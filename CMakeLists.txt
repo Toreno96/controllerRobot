@@ -73,23 +73,15 @@ add_library(dynamixel STATIC ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/dynamixel/dyna
 SET_TARGET_PROPERTIES(dynamixel PROPERTIES COMPILE_FLAGS "-w") #disable tons of warnings in the dynamixel library
 
 
-#Dynamixel 2
-INCLUDE_DIRECTORIES("${CMAKE_SOURCE_DIR}/3rdParty/dynamixel2/include")
-add_library(group_bulk_read SHARED 3rdParty/dynamixel2/src/*.cpp)
-add_library(group_bulk_read SHARED 3rdParty/dynamixel2/src/dynamixel_sdk/*.cpp)
-add_library(group_bulk_read SHARED 3rdParty/dynamixel2/src/dynamixel_sdk_linux/*.cpp)
-#add_library(group_bulk_read SHARED src/dynamixel_sdk/group_bulk_read.cpp)
-#add_library(group_bulk_write SHARED src/dynamixel_sdk/group_bulk_write.cpp)
-#add_library(group_sync_read SHARED src/dynamixel_sdk/group_sync_read.cpp)
-#add_library(group_sync_write SHARED src/dynamixel_sdk/group_sync_write.cpp)
-#add_library(packet_handler SHARED src/dynamixel_sdk/packet_handler.cpp)
-#add_library(port_handler SHARED src/dynamixel_sdk/port_handler.cpp)
-#add_library(protocol1_packet_handler SHARED src/dynamixel_sdk/protocol1_packet_handler.cpp)
-#add_library(protocol2_packet_handler SHARED src/dynamixel_sdk/protocol2_packet_handler.cpp)
-#add_library(port_handler_linux SHARED src/dynamixel_sdk_linux/port_handler_linux.cpp)
-add_executable(Projekt_Dynamixel src/read_write.cpp)
-target_link_libraries(Projekt_Dynamixel group_bulk_read group_bulk_write group_sync_read
-group_sync_write packet_handler port_handler protocol1_packet_handler protocol2_packet_handler port_handler_linux)
+###############################################################################
+#
+# Dynamixel SDK 3.4.3
+#
+###############################################################################
+SET(DYNAMIXEL3_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/dynamixel3/")
+SET(DYNAMIXEL3_INCLUDE_DIR "${DYNAMIXEL3_DIR}/inclue")
+SET(DYNAMIXEL3_SOURCE_DIR "${DYNAMIXEL3_DIR}/src")
+add_library(dynamixel3 STATIC ${DYNAMIXEL3_INCLUDE_DIR}/dynamixel_sdk/*.h ${DYNAMIXEL3_INCLUDE_DIR}/dynamixel_sdk_linux/port_handler_linux.h ${DYNAMIXEL3_INCLUDE_DIR}/dynamixel_sdk.h ${DYNAMIXEL3_SOURCE_DIR}/dynamixel_sdk/*.cpp ${DYNAMIXEL3_SOURCE_DIR}/dynamixel_sdk_linux/port_handler_linux.cpp)
 
 
 ###############################################################################
