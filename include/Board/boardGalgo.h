@@ -8,6 +8,8 @@ namespace controller {
 
     class BoardGalgo : Board {
         public:
+	  BoardGalgo( const std::string &port, int baudRate );
+	  ~BoardGalgo();
 
 	/**
          * \brief Set reference position value for servomotor.
@@ -266,6 +268,10 @@ namespace controller {
          * \brief Set default value.
          */
             void setDefault(void);
+	    
+	    
+	private:
+	  dynamixel::PortHandler *portHandler;
     };
 }
 
