@@ -95,7 +95,7 @@ file(GLOB DYNAMIXEL3_SOURCES
 )
   
 add_library(dynamixel3 STATIC ${DYNAMIXEL3_HEADERS} ${DYNAMIXEL3_SOURCES})
-
+SET_TARGET_PROPERTIES(dynamixel3 PROPERTIES COMPILE_FLAGS "-w") #disable tons of warnings in the dynamixel library
 
 ###############################################################################
 #
