@@ -6,7 +6,7 @@ namespace controller {
 
 // TO-DO Zapytać o Type
 BoardGalgo::BoardGalgo( const std::string &port, int baudRate ) :
-    Board( "Board Galgo", TYPE_USB2DYNAMIXEL ), protocolVersion_( 2.0 ),
+    Board( "Board Galgo", TYPE_USB2DYNAMIXEL ),
     portHandler_( dynamixel::PortHandler::getPortHandler( port.c_str() ) ) {
   if( !portHandler_->openPort() )
       throw FailedOpeningPortException("Failed to open the port \"" + port + '\"');
@@ -17,12 +17,12 @@ BoardGalgo::~BoardGalgo() {
   portHandler_->closePort();
 }
 
-void BoardGalgo::toggleTorque( uint8_t dynamixelId, bool onOrOff ) {
+void BoardGalgo::toggleTorque( tId dynamixel, bool onOrOff ) {
     uint8_t error;
     dynamixel::PacketHandler *packetHandler =
             dynamixel::PacketHandler::getPacketHandler( protocolVersion_ );
     int communicationResult = packetHandler->write1ByteTxRx( portHandler_,
-            dynamixelId, 64, onOrOff, &error );
+            dynamixel, torqueEnable, onOrOff, &error );
 
     if( communicationResult != COMM_SUCCESS ) {
         packetHandler->printTxRxResult( communicationResult );
@@ -31,9 +31,12 @@ void BoardGalgo::toggleTorque( uint8_t dynamixelId, bool onOrOff ) {
         packetHandler->printRxPacketError( error );
     }
 }
+BoardGalgo::tId BoardGalgo::convert( int legNo, int jointNo ) {
+    return legNo * 10 + jointNo;
+}
 
 void BoardGalgo::setLED(int legNo, int jointNo, bool powered){
-    uint8_t id = legNo * 10 + jointNo;
+    tId id = convert( legNo, jointNo );
     uint8_t dxl_error = 0;
     int dxl_comm_result = COMM_TX_FAIL;
     dynamixel::PacketHandler *packetHandler =
