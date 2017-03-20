@@ -51,6 +51,17 @@ void BoardGalgo::setLED(int legNo, int jointNo, bool powered){
     }
 }
 
+void BoardGalgo::setLED(int legNo, bool powered){
+    for(int i = 0; i < 3; i++){
+        setLED(legNo, i, powered);
+    }
+}
+
+void BoardGalgo::setLED(bool powered){
+    for(int i = 0; i < 4; i++){
+        setLED(i, powered);
+    }
+}
 
 uint16_t BoardGalgo::convert( double angle ) {
     return angle * 11.375;

@@ -274,6 +274,10 @@ namespace controller {
 
             void setLED(int legNo, int jointNo, bool powered);
 
+            void setLED(int legNo, bool powered);
+
+            void setLED(bool powered);
+
         /**
          * \brief Set default value.
          */
