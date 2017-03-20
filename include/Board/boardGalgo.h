@@ -8,6 +8,7 @@ namespace controller {
 
     class BoardGalgo : Board {
         private:
+            typedef uint8_t tId;
             typedef uint16_t tAddress;
             const tAddress torqueEnable;
             // TO-DO Zamień nazwę na Led
@@ -277,7 +278,7 @@ namespace controller {
             void setDefault(void);
 
 	private:
-      void toggleTorque( uint8_t dynamixelId, bool onOrOff );
+      void toggleTorque( tId dynamixel, bool onOrOff );
       const float protocolVersion_;
       dynamixel::PortHandler *portHandler_;
     };

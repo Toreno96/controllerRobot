@@ -19,12 +19,12 @@ BoardGalgo::~BoardGalgo() {
   portHandler_->closePort();
 }
 
-void BoardGalgo::toggleTorque( uint8_t dynamixelId, bool onOrOff ) {
+void BoardGalgo::toggleTorque( tId dynamixel, bool onOrOff ) {
     uint8_t error;
     dynamixel::PacketHandler *packetHandler =
             dynamixel::PacketHandler::getPacketHandler( protocolVersion_ );
     int communicationResult = packetHandler->write1ByteTxRx( portHandler_,
-            dynamixelId, torqueEnable, onOrOff, &error );
+            dynamixel, torqueEnable, onOrOff, &error );
 
     if( communicationResult != COMM_SUCCESS ) {
         packetHandler->printTxRxResult( communicationResult );
