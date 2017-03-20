@@ -14,6 +14,7 @@ namespace controller {
             const tAddress torqueEnable = 64;
             // TO-DO Zamień nazwę na Led
             const tAddress ADDR_LED = 65;
+            const tAddress goalPosition = 116;
         public:
 	  BoardGalgo( const std::string &port, int baudRate );
 	  ~BoardGalgo();

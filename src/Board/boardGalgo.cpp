@@ -51,7 +51,23 @@ void BoardGalgo::setLED(int legNo, int jointNo, bool powered){
     }
 }
 
-unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){}
+unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
+    tId dynamixel = convert( legNo, jointNo );
+    uint8_t error;
+    // TO-DO Konwersja angle na odpowiadającą wartość goal position dynamixela
+    uint16_t goalPosition = 1000;
+    dynamixel::PacketHandler *packetHandler =
+            dynamixel::PacketHandler::getPacketHandler( protocolVersion_ );
+    int communicationResult = packetHandler->write1ByteTxRx( portHandler_,
+            dynamixel, goalPosition, goalPosition, &error );
+
+    if( communicationResult != COMM_SUCCESS ) {
+        packetHandler->printTxRxResult( communicationResult );
+    }
+    else if( error != 0 ) {
+        packetHandler->printRxPacketError( error );
+    }
+}
 unsigned int BoardGalgo::setPosition(int legNo, const std::vector<double>& angle){}
 unsigned int BoardGalgo::setPosition(const std::vector<double>& angle){}
 
