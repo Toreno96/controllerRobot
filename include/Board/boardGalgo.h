@@ -8,7 +8,10 @@ namespace controller {
 
     class BoardGalgo : Board {
         private:
-            const uint16_t ADDR_LED = 65;
+            typedef uint16_t tAddress;
+            const tAddress torqueEnable;
+            // TO-DO Zamień nazwę na Led
+            const tAddress ADDR_LED;
         public:
 	  BoardGalgo( const std::string &port, int baudRate );
 	  ~BoardGalgo();
