@@ -6,9 +6,9 @@
 
 namespace controller {
 
-    const uint16_t ADDR_LED = 65;
-
     class BoardGalgo : Board {
+        private:
+            const uint16_t ADDR_LED = 65;
         public:
 	  BoardGalgo( const std::string &port, int baudRate );
 	  ~BoardGalgo();
