@@ -18,6 +18,7 @@ int main()
         //Board* board = createBoardDynamixel();
         BoardGalgo bg = BoardGalgo("/dev/ttyUSB0", 3000000);
         bg.setLED(1,1,0);
+        bg.setPosition( 1, 1, 90 );
 
         //board->setPosition(0,0,1.2);
     }
