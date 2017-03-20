@@ -6,6 +6,8 @@
 
 namespace controller {
 
+    const uint16_t ADDR_LED = 65;
+
     class BoardGalgo : Board {
         public:
 	  BoardGalgo( const std::string &port, int baudRate );
@@ -264,6 +266,8 @@ namespace controller {
          */
             void setOffset(const std::vector<double> offset);
 
+            void setLED(int legNo, int jointNo, bool powered);
+
         /**
          * \brief Set default value.
          */
@@ -272,6 +276,7 @@ namespace controller {
 	    
 	private:
 	  dynamixel::PortHandler *portHandler;
+      dynamixel::PacketHandler *packetHandler;
     };
 }
 
