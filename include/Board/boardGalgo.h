@@ -1,7 +1,6 @@
 #ifndef _BOARD_GALGO_H_
 #define _BOARD_GALGO_H_
 
-#include "../../3rdParty/dynamixel3/include/dynamixel_sdk.h"
 #include "board.h"
 
 namespace controller {
@@ -42,7 +41,7 @@ namespace controller {
          * \param speed Speed value.
          * \return Return error value.
          */
-	    unsigned int setSpeed(int legNo, int jointNo, double speed);
+            unsigned int setSpeed(int legNo, int jointNo, double speed);
 	 
         /**
          * \brief Set reference speed value for all serwomotors in particular leg.
@@ -268,10 +267,11 @@ namespace controller {
          * \brief Set default value.
          */
             void setDefault(void);
-	    
-	    
+
 	private:
-	  dynamixel::PortHandler *portHandler;
+      void toggleTorque( uint8_t dynamixelId, bool onOrOff );
+      const float protocolVersion_;
+      dynamixel::PortHandler *portHandler_;
     };
 }
 
