@@ -70,11 +70,10 @@ unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
     tId dynamixel = convert( legNo, jointNo );
     toggleTorque( dynamixel, true );
     uint8_t error;
-    uint16_t goalPosition = convert( angle );
     dynamixel::PacketHandler *packetHandler =
             dynamixel::PacketHandler::getPacketHandler( protocolVersion_ );
     int communicationResult = packetHandler->write4ByteTxRx( portHandler_,
-            dynamixel, goalPosition, goalPosition, &error );
+            dynamixel, goalPosition, convert( angle ), &error );
 
     if( communicationResult != COMM_SUCCESS ) {
         packetHandler->printTxRxResult( communicationResult );
