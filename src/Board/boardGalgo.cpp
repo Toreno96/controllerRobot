@@ -31,9 +31,12 @@ void BoardGalgo::toggleTorque( tId dynamixel, bool onOrOff ) {
         packetHandler->printRxPacketError( error );
     }
 }
+BoardGalgo::tId BoardGalgo::convert( int legNo, int jointNo ) {
+    return legNo * 10 + jointNo;
+}
 
 void BoardGalgo::setLED(int legNo, int jointNo, bool powered){
-    uint8_t id = legNo * 10 + jointNo;
+    tId id = convert( legNo, jointNo );
     uint8_t dxl_error = 0;
     int dxl_comm_result = COMM_TX_FAIL;
     dynamixel::PacketHandler *packetHandler =

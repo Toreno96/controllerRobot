@@ -280,6 +280,7 @@ namespace controller {
 
 	private:
       void toggleTorque( tId dynamixel, bool onOrOff );
+      tId convert( int legNo, int jointNo );
       dynamixel::PortHandler *portHandler_;
     };
 }
