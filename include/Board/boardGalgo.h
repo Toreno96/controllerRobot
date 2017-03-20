@@ -10,9 +10,10 @@ namespace controller {
         private:
             typedef uint8_t tId;
             typedef uint16_t tAddress;
-            const tAddress torqueEnable;
+            const float protocolVersion_ = 2.0;
+            const tAddress torqueEnable = 64;
             // TO-DO Zamień nazwę na Led
-            const tAddress ADDR_LED;
+            const tAddress ADDR_LED = 65;
         public:
 	  BoardGalgo( const std::string &port, int baudRate );
 	  ~BoardGalgo();
@@ -279,7 +280,6 @@ namespace controller {
 
 	private:
       void toggleTorque( tId dynamixel, bool onOrOff );
-      const float protocolVersion_;
       dynamixel::PortHandler *portHandler_;
     };
 }
