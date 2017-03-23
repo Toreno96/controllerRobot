@@ -17,12 +17,41 @@ BoardGalgo::~BoardGalgo() {
   portHandler_->closePort();
 }
 
+BoardGalgo::tId BoardGalgo::convert( int legNo, int jointNo ) {
+    return legNo * 10 + jointNo;
+}
+void BoardGalgo::setLED(int legNo, int jointNo, bool powered){
+    tId id = convert( legNo, jointNo );
+    uint8_t dxl_error = 0;
+    int dxl_comm_result = COMM_TX_FAIL;
+    dynamixel::PacketHandler *packetHandler =
+            dynamixel::PacketHandler::getPacketHandler( PROTOCOL_VERSION );
+
+    dxl_comm_result = packetHandler->write1ByteTxRx(portHandler_, id, LED, powered, &dxl_error);
+    if (dxl_comm_result != COMM_SUCCESS){
+      packetHandler->printTxRxResult(dxl_comm_result);
+    }
+    else if (dxl_error != 0) {
+      packetHandler->printRxPacketError(dxl_error);
+    }
+}
+void BoardGalgo::setLED(int legNo, bool powered){
+    for(int i = 0; i < 3; i++){
+        setLED(legNo, i, powered);
+    }
+}
+void BoardGalgo::setLED(bool powered){
+    for(int i = 0; i < 4; i++){
+        setLED(i, powered);
+    }
+}
+
 void BoardGalgo::toggleTorque( tId dynamixel, bool onOrOff ) {
     uint8_t error;
     dynamixel::PacketHandler *packetHandler =
-            dynamixel::PacketHandler::getPacketHandler( protocolVersion_ );
+            dynamixel::PacketHandler::getPacketHandler( PROTOCOL_VERSION );
     int communicationResult = packetHandler->write1ByteTxRx( portHandler_,
-            dynamixel, torqueEnable, onOrOff, &error );
+            dynamixel, TORQUE_ENABLE, onOrOff, &error );
 
     if( communicationResult != COMM_SUCCESS ) {
         packetHandler->printTxRxResult( communicationResult );
@@ -31,38 +60,6 @@ void BoardGalgo::toggleTorque( tId dynamixel, bool onOrOff ) {
         packetHandler->printRxPacketError( error );
     }
 }
-BoardGalgo::tId BoardGalgo::convert( int legNo, int jointNo ) {
-    return legNo * 10 + jointNo;
-}
-
-void BoardGalgo::setLED(int legNo, int jointNo, bool powered){
-    tId id = convert( legNo, jointNo );
-    uint8_t dxl_error = 0;
-    int dxl_comm_result = COMM_TX_FAIL;
-    dynamixel::PacketHandler *packetHandler =
-            dynamixel::PacketHandler::getPacketHandler( protocolVersion_ );
-
-    dxl_comm_result = packetHandler->write1ByteTxRx(portHandler_, id, ADDR_LED, powered, &dxl_error);
-    if (dxl_comm_result != COMM_SUCCESS){
-      packetHandler->printTxRxResult(dxl_comm_result);
-    }
-    else if (dxl_error != 0) {
-      packetHandler->printRxPacketError(dxl_error);
-    }
-}
-
-void BoardGalgo::setLED(int legNo, bool powered){
-    for(int i = 0; i < 3; i++){
-        setLED(legNo, i, powered);
-    }
-}
-
-void BoardGalgo::setLED(bool powered){
-    for(int i = 0; i < 4; i++){
-        setLED(i, powered);
-    }
-}
-
 uint16_t BoardGalgo::convert( double angle ) {
     return angle * 11.375;
 }
@@ -71,9 +68,9 @@ unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
     toggleTorque( dynamixel, true );
     uint8_t error;
     dynamixel::PacketHandler *packetHandler =
-            dynamixel::PacketHandler::getPacketHandler( protocolVersion_ );
+            dynamixel::PacketHandler::getPacketHandler( PROTOCOL_VERSION );
     int communicationResult = packetHandler->write4ByteTxRx( portHandler_,
-            dynamixel, goalPosition, convert( angle ), &error );
+            dynamixel, GOAL_POSITION, convert( angle ), &error );
 
     if( communicationResult != COMM_SUCCESS ) {
         packetHandler->printTxRxResult( communicationResult );
