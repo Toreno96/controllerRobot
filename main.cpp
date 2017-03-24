@@ -42,6 +42,10 @@ int main()
         //bg.setSpeed(1,1,300);
         //std::this_thread::sleep_for(std::chrono::seconds(1));
         //bg.setSpeed(1,1,0);
+
+        bg.setSpeed( 1, std::vector< double >{ 20.0, 100.0, 0.0 } );
+        std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
+        bg.setSpeed( 1, std::vector< double >{ 0.0, 0.0, 0.0 } );
     }
     catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;
