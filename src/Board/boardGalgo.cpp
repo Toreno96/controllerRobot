@@ -78,7 +78,6 @@ unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
     else if( error != 0 ) {
         packetHandler->printRxPacketError( error );
     }
-    toggleTorque( dynamixel, false );
 }
 unsigned int BoardGalgo::setPosition(int legNo, const std::vector<double>& angle){}
 unsigned int BoardGalgo::setPosition(const std::vector<double>& angle){}
