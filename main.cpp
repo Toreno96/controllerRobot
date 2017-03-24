@@ -2,6 +2,8 @@
 #include "Board/boardDynamixel.h"
 #include "Board/boardGalgo.h"
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 int main()
 {
@@ -17,10 +19,15 @@ int main()
 */
         //Board* board = createBoardDynamixel();
         BoardGalgo bg = BoardGalgo("/dev/ttyUSB0", 3000000);
-        bg.setLED(1,1,0);
-        bg.setPosition( 1, 1, 90 );
-
-        //board->setPosition(0,0,1.2);
+        bg.setLED(1,1,1);
+        double goalPositionAngle;
+        std::cout << "Enter position angle:\n> ";
+        std::cin >> goalPositionAngle;
+        bg.setPosition( 1, 1, goalPositionAngle );
+        std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
+        double presentPositionAngle;
+        bg.readPosition( 1, 1, presentPositionAngle );
+        std::cout << "Current position angle: " << presentPositionAngle << '\n';
     }
     catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;

@@ -46,6 +46,7 @@ void BoardGalgo::setLED(bool powered){
     }
 }
 
+// TO-DO Zapytać o poziom dostępu (private vs. public)
 void BoardGalgo::toggleTorque( tId dynamixel, bool onOrOff ) {
     uint8_t error;
     dynamixel::PacketHandler *packetHandler =
@@ -98,7 +99,28 @@ unsigned int BoardGalgo::setTorqueLimit(int legNo, int jointNo, double torqueLim
 unsigned int BoardGalgo::setTorqueLimit(int legNo, const std::vector<double>& torqueLimit){}
 unsigned int BoardGalgo::setTorqueLimit(const std::vector<double>& torqueLimit){}
 
-unsigned int BoardGalgo::readPosition(int legNo, int jointNo, double& angle){}
+double BoardGalgo::convert( uint32_t position ) {
+    return position / 11.375;
+}
+unsigned int BoardGalgo::readPosition(int legNo, int jointNo, double& angle){
+    tId dynamixel = convert( legNo, jointNo );
+    dynamixel::PacketHandler *packetHandler =
+            dynamixel::PacketHandler::getPacketHandler( PROTOCOL_VERSION );
+    uint32_t presentPosition;
+    uint8_t error;
+    int communicationResult = packetHandler->read4ByteTxRx(portHandler_, dynamixel,
+            PRESENT_POSITION, &presentPosition, &error);
+
+    if (communicationResult != COMM_SUCCESS)
+        packetHandler->printTxRxResult(communicationResult);
+    else if (error != 0)
+        packetHandler->printRxPacketError(error);
+
+    angle = convert( presentPosition );
+
+    // TO-DO Zapytać o zwracany kod błędu
+    return 0;
+}
 unsigned int BoardGalgo::readPosition(int legNo, std::vector<double>& angle){}
 unsigned int BoardGalgo::readPosition(std::vector<double>& angle){}
 

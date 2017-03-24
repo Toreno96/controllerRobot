@@ -259,9 +259,11 @@ private:
     const tAddress TORQUE_ENABLE = 64;
     const tAddress LED = 65;
     const tAddress GOAL_POSITION = 116;
+    const tAddress PRESENT_POSITION = 132;
     void toggleTorque( tId dynamixel, bool onOrOff );
     tId convert( int legNo, int jointNo );
     uint16_t convert( double angle );
+    double convert( uint32_t position );
     dynamixel::PortHandler *portHandler_;
 };
 
