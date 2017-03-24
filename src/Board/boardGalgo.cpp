@@ -1,4 +1,3 @@
-
 #include "Board/boardGalgo.h"
 #include "Board/exceptions.h"
 
@@ -83,7 +82,37 @@ unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
 unsigned int BoardGalgo::setPosition(int legNo, const std::vector<double>& angle){}
 unsigned int BoardGalgo::setPosition(const std::vector<double>& angle){}
 
-unsigned int BoardGalgo::setSpeed(int legNo, int jointNo, double speed){}
+//TODO co to jest speed
+unsigned int BoardGalgo::setSpeed(int legNo, int jointNo, double speed){
+    tId dynamixel = convert( legNo, jointNo );
+    uint8_t error;
+    dynamixel::PacketHandler *packetHandler =
+            dynamixel::PacketHandler::getPacketHandler( PROTOCOL_VERSION );
+
+    //Set operating mode
+    toggleTorque( dynamixel, false );
+
+    int communicationResult = packetHandler->write1ByteTxRx(portHandler_, dynamixel, OPERATING_MODE, OPERATINGMODE_VELOCITY, &error);
+    if (communicationResult != COMM_SUCCESS){
+      packetHandler->printTxRxResult(communicationResult);
+    }
+    else if (error != 0){
+      packetHandler->printRxPacketError(error);
+    }
+
+    //Set velocity
+    toggleTorque( dynamixel, true );
+
+    communicationResult = packetHandler->write4ByteTxRx(portHandler_, dynamixel, GOAL_VELOCITY, speed, &error);
+    if (communicationResult != COMM_SUCCESS){
+      packetHandler->printTxRxResult(communicationResult);
+    }
+    else if (error != 0){
+      packetHandler->printRxPacketError(error);
+    }
+
+}
+
 unsigned int BoardGalgo::setSpeed(int legNo, const std::vector<double>& speed){}
 unsigned int BoardGalgo::setSpeed(const std::vector<double>& speed){}
 

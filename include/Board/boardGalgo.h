@@ -259,6 +259,13 @@ private:
     const tAddress TORQUE_ENABLE = 64;
     const tAddress LED = 65;
     const tAddress GOAL_POSITION = 116;
+    const tAddress GOAL_VELOCITY = 104;
+    const tAddress PRESENT_VELOCITY	= 128;
+    const tAddress OPERATING_MODE = 11;
+
+    const int OPERATINGMODE_VELOCITY = 1;
+    const int OPERATINGMODE_POSITION = 3;
+
     void toggleTorque( tId dynamixel, bool onOrOff );
     tId convert( int legNo, int jointNo );
     uint16_t convert( double angle );
