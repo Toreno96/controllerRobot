@@ -267,6 +267,9 @@ private:
     const int OPERATINGMODE_VELOCITY = 1;
     const int OPERATINGMODE_POSITION = 3;
 
+    void handle( int communicationResult );
+    void handle( uint8_t error );
+    void handle( int communicationResult, uint8_t error );
     void toggleTorque( tId dynamixel, bool onOrOff );
     tId convert( int legNo, int jointNo );
     uint16_t convert( double angle );
