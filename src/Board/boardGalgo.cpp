@@ -112,8 +112,23 @@ unsigned int BoardGalgo::setSpeed(int legNo, int jointNo, double speed){
 
 }
 
-unsigned int BoardGalgo::setSpeed(int legNo, const std::vector<double>& speed){}
-unsigned int BoardGalgo::setSpeed(const std::vector<double>& speed){}
+unsigned int BoardGalgo::setSpeed(int legNo, const std::vector<double>& speed){
+    for(int i = 0; i < 3; i++){
+        setSpeed(legNo, i, speed[i]);
+    }
+}
+
+unsigned int BoardGalgo::setSpeed(const std::vector<double>& speed){
+    int ix = 0;
+
+    for(int i = 0; i < 4; i++){     //Legs
+        for(int j = 0; j < 3; j++){ //Joints
+            setSpeed(i, j, speed[ix]);
+            ix++;
+        }
+    }
+
+}
 
 unsigned int BoardGalgo::setComplianceMargin(int legNo, int jointNo, double margin){}
 unsigned int BoardGalgo::setComplianceMargin(int legNo, const std::vector<double> margin){}
