@@ -10,7 +10,7 @@ BoardGalgo::BoardGalgo( const std::string &port, int baudRate ) :
   if( !portHandler_->openPort() )
       throw FailedOpeningPortException("Failed to open the port \"" + port + '\"');
   if( !portHandler_->setBaudRate( baudRate ) )
-      throw FailedChangingBaudRateException("Failed to change the baudrate to " + baudRate);
+      throw FailedChangingBaudRateException("Failed to change the baudrate to " + std::to_string( baudRate ) ) ;
 }
 BoardGalgo::~BoardGalgo() {
   portHandler_->closePort();
@@ -39,7 +39,7 @@ void BoardGalgo::handle( dynamixel::PacketHandler *packetHandler,
 }
 
 BoardGalgo::tId BoardGalgo::convert( int legNo, int jointNo ) {
-    return legNo * 10 + jointNo;
+    return static_cast< tId >( legNo * 10 + jointNo );
 }
 void BoardGalgo::setLED(int legNo, int jointNo, bool powered){
     tId id = convert( legNo, jointNo );
@@ -72,7 +72,7 @@ void BoardGalgo::toggleTorque( tId dynamixel, bool onOrOff ) {
     handle( packetHandler, communicationResult, error );
 }
 uint16_t BoardGalgo::convert( double angle ) {
-    return angle * 11.375;
+    return static_cast< uint16_t >( angle * 11.375 );
 }
 unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
     tId dynamixel = convert( legNo, jointNo );
@@ -83,6 +83,9 @@ unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
     int communicationResult = packetHandler->write4ByteTxRx( portHandler_,
             dynamixel, GOAL_POSITION, convert( angle ), &error );
     handle( packetHandler, communicationResult, error );
+
+    // TO-DO Zapytać o zwracany kod błędu
+    return 0;
 }
 unsigned int BoardGalgo::setPosition(int legNo, const std::vector<double>& angle){}
 unsigned int BoardGalgo::setPosition(const std::vector<double>& angle){}

@@ -1,5 +1,5 @@
-#include "3rdParty/tinyXML/tinyxml2.h"
-#include "Board/boardDynamixel.h"
+//#include "3rdParty/tinyXML/tinyxml2.h"
+//#include "Board/boardDynamixel.h"
 #include "Board/boardGalgo.h"
 #include <iostream>
 #include <chrono>
@@ -9,8 +9,6 @@
 int main()
 {
     try {
-        using namespace std;
-
         /*
         tinyxml2::XMLDocument config;
         config.LoadFile("../../resources/configGlobal.xml");
@@ -23,7 +21,7 @@ int main()
         std::string portName;
         std::cout << "Enter port name:\n> ";
         std::cin >> portName;
-        BoardGalgo bg = BoardGalgo(portName, 3000000);
+        controller::BoardGalgo bg( portName, 3000000 );
 
         // Odkomentować wybrane funkcje w celu przeprowadzenia testów
 

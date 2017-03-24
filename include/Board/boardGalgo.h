@@ -264,8 +264,8 @@ private:
     const tAddress PRESENT_VELOCITY	= 128;
     const tAddress PRESENT_POSITION = 132;
 
-    const int OPERATINGMODE_VELOCITY = 1;
-    const int OPERATINGMODE_POSITION = 3;
+    const uint8_t OPERATINGMODE_VELOCITY = 1;
+    const uint8_t OPERATINGMODE_POSITION = 3;
 
     void handle( dynamixel::PacketHandler *packetHandler,
             int communicationResult );
