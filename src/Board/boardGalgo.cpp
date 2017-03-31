@@ -60,7 +60,7 @@ void BoardGalgo::toggleTorque( tId dynamixel, bool onOrOff ) {
         packetHandler->printRxPacketError( error );
     }
 }
-uint16_t BoardGalgo::convert( double angle ) {
+uint16_t BoardGalgo::convertAngle( double angle ) {
     return angle * 11.375;
 }
 unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
@@ -82,7 +82,10 @@ unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
 unsigned int BoardGalgo::setPosition(int legNo, const std::vector<double>& angle){}
 unsigned int BoardGalgo::setPosition(const std::vector<double>& angle){}
 
-//TODO co to jest speed
+uint32_t BoardGalgo::convertSpeed(double value){
+    return value * MAX_SPEED;
+}
+
 unsigned int BoardGalgo::setSpeed(int legNo, int jointNo, double speed){
     tId dynamixel = convert( legNo, jointNo );
     uint8_t error;
@@ -103,7 +106,16 @@ unsigned int BoardGalgo::setSpeed(int legNo, int jointNo, double speed){
     //Set velocity
     toggleTorque( dynamixel, true );
 
-    communicationResult = packetHandler->write4ByteTxRx(portHandler_, dynamixel, GOAL_VELOCITY, speed, &error);
+    /*
+    uint zm;
+    packetHandler->read4ByteTxRx(portHandler_, dynamixel, 44, &zm, &error);
+    std::cout << "Velocity limit: " << zm << std::endl;
+    packetHandler->read4ByteTxRx(portHandler_, dynamixel, 128, &zm, &error);
+    std::cout << "Obecna: " << zm << std::endl;
+    */
+
+    communicationResult = packetHandler->write4ByteTxRx(portHandler_, dynamixel, GOAL_VELOCITY, convertSpeed(speed), &error);
+
     if (communicationResult != COMM_SUCCESS){
       packetHandler->printTxRxResult(communicationResult);
     }

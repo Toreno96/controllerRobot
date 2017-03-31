@@ -27,6 +27,8 @@ int main()
 
         // Odkomentować wybrane funkcje w celu przeprowadzenia testów
 
+        //BoardGalgo bg = BoardGalgo("/dev/ttyUSB0", 3000000);
+
         //bg.setLED(1,1,1);
 
         //double goalPositionAngle;
@@ -39,9 +41,11 @@ int main()
         //bg.readPosition( 1, 1, presentPositionAngle );
         //std::cout << "Current position angle: " << presentPositionAngle << '\n';
 
-        //bg.setSpeed(1,1,300);
-        //std::this_thread::sleep_for(std::chrono::seconds(1));
-        //bg.setSpeed(1,1,0);
+        bg.setSpeed(1,1,0.5);
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        bg.setSpeed(1,1,1.0);
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        bg.setSpeed(1,1,0.0);
     }
     catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;
