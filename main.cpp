@@ -43,9 +43,24 @@ int main()
         //std::this_thread::sleep_for(std::chrono::seconds(1));
         //bg.setSpeed(1,1,0);
 
-        bg.setSpeed( 1, std::vector< double >{ 20.0, 100.0, 0.0 } );
-        std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
-        bg.setSpeed( 1, std::vector< double >{ 0.0, 0.0, 0.0 } );
+        //bg.setSpeed( 1, std::vector< double >{ 20.0, 100.0, 0.0 } );
+        //std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
+        //bg.setSpeed( 1, std::vector< double >{ 0.0, 0.0, 0.0 } );
+
+        bg.toggleTorque( 1, 1, false );
+        std::cout << "11 joint torque disabled\n";
+        std::this_thread::sleep_for( std::chrono::seconds( 10 ) );
+        bg.toggleTorque( 1, 1, true );
+        std::cout << "11 joint torque enabled\n";
+        std::this_thread::sleep_for( std::chrono::seconds( 10 ) );
+        bg.toggleTorque( 1, 1, false );
+        std::cout << "11 joint torque disabled\n";
+        std::this_thread::sleep_for( std::chrono::seconds( 10 ) );
+        bg.toggleTorque( 1, std::vector< bool >( 3, true ) );
+        std::cout << "1 leg torque enabled\n";
+        std::this_thread::sleep_for( std::chrono::seconds( 10 ) );
+        bg.toggleTorque( std::vector< bool >( 4 * 3, false ) );
+        std::cout << "all legs torque disabled\n";
     }
     catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;
