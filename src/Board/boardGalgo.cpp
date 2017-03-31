@@ -5,7 +5,7 @@ namespace controller {
 
 // TO-DO Zapytać o Type
 BoardGalgo::BoardGalgo( const std::string &port, int baudRate ) :
-    Board( "Board Galgo", TYPE_USB2DYNAMIXEL ),
+    Board( "Board Galgo", TYPE_GALGO ),
     portHandler_( dynamixel::PortHandler::getPortHandler( port.c_str() ) ) {
   if( !portHandler_->openPort() )
       throw FailedOpeningPortException("Failed to open the port \"" + port + '\"');
