@@ -264,11 +264,16 @@ private:
     const tAddress PRESENT_VELOCITY	= 128;
     const tAddress PRESENT_POSITION = 132;
 
-    const int OPERATINGMODE_VELOCITY = 1;
-    const int OPERATINGMODE_POSITION = 3;
+    const uint8_t OPERATINGMODE_VELOCITY = 1;
+    const uint8_t OPERATINGMODE_POSITION = 3;
 
     const int MAX_SPEED = 180;
 
+    void handle( dynamixel::PacketHandler *packetHandler,
+            int communicationResult );
+    void handle( dynamixel::PacketHandler *packetHandler, uint8_t error );
+    void handle( dynamixel::PacketHandler *packetHandler,
+            int communicationResult, uint8_t error );
     void toggleTorque( tId dynamixel, bool onOrOff );
     tId convert( int legNo, int jointNo );
     uint16_t convertAngle( double angle );

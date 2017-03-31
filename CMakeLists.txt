@@ -7,7 +7,7 @@ SET(CMAKE_BUILD_TYPE "Release" CACHE PATH "Current build configuration")
 
 # Example Project configuration
 PROJECT(CONTROLLER)
-SET(CMAKE_CXX_FLAGS "-Wall -Wextra -Wconversion -std=c++11 -pthread")
+SET(CMAKE_CXX_FLAGS "-Wall -Wextra -Wconversion -Wno-unused-parameter -Wno-return-type -std=c++11 -pthread")
 #add_definitions(-DDEBUG)
 
 # Folders
