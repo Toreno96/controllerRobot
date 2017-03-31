@@ -92,13 +92,12 @@ void BoardGalgo::setLED(int legNo, const std::vector<bool>& powered){
     int dxl_comm_result = COMM_TX_FAIL;
     dynamixel::PacketHandler *packetHandler =
             dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
-
     dynamixel::GroupSyncWrite groupSyncWrite(portHandler_, packetHandler, LED, 1);
 
     uint8_t v;
+
     for(int i = 0; i < 3; i++){
         v = powered[i];
-        //groupSyncWrite.addParam(convert(legNo, i), &(powered[i]));
         groupSyncWrite.addParam(convert(legNo, i), &v);
     }
 
@@ -112,7 +111,6 @@ void BoardGalgo::setLED(const std::vector<bool> &powered){
     int dxl_comm_result = COMM_TX_FAIL;
     dynamixel::PacketHandler *packetHandler =
             dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
-
     dynamixel::GroupSyncWrite groupSyncWrite(portHandler_, packetHandler, LED, 1);
 
     uint8_t v;
@@ -187,21 +185,63 @@ unsigned int BoardGalgo::setSpeed(int legNo, int jointNo, double speed){
 }
 
 unsigned int BoardGalgo::setSpeed(int legNo, const std::vector<double>& speed){
+    int dxl_comm_result = COMM_TX_FAIL;
+    dynamixel::PacketHandler *packetHandler =
+            dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
+    dynamixel::GroupSyncWrite groupSyncWrite(portHandler_, packetHandler, GOAL_VELOCITY, 4);
+
+    toggleTorque(convert(legNo, 0), true);
+    toggleTorque(convert(legNo, 1), true);
+    //toggleTorque(convert(legNo, 2), true);
+
+    uint32_t s;
+    uint8_t v[4];
+
     for(int i = 0; i < 3; i++){
-        setSpeed(legNo, i, speed[i]);
+        s = convertSpeed(speed[i]);
+        v[0] = DXL_LOBYTE(DXL_LOWORD(s));
+        v[1] = DXL_HIBYTE(DXL_LOWORD(s));
+        v[2] = DXL_LOBYTE(DXL_HIWORD(s));
+        v[3] = DXL_HIBYTE(DXL_HIWORD(s));
+        groupSyncWrite.addParam(convert(legNo, i), v);
     }
+
+    dxl_comm_result = groupSyncWrite.txPacket();
+    handle(packetHandler, dxl_comm_result);
+
+    groupSyncWrite.clearParam();
 }
 
 unsigned int BoardGalgo::setSpeed(const std::vector<double>& speed){
+    int dxl_comm_result = COMM_TX_FAIL;
+    dynamixel::PacketHandler *packetHandler =
+            dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
+    dynamixel::GroupSyncWrite groupSyncWrite(portHandler_, packetHandler, GOAL_VELOCITY, 4);
+
+    toggleTorque(convert(1, 0), true);
+    toggleTorque(convert(1, 1), true);
+    //toggleTorque(convert(legNo, 2), true);
+
+    uint32_t s;
+    uint8_t v[4];
     int ix = 0;
 
-    for(int i = 0; i < 4; i++){     //Legs
-        for(int j = 0; j < 3; j++){ //Joints
-            setSpeed(i, j, speed[ix]);
+    for(int i = 0; i < 4; i++){
+        for(int j = 0; j < 3; j++){
+            s = convertSpeed(speed[ix]);
+            v[0] = DXL_LOBYTE(DXL_LOWORD(s));
+            v[1] = DXL_HIBYTE(DXL_LOWORD(s));
+            v[2] = DXL_LOBYTE(DXL_HIWORD(s));
+            v[3] = DXL_HIBYTE(DXL_HIWORD(s));
+            groupSyncWrite.addParam(convert(i, j), v);
             ix++;
         }
     }
 
+    dxl_comm_result = groupSyncWrite.txPacket();
+    handle(packetHandler, dxl_comm_result);
+
+    groupSyncWrite.clearParam();
 }
 
 unsigned int BoardGalgo::setComplianceMargin(int legNo, int jointNo, double margin){}
