@@ -5,7 +5,7 @@ namespace controller {
 
 // TO-DO Zapytać o Type
 BoardGalgo::BoardGalgo( const std::string &port, int baudRate ) :
-    Board( "Board Galgo", TYPE_USB2DYNAMIXEL ),
+    Board( "Board Galgo", TYPE_GALGO ),
     portHandler_( dynamixel::PortHandler::getPortHandler( port.c_str() ) ) {
   if( !portHandler_->openPort() )
       throw FailedOpeningPortException("Failed to open the port \"" + port + '\"');
@@ -97,7 +97,7 @@ unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
     dynamixel::PacketHandler *packetHandler =
             dynamixel::PacketHandler::getPacketHandler( PROTOCOL_VERSION );
     int communicationResult = packetHandler->write4ByteTxRx( portHandler_,
-            dynamixel, GOAL_POSITION, convert( angle ), &error );
+            dynamixel, GOAL_POSITION, convertAngle( angle ), &error );
     handle( packetHandler, communicationResult, error );
 
     // TO-DO Zapytać o zwracany kod błędu

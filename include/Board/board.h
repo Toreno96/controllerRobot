@@ -43,6 +43,8 @@ namespace controller {
                     TYPE_SPIBASED,
                     /// Board with usb2dynamixel (Messor2)
                     TYPE_USB2DYNAMIXEL,
+                    /// Board Galgo
+                    TYPE_GALGO
             };
 
             /// Board controller state
