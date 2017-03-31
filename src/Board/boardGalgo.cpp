@@ -3,7 +3,6 @@
 
 namespace controller {
 
-// TO-DO Zapytać o Type
 BoardGalgo::BoardGalgo( const std::string &port, int baudRate ) :
     Board( "Board Galgo", TYPE_GALGO ),
     portHandler_( dynamixel::PortHandler::getPortHandler( port.c_str() ) ) {
@@ -64,7 +63,6 @@ void BoardGalgo::setLED(bool powered){
     }
 }
 
-// TO-DO Zapytać o poziom dostępu (private vs. public)
 void BoardGalgo::toggleTorque( tId dynamixel, bool onOrOff ) {
     uint8_t error;
     dynamixel::PacketHandler *packetHandler =
@@ -87,7 +85,6 @@ unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
             dynamixel, GOAL_POSITION, convertAngle( angle ), &error );
     handle( packetHandler, communicationResult, error );
 
-    // TO-DO Zapytać o zwracany kod błędu
     return 0;
 }
 unsigned int BoardGalgo::setPosition(int legNo, const std::vector<double>& angle){}
@@ -171,7 +168,6 @@ unsigned int BoardGalgo::readPosition(int legNo, int jointNo, double& angle){
 
     angle = convert( presentPosition );
 
-    // TO-DO Zapytać o zwracany kod błędu
     return 0;
 }
 unsigned int BoardGalgo::readPosition(int legNo, std::vector<double>& angle){}
