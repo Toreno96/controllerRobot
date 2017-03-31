@@ -28,13 +28,15 @@ void BoardGalgo::handle( dynamixel::PacketHandler *packetHandler,
 void BoardGalgo::handle( dynamixel::PacketHandler *packetHandler,
         uint8_t error ) {
     if( error != 0 ) {
+        printf( "Dynamixel hardware error: " );
         packetHandler->printRxPacketError( error );
-        throw std::runtime_error( "Dynamixel hardware error" );
     }
 }
 void BoardGalgo::handle( dynamixel::PacketHandler *packetHandler,
         int communicationResult, uint8_t error ) {
+    #ifndef NDEBUG
     handle( packetHandler, communicationResult );
+    #endif // #ifndef NDEBUG
     handle( packetHandler, error );
 }
 
