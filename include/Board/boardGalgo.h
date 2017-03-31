@@ -11,9 +11,6 @@ class BoardGalgo : Board {
         BoardGalgo( const std::string &port, int baudRate );
         ~BoardGalgo();
 
-        // TO-DO Dokumentacja doxygen
-        void toggleTorque( tId dynamixel, bool onOrOff );
-
         // TO-DO Dokumentacja doxygen poniższych funkcji setLED
         void setLED(int legNo, int jointNo, bool powered);
         void setLED(int legNo, bool powered);
@@ -277,6 +274,7 @@ private:
     void handle( dynamixel::PacketHandler *packetHandler, uint8_t error );
     void handle( dynamixel::PacketHandler *packetHandler,
             int communicationResult, uint8_t error );
+    void toggleTorque( tId dynamixel, bool onOrOff );
     tId convert( int legNo, int jointNo );
     uint16_t convertAngle( double angle );
     double convert( uint32_t position );
