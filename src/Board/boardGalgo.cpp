@@ -47,22 +47,54 @@ void BoardGalgo::setLED(int legNo, int jointNo, bool powered){
     uint8_t dxl_error = 0;
     int dxl_comm_result = COMM_TX_FAIL;
     dynamixel::PacketHandler *packetHandler =
-            dynamixel::PacketHandler::getPacketHandler( PROTOCOL_VERSION );
+            dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
 
     dxl_comm_result = packetHandler->write1ByteTxRx(portHandler_, id, LED, powered, &dxl_error);
     handle(packetHandler, dxl_comm_result, dxl_error);
 }
 
-void BoardGalgo::setLED(int legNo, bool powered){
+void BoardGalgo::setLED(int legNo, const std::vector<bool>& powered){
+    int dxl_comm_result = COMM_TX_FAIL;
+    dynamixel::PacketHandler *packetHandler =
+            dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
+
+    dynamixel::GroupSyncWrite groupSyncWrite(portHandler_, packetHandler, LED, 1);
+
+    uint8_t v;
     for(int i = 0; i < 3; i++){
-        setLED(legNo, i, powered);
+        v = powered[i];
+        //groupSyncWrite.addParam(convert(legNo, i), &(powered[i]));
+        groupSyncWrite.addParam(convert(legNo, i), &v);
     }
+
+    dxl_comm_result = groupSyncWrite.txPacket();
+    handle(packetHandler, dxl_comm_result);
+
+    groupSyncWrite.clearParam();
 }
 
-void BoardGalgo::setLED(bool powered){
+void BoardGalgo::setLED(const std::vector<bool> &powered){
+    int dxl_comm_result = COMM_TX_FAIL;
+    dynamixel::PacketHandler *packetHandler =
+            dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
+
+    dynamixel::GroupSyncWrite groupSyncWrite(portHandler_, packetHandler, LED, 1);
+
+    uint8_t v;
+    int ix = 0;
+
     for(int i = 0; i < 4; i++){
-        setLED(i, powered);
+        for(int j = 0; j < 3; j++){
+            v = powered[ix];
+            groupSyncWrite.addParam(convert(i, j), &v);
+            ix++;
+        }
     }
+
+    dxl_comm_result = groupSyncWrite.txPacket();
+    handle(packetHandler, dxl_comm_result);
+
+    groupSyncWrite.clearParam();
 }
 
 void BoardGalgo::setOperatingMode(int legNo, int jointNo, uint8_t operatingMode){

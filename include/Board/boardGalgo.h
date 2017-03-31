@@ -13,8 +13,8 @@ class BoardGalgo : Board {
 
         // TO-DO Dokumentacja doxygen poniższych funkcji setLED
         void setLED(int legNo, int jointNo, bool powered);
-        void setLED(int legNo, bool powered);
-        void setLED(bool powered);
+        void setLED(int legNo, const std::vector<bool>& powered);
+        void setLED(const std::vector<bool>& powered);
 
         void setOperatingMode(int legNo, int jointNo, uint8_t operatingMode);
         
