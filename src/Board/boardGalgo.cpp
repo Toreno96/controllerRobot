@@ -72,7 +72,7 @@ void BoardGalgo::toggleTorque( tId dynamixel, bool onOrOff ) {
     handle( packetHandler, communicationResult, error );
 }
 
-uint16_t BoardGalgo::convert( double angle ) {
+uint16_t BoardGalgo::convertAngle( double angle ) {
     return static_cast< uint16_t >( angle * 11.375 );
 }
 unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
@@ -82,7 +82,7 @@ unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
     dynamixel::PacketHandler *packetHandler =
             dynamixel::PacketHandler::getPacketHandler( PROTOCOL_VERSION );
     int communicationResult = packetHandler->write4ByteTxRx( portHandler_,
-            dynamixel, GOAL_POSITION, convert( angle ), &error );
+            dynamixel, GOAL_POSITION, convertAngle( angle ), &error );
     handle( packetHandler, communicationResult, error );
 
     // TO-DO Zapytać o zwracany kod błędu
