@@ -43,6 +43,13 @@ BoardGalgo::tId BoardGalgo::convert( int legNo, int jointNo ) {
     return static_cast< tId >( legNo * 10 + jointNo );
 }
 
+void BoardGalgo::toggleTorque( int legNo, int joinNo, bool onOrOff ) {
+    toggleTorque( convert( legNo, joinNo ), onOrOff );
+}
+void BoardGalgo::toggleTorque( int legNo,
+        const std::vector< bool >& onOrOff ) {}
+void BoardGalgo::toggleTorque( const std::vector< bool >& onOrOff ) {}
+
 void BoardGalgo::setLED(int legNo, int jointNo, bool powered){
     tId id = convert(legNo, jointNo);
     uint8_t dxl_error = 0;

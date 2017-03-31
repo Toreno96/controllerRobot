@@ -11,6 +11,11 @@ class BoardGalgo : Board {
         BoardGalgo( const std::string &port, int baudRate );
         ~BoardGalgo();
 
+        // TO-DO Dokumentacja doxygen poniższych funkcji toggleTorque
+        void toggleTorque( int legNo, int joinNo, bool onOrOff );
+        void toggleTorque( int legNo, const std::vector< bool >& onOrOff );
+        void toggleTorque( const std::vector< bool >& onOrOff );
+
         // TO-DO Dokumentacja doxygen poniższych funkcji setLED
         void setLED(int legNo, int jointNo, bool powered);
         void setLED(int legNo, bool powered);
