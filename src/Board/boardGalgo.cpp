@@ -3,7 +3,6 @@
 
 namespace controller {
 
-// TO-DO Zapytać o Type
 BoardGalgo::BoardGalgo( const std::string &port, int baudRate ) :
     Board( "Board Galgo", TYPE_GALGO ),
     portHandler_( dynamixel::PortHandler::getPortHandler( port.c_str() ) ) {
@@ -28,19 +27,28 @@ void BoardGalgo::handle( dynamixel::PacketHandler *packetHandler,
 void BoardGalgo::handle( dynamixel::PacketHandler *packetHandler,
         uint8_t error ) {
     if( error != 0 ) {
+        printf( "Dynamixel hardware error: " );
         packetHandler->printRxPacketError( error );
-        throw std::runtime_error( "Dynamixel hardware error" );
     }
 }
 void BoardGalgo::handle( dynamixel::PacketHandler *packetHandler,
         int communicationResult, uint8_t error ) {
+    #ifndef NDEBUG
     handle( packetHandler, communicationResult );
+    #endif // #ifndef NDEBUG
     handle( packetHandler, error );
 }
 
 BoardGalgo::tId BoardGalgo::convert( int legNo, int jointNo ) {
     return static_cast< tId >( legNo * 10 + jointNo );
 }
+
+void BoardGalgo::toggleTorque( int legNo, int joinNo, bool onOrOff ) {
+    toggleTorque( convert( legNo, joinNo ), onOrOff );
+}
+void BoardGalgo::toggleTorque( int legNo,
+        const std::vector< bool >& onOrOff ) {}
+void BoardGalgo::toggleTorque( const std::vector< bool >& onOrOff ) {}
 
 void BoardGalgo::setLED(int legNo, int jointNo, bool powered){
     tId id = convert(legNo, jointNo);
@@ -107,7 +115,6 @@ void BoardGalgo::setOperatingMode(int legNo, int jointNo, uint8_t operatingMode)
     handle(packetHandler, communicationResult, error);
 }
 
-// TO-DO Zapytać o poziom dostępu (private vs. public)
 void BoardGalgo::toggleTorque( tId dynamixel, bool onOrOff ) {
     uint8_t error;
     dynamixel::PacketHandler *packetHandler =
@@ -130,7 +137,6 @@ unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
             dynamixel, GOAL_POSITION, convertAngle( angle ), &error );
     handle( packetHandler, communicationResult, error );
 
-    // TO-DO Zapytać o zwracany kod błędu
     return 0;
 }
 unsigned int BoardGalgo::setPosition(int legNo, const std::vector<double>& angle){}
@@ -239,7 +245,6 @@ unsigned int BoardGalgo::readPosition(int legNo, int jointNo, double& angle){
 
     angle = convert( presentPosition );
 
-    // TO-DO Zapytać o zwracany kod błędu
     return 0;
 }
 unsigned int BoardGalgo::readPosition(int legNo, std::vector<double>& angle){}
