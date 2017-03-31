@@ -15,6 +15,8 @@ class BoardGalgo : Board {
         void setLED(int legNo, int jointNo, bool powered);
         void setLED(int legNo, bool powered);
         void setLED(bool powered);
+
+        void setOperatingMode(int legNo, int jointNo, uint8_t operatingMode);
         
        /**
         * \brief Set reference position value for servomotor.
@@ -252,6 +254,9 @@ class BoardGalgo : Board {
         */
         void setDefault(void);
 
+        static const uint8_t OPERATINGMODE_VELOCITY = 1;
+        static const uint8_t OPERATINGMODE_POSITION = 3;
+
 private:
     typedef uint8_t tId;
     typedef uint16_t tAddress;
@@ -264,10 +269,7 @@ private:
     const tAddress PRESENT_VELOCITY	= 128;
     const tAddress PRESENT_POSITION = 132;
 
-    const uint8_t OPERATINGMODE_VELOCITY = 1;
-    const uint8_t OPERATINGMODE_POSITION = 3;
-
-    const int MAX_SPEED = 180;
+    const int MAX_SPEED = 350;
 
     void handle( dynamixel::PacketHandler *packetHandler,
             int communicationResult );
