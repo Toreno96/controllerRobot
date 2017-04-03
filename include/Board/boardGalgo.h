@@ -271,10 +271,12 @@ private:
     const tAddress LED = 65;
     const tAddress GOAL_VELOCITY = 104;
     const tAddress GOAL_POSITION = 116;
+    const tAddress PRESENT_CURRENT = 126;
     const tAddress PRESENT_VELOCITY	= 128;
     const tAddress PRESENT_POSITION = 132;
 
     const int MAX_SPEED = 350;
+    const int MAX_CURRENT = 1193;
 
     void handle( dynamixel::PacketHandler *packetHandler,
             int communicationResult );
@@ -286,6 +288,7 @@ private:
     uint16_t convertAngle( double angle );
     double convert( uint32_t position );
     uint32_t convertSpeed(double value);
+    double convertCurrent(uint16_t value);
     dynamixel::PortHandler *portHandler_;
 };
 
