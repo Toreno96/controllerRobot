@@ -27,7 +27,7 @@ void BoardGalgo::handle( dynamixel::PacketHandler *packetHandler,
 void BoardGalgo::handle( dynamixel::PacketHandler *packetHandler,
         uint8_t error ) {
     if( error != 0 ) {
-        printf( "Dynamixel hardware error: " );
+        printf( "Dynamixel error: " );
         packetHandler->printRxPacketError( error );
     }
 }
