@@ -27,7 +27,7 @@ void BoardGalgo::handle( dynamixel::PacketHandler *packetHandler,
 void BoardGalgo::handle( dynamixel::PacketHandler *packetHandler,
         uint8_t error ) {
     if( error != 0 ) {
-        printf( "Dynamixel hardware error: " );
+        printf( "Dynamixel error: " );
         packetHandler->printRxPacketError( error );
     }
 }
@@ -47,8 +47,35 @@ void BoardGalgo::toggleTorque( int legNo, int joinNo, bool onOrOff ) {
     toggleTorque( convert( legNo, joinNo ), onOrOff );
 }
 void BoardGalgo::toggleTorque( int legNo,
-        const std::vector< bool >& onOrOff ) {}
-void BoardGalgo::toggleTorque( const std::vector< bool >& onOrOff ) {}
+        const std::vector< bool >& onOrOff ) {
+    dynamixel::PacketHandler *packetHandler =
+            dynamixel::PacketHandler::getPacketHandler( PROTOCOL_VERSION );
+    dynamixel::GroupSyncWrite groupSyncWrite( portHandler_, packetHandler,
+            TORQUE_ENABLE, 1 );
+    uint8_t convertedOnOrOff;
+    for( int joinNo = 0; joinNo < 3; ++joinNo ) {
+        convertedOnOrOff = onOrOff[ joinNo ];
+        groupSyncWrite.addParam( convert( legNo, joinNo ), &convertedOnOrOff );
+    }
+    handle( packetHandler, groupSyncWrite.txPacket() );
+    groupSyncWrite.clearParam();
+}
+void BoardGalgo::toggleTorque( const std::vector< bool >& onOrOff ) {
+    dynamixel::PacketHandler *packetHandler =
+            dynamixel::PacketHandler::getPacketHandler( PROTOCOL_VERSION );
+    dynamixel::GroupSyncWrite groupSyncWrite( portHandler_, packetHandler,
+            TORQUE_ENABLE, 1 );
+    uint8_t convertedOnOrOff;
+    for( int legNo = 0, i = 0; legNo < 4; ++legNo ) {
+        for( int joinNo = 0; joinNo < 3; ++joinNo, ++i ) {
+            convertedOnOrOff = onOrOff[ i ];
+            groupSyncWrite.addParam( convert( legNo, joinNo ),
+                    &convertedOnOrOff );
+        }
+    }
+    handle( packetHandler, groupSyncWrite.txPacket() );
+    groupSyncWrite.clearParam();
+}
 
 void BoardGalgo::setLED(int legNo, int jointNo, bool powered){
     tId id = convert(legNo, jointNo);
