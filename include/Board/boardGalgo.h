@@ -24,6 +24,10 @@ class BoardGalgo : Board {
         void setOperatingMode(int legNo, int jointNo, uint8_t operatingMode);
         void setOperatingMode(int legNo, const std::vector<uint8_t>& operatingMode);
         void setOperatingMode(const std::vector<uint8_t>& operatingMode);
+
+        void reboot( int legNo, int jointNo );
+        void reboot( int legNo );
+        void reboot();
         
        /**
         * \brief Set reference position value for servomotor.

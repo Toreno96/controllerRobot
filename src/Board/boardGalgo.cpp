@@ -15,6 +15,19 @@ BoardGalgo::~BoardGalgo() {
   portHandler_->closePort();
 }
 
+void BoardGalgo::reboot( int legNo, int jointNo ) {
+    tId dynamixel = convert( legNo, jointNo );
+    uint8_t error;
+    dynamixel::PacketHandler *packetHandler =
+            dynamixel::PacketHandler::getPacketHandler( PROTOCOL_VERSION );
+    int communicationResult = packetHandler->reboot( portHandler_, dynamixel,
+            &error );
+    handle( packetHandler, communicationResult, error );
+}
+// WIP
+void BoardGalgo::reboot( int legNo ) {}
+void BoardGalgo::reboot() {}
+
 // TO-DO Customowe wyjątki;
 // umożliwienie wypisania TxRxResult po złapaniu wyjątku
 void BoardGalgo::handle( dynamixel::PacketHandler *packetHandler,
