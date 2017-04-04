@@ -144,10 +144,11 @@ void BoardGalgo::setOperatingMode(int legNo, const std::vector<uint8_t>& operati
             dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
     dynamixel::GroupSyncWrite groupSyncWrite(portHandler_, packetHandler, OPERATING_MODE, 1);
 
-    uint8_t v;
+    std::vector<bool> torque(3);
+    for(int i = 0; i < 3; i++) torque[i] = false;
+    toggleTorque(legNo, torque);
 
-    toggleTorque(convert(1,0), false);
-    toggleTorque(convert(1,1), false);
+    uint8_t v;
 
     for(int i = 0; i < 3; i++){
         v = operatingMode[i];
@@ -164,11 +165,12 @@ void BoardGalgo::setOperatingMode(const std::vector<uint8_t>& operatingMode){
             dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
     dynamixel::GroupSyncWrite groupSyncWrite(portHandler_, packetHandler, OPERATING_MODE, 1);
 
+    std::vector<bool> torque(12);
+    for(int i = 0; i < 12; i++) torque[i] = false;
+    toggleTorque(torque);
+
     uint8_t v;
     int ix = 0;
-
-    toggleTorque(convert(1,0), false);
-    toggleTorque(convert(1,1), false);
 
     for(int i = 0; i < 4; i++){
         for(int j = 0; j < 3; j++){
@@ -209,7 +211,7 @@ unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
 unsigned int BoardGalgo::setPosition(int legNo, const std::vector<double>& angle){}
 // WIP
 unsigned int BoardGalgo::setPosition(const std::vector<double>& angle){
-    dynamixel::PacketHandler *packetHandler =
+/*    dynamixel::PacketHandler *packetHandler =
             dynamixel::PacketHandler::getPacketHandler( PROTOCOL_VERSION );
     dynamixel::GroupSyncWrite groupSyncWrite( portHandler_, packetHandler,
             GOAL_POSITION, 4 );
@@ -226,7 +228,7 @@ unsigned int BoardGalgo::setPosition(const std::vector<double>& angle){
         }
     }
     handle( packetHandler, groupSyncWrite.txPacket() );
-    groupSyncWrite.clearParam();
+    groupSyncWrite.clearParam();*/
 }
 
 uint32_t BoardGalgo::convertSpeed(double value){
