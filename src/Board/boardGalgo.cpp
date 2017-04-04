@@ -157,8 +157,7 @@ void BoardGalgo::setOperatingMode(int legNo, const std::vector<uint8_t>& operati
             dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
     dynamixel::GroupSyncWrite groupSyncWrite(portHandler_, packetHandler, OPERATING_MODE, 1);
 
-    std::vector<bool> torque(3);
-    for(int i = 0; i < 3; i++) torque[i] = false;
+    std::vector<bool> torque(3, false);
     toggleTorque(legNo, torque);
 
     uint8_t v;
@@ -178,8 +177,7 @@ void BoardGalgo::setOperatingMode(const std::vector<uint8_t>& operatingMode){
             dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
     dynamixel::GroupSyncWrite groupSyncWrite(portHandler_, packetHandler, OPERATING_MODE, 1);
 
-    std::vector<bool> torque(12);
-    for(int i = 0; i < 12; i++) torque[i] = false;
+    std::vector<bool> torque(12, false);
     toggleTorque(torque);
 
     uint8_t v;
@@ -283,9 +281,8 @@ unsigned int BoardGalgo::setSpeed(int legNo, const std::vector<double>& speed){
             dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
     dynamixel::GroupSyncWrite groupSyncWrite(portHandler_, packetHandler, GOAL_VELOCITY, 4);
 
-    toggleTorque(convert(legNo, 0), true);
-    toggleTorque(convert(legNo, 1), true);
-    //toggleTorque(convert(legNo, 2), true);
+    std::vector<bool> torque(3, true);
+    toggleTorque(legNo, torque);
 
     uint32_t s;
     uint8_t v[4];
@@ -309,9 +306,8 @@ unsigned int BoardGalgo::setSpeed(const std::vector<double>& speed){
             dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
     dynamixel::GroupSyncWrite groupSyncWrite(portHandler_, packetHandler, GOAL_VELOCITY, 4);
 
-    toggleTorque(convert(1, 0), true);
-    toggleTorque(convert(1, 1), true);
-    //toggleTorque(convert(legNo, 2), true);
+    std::vector<bool> torque(12, true);
+    toggleTorque(torque);
 
     uint32_t s;
     uint8_t v[4];
@@ -441,9 +437,29 @@ unsigned int BoardGalgo::readTorque(int legNo, int jointNo, double& servoTorque)
 unsigned int BoardGalgo::readTorque(int legNo,std::vector<double>& servoTorque){}
 unsigned int BoardGalgo::readTorque(std::vector<double>& servoTorque){}
 
-void BoardGalgo::setOffset(int legNo, int jointNo, double offset){}
-void BoardGalgo::setOffset(int legNo, const std::vector<double> offset){}
-void BoardGalgo::setOffset(const std::vector<double> offset){}
+int BoardGalgo::convertToIndex(int legNo, int jointNo){
+    return legNo*3 + jointNo;
+}
+
+double BoardGalgo::convertRadToDeg(double angle){
+    return angle * (180/M_PI);
+}
+
+void BoardGalgo::setOffset(int legNo, int jointNo, double offset){
+    angleOffset[convertToIndex(legNo, jointNo)] += (int)convertRadToDeg(offset);
+}
+
+void BoardGalgo::setOffset(int legNo, const std::vector<double> offset){
+    for(int i = 0; i < 3; i++){
+         angleOffset[convertToIndex(legNo, i)] += (int)convertRadToDeg(offset[i]);
+    }
+}
+
+void BoardGalgo::setOffset(const std::vector<double> offset){
+    for(int i = 0; i < 12; i++){
+         angleOffset[i] += (int)convertRadToDeg(offset[i]);
+    }
+}
 
 void BoardGalgo::setDefault(void){}
 

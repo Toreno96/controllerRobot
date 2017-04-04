@@ -3,6 +3,7 @@
 
 #include "../../3rdParty/dynamixel3/include/dynamixel_sdk.h"
 #include "board.h"
+#include "math.h"
 
 namespace controller {
 
@@ -242,20 +243,20 @@ class BoardGalgo : Board {
         * \brief Returns servo's offset.
         * \param legNo Leg number.
         * \param jointNo Joint number.
-        * \param offset Offset value.
+        * \param offset Offset value in radians.
         * \return Return error value.
         */
         void setOffset(int legNo, int jointNo, double offset);
        /**
         * \brief Returns offset of servos in particular leg.
         * \param legNo Leg number.
-        * \param offset Vector of offset values.
+        * \param offset Vector of offset values in radians.
         * \return Return error value.
         */
         void setOffset(int legNo, const std::vector<double> offset);
        /**
         * \brief Returns offset of servos.
-        * \param offset Vector of offset values.
+        * \param offset Vector of offset values in radians.
         * \return Return error value.
         */
         void setOffset(const std::vector<double> offset);
@@ -295,7 +296,12 @@ private:
     double convert( uint32_t position );
     uint32_t convertSpeed(double value);
     double convertCurrent(uint16_t value);
+    int convertToIndex(int legNo, int jointNo);
+    double convertRadToDeg(double angle);
     dynamixel::PortHandler *portHandler_;
+
+    /// Default offset values of angles for serwomotors.
+    int angleOffset[12];
 };
 
 } // namespace controller
