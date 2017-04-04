@@ -162,13 +162,31 @@ unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
 
     return 0;
 }
-unsigned int BoardGalgo::setPosition(int legNo, const std::vector<double>& angle){}
-// WIP
+unsigned int BoardGalgo::setPosition(int legNo, const std::vector<double>& angle){
+    dynamixel::PacketHandler *packetHandler =
+            dynamixel::PacketHandler::getPacketHandler( PROTOCOL_VERSION );
+    dynamixel::GroupSyncWrite groupSyncWrite( portHandler_, packetHandler,
+            GOAL_POSITION, 4 );
+    toggleTorque( legNo, std::vector< bool >( 3, true ) );
+    uint8_t angleAsBytes[ 4 ];
+    for( int joinNo = 0; joinNo < 3; ++joinNo ) {
+        uint16_t convertedAngle = convertAngle( angle[ joinNo ] );
+        angleAsBytes[ 0 ] = DXL_LOBYTE( DXL_LOWORD( convertedAngle ) );
+        angleAsBytes[ 1 ] = DXL_HIBYTE( DXL_LOWORD( convertedAngle ) );
+        angleAsBytes[ 2 ] = DXL_LOBYTE( DXL_HIWORD( convertedAngle ) );
+        angleAsBytes[ 3 ] = DXL_HIBYTE( DXL_HIWORD( convertedAngle ) );
+        groupSyncWrite.addParam( convert( legNo, joinNo ),
+                angleAsBytes );
+    }
+    handle( packetHandler, groupSyncWrite.txPacket() );
+    groupSyncWrite.clearParam();
+}
 unsigned int BoardGalgo::setPosition(const std::vector<double>& angle){
     dynamixel::PacketHandler *packetHandler =
             dynamixel::PacketHandler::getPacketHandler( PROTOCOL_VERSION );
     dynamixel::GroupSyncWrite groupSyncWrite( portHandler_, packetHandler,
             GOAL_POSITION, 4 );
+    toggleTorque( std::vector< bool >( 4 * 3, true ) );
     uint8_t angleAsBytes[ 4 ];
     for( int legNo = 0, i = 0; legNo < 4; ++legNo ) {
         for( int joinNo = 0; joinNo < 3; ++joinNo, ++i ) {
@@ -178,7 +196,7 @@ unsigned int BoardGalgo::setPosition(const std::vector<double>& angle){
             angleAsBytes[ 2 ] = DXL_LOBYTE( DXL_HIWORD( convertedAngle ) );
             angleAsBytes[ 3 ] = DXL_HIBYTE( DXL_HIWORD( convertedAngle ) );
             groupSyncWrite.addParam( convert( legNo, joinNo ),
-                    &convertedOnOrOff );
+                    angleAsBytes );
         }
     }
     handle( packetHandler, groupSyncWrite.txPacket() );
