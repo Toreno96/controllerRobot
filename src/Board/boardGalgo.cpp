@@ -241,7 +241,7 @@ unsigned int BoardGalgo::setPosition(int legNo, const std::vector<double>& angle
     groupSyncWrite.clearParam();
 }
 unsigned int BoardGalgo::setPosition(const std::vector<double>& angle){
-/*    dynamixel::PacketHandler *packetHandler =
+    dynamixel::PacketHandler *packetHandler =
             dynamixel::PacketHandler::getPacketHandler( PROTOCOL_VERSION );
     dynamixel::GroupSyncWrite groupSyncWrite( portHandler_, packetHandler,
             GOAL_POSITION, 4 );
@@ -259,7 +259,7 @@ unsigned int BoardGalgo::setPosition(const std::vector<double>& angle){
         }
     }
     handle( packetHandler, groupSyncWrite.txPacket() );
-    groupSyncWrite.clearParam();*/
+    groupSyncWrite.clearParam();
 }
 
 uint32_t BoardGalgo::convertSpeed(double value){
