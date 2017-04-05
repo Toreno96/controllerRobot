@@ -2,13 +2,17 @@
 cmake_minimum_required(VERSION 2.8)
 
 # Build options have to be before PROJECT(...)
-SET(CMAKE_CONFIGURATION_TYPES "Release" CACHE PATH "Configuration types")
-SET(CMAKE_BUILD_TYPE "Release" CACHE PATH "Current build configuration")
+SET(CMAKE_CONFIGURATION_TYPES "Debug" "Release" CACHE PATH "Configuration types")
+if(NOT CMAKE_BUILD_TYPE)
+  SET(CMAKE_BUILD_TYPE "Debug" CACHE PATH "Current build configuration")
+endif(NOT CMAKE_BUILD_TYPE)
 
 # Example Project configuration
 PROJECT(CONTROLLER)
-SET(CMAKE_CXX_FLAGS "-Wall -Wextra -Wconversion -Wno-unused-parameter -Wno-return-type -std=c++11 -pthread")
-#add_definitions(-DDEBUG)
+
+SET(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra -Wshadow -Wconversion -pthread")
+SET(CMAKE_CXX_FLAGS_DEBUG "-O0 -DEBUG -g")
+SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 
 # Folders
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
