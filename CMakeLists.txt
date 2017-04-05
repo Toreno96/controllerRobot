@@ -59,10 +59,6 @@ foreach(CONFIGURATION_TYPE ${CMAKE_CONFIGURATION_TYPES})
 	SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${CONFIGURATION_TYPE} ${ARCHIVE_OUTPUT_DIRECTORY})
 endforeach(CONFIGURATION_TYPE CMAKE_CONFIGURATION_TYPES)
 
-if(MSVC)
-  SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
-endif()
-
 ###############################################################################
 #
 # SIMULATOR tinyXML2 library
