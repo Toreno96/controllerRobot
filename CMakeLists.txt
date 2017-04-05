@@ -14,6 +14,11 @@ SET(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra -Wshadow -Wconversion -pthread")
 SET(CMAKE_CXX_FLAGS_DEBUG "-O0 -DEBUG -g")
 SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 
+option( DISABLE_WARNINGS "Disable some of the non-critical warnings" ON )
+if( DISABLE_WARNINGS )
+  SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -Wno-return-type" )
+endif( DISABLE_WARNINGS )
+
 # Folders
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 
