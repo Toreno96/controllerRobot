@@ -266,8 +266,8 @@ class BoardGalgo : Board {
         */
         void setDefault(void);
 
-        static const uint8_t OPERATINGMODE_VELOCITY = 1;
-        static const uint8_t OPERATINGMODE_POSITION = 3;
+        static const uint8_t OPERATINGMODE_VELOCITY;
+        static const uint8_t OPERATINGMODE_POSITION;
 
 private:
     typedef uint8_t tId;

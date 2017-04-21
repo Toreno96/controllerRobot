@@ -3,6 +3,9 @@
 
 namespace controller {
 
+const uint8_t BoardGalgo::OPERATINGMODE_VELOCITY = 1;
+const uint8_t BoardGalgo::OPERATINGMODE_POSITION = 3;
+
 BoardGalgo::BoardGalgo( const std::string &port, int baudRate ) :
     Board( "Board Galgo", TYPE_GALGO ),
     portHandler_( dynamixel::PortHandler::getPortHandler( port.c_str() ) ) {
