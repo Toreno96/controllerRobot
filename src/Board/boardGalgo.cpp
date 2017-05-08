@@ -88,7 +88,7 @@ void BoardGalgo::toggleTorque( int legNo,
     dynamixel::GroupSyncWrite groupSyncWrite( portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(),
             TORQUE_ENABLE, 1 );
     uint8_t convertedOnOrOff;
-    for( int joinNo = 0; joinNo < 3; ++joinNo ) {
+    for( int joinNo = 1; joinNo <= 2; ++joinNo ) {
         convertedOnOrOff = onOrOff[ joinNo ];
         groupSyncWrite.addParam( convert( legNo, joinNo ), &convertedOnOrOff );
     }
@@ -125,7 +125,7 @@ void BoardGalgo::setLED(int legNo, const std::vector<bool>& powered){
 
     uint8_t v;
 
-    for(int i = 0; i < 3; i++){
+    for(int i = 1; i <= 2; i++){
         v = powered[i];
         groupSyncWrite.addParam(convert(legNo, i), &v);
     }
@@ -171,7 +171,7 @@ void BoardGalgo::setOperatingMode(int legNo, const std::vector<uint8_t>& operati
 
     uint8_t v;
 
-    for(int i = 0; i < 3; i++){
+    for(int i = 1; i <= 2; i++){
         v = operatingMode[i];
         groupSyncWrite.addParam(convert(legNo, i), &v);
     }
@@ -219,7 +219,7 @@ unsigned int BoardGalgo::setPosition(int legNo, const std::vector<double>& angle
             GOAL_POSITION, 4 );
     toggleTorque( legNo, std::vector< bool >( 3, true ) );
     uint8_t angleAsBytes[ 4 ];
-    for( int joinNo = 0; joinNo < 3; ++joinNo ) {
+    for( int joinNo = 1; joinNo <= 2; ++joinNo ) {
         uint16_t convertedAngle = convertAngle( angle[ joinNo ] );
         angleAsBytes[ 0 ] = DXL_LOBYTE( DXL_LOWORD( convertedAngle ) );
         angleAsBytes[ 1 ] = DXL_HIBYTE( DXL_LOWORD( convertedAngle ) );
@@ -273,7 +273,7 @@ unsigned int BoardGalgo::setSpeed(int legNo, const std::vector<double>& speed){
     uint32_t s;
     uint8_t v[4];
 
-    for(int i = 0; i < 3; i++){
+    for(int i = 1; i <= 2; i++){
         s = convertSpeed(speed[i]);
         v[0] = DXL_LOBYTE(DXL_LOWORD(s));
         v[1] = DXL_HIBYTE(DXL_LOWORD(s));
@@ -374,14 +374,14 @@ unsigned int BoardGalgo::readCurrent(int legNo, std::vector<double>& servoCurren
     int dxl_comm_result = COMM_TX_FAIL;
     dynamixel::GroupSyncRead groupSyncRead(portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(), PRESENT_CURRENT, 2);
 
-    for(int i = 0; i < 3; i++){
+    for(int i = 1; i <= 2; i++){
         groupSyncRead.addParam(convert(legNo, i));
     }
 
     dxl_comm_result = groupSyncRead.txRxPacket();
     handle(dxl_comm_result);
 
-    for(int i = 0; i < 3; i++){
+    for(int i = 1; i <= 2; i++){
         servoCurrent[i] = convertCurrent((uint16_t)groupSyncRead.getData(convert(legNo, i), PRESENT_CURRENT, 2));
     }
 }
@@ -426,7 +426,7 @@ void BoardGalgo::setOffset(int legNo, int jointNo, double offset){
 }
 
 void BoardGalgo::setOffset(int legNo, const std::vector<double> offset){
-    for(int i = 0; i < 3; i++){
+    for(int i = 1; i <= 2; i++){
          angleOffset[convertToIndex(legNo, i)] += (int)convertRadToDeg(offset[i]);
     }
 }
