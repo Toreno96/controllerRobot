@@ -1,6 +1,7 @@
 #ifndef _BOARD_GALGO_H_
 #define _BOARD_GALGO_H_
 
+#include <map>
 #include <memory>
 #include "../../3rdParty/dynamixel3/include/dynamixel_sdk.h"
 #include "board.h"
@@ -10,7 +11,9 @@ namespace controller {
 
 class BoardGalgo : Board {
     public:
-        BoardGalgo( const std::string &port, int baudRate );
+        BoardGalgo( const std::string &rightLegsDevPath,
+                    const std::string &leftLegsDevPath,
+                    int baudRate );
         ~BoardGalgo();
 
         // TO-DO Dokumentacja doxygen poniższych funkcji toggleTorque
@@ -288,10 +291,11 @@ private:
     const int MAX_SPEED = 350;
     const int MAX_CURRENT = 1193;
 
+    void preparePortHandler( const tPortHandler& portHandler, int baudRate );
+    void preparePortHandlersByLegNumberMap();
     void handle( int communicationResult );
     void handle( uint8_t error );
     void handle( int communicationResult, uint8_t error );
-    void toggleTorque( tId dynamixel, bool onOrOff );
     tId convert( int legNo, int jointNo );
     uint16_t convertAngle( double angle );
     double convert( uint32_t position );
@@ -299,7 +303,9 @@ private:
     double convertCurrent(uint16_t value);
     int convertToIndex(int legNo, int jointNo);
     double convertRadToDeg(double angle);
-    tPortHandler portHandler_;
+    tPortHandler rightLegs_;
+    tPortHandler leftLegs_;
+    std::map< int, tPortHandler > portHandlersByLegNumber_;
     tPacketHandler packetHandler_;
 
     /// Default offset values of angles for serwomotors.

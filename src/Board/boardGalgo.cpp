@@ -1,3 +1,4 @@
+#include <utility>
 #include "Board/boardGalgo.h"
 #include "Board/exceptions.h"
 
@@ -6,24 +7,44 @@ namespace controller {
 const uint8_t BoardGalgo::OPERATINGMODE_VELOCITY = 1;
 const uint8_t BoardGalgo::OPERATINGMODE_POSITION = 3;
 
-BoardGalgo::BoardGalgo( const std::string &port, int baudRate ) :
+BoardGalgo::BoardGalgo( const std::string &rightLegsDevPath,
+                        const std::string &leftLegsDevPath,
+                        int baudRate ) :
         Board( "Board Galgo", TYPE_GALGO ),
-        portHandler_( dynamixel::PortHandler::getPortHandler( port.c_str() ) ),
+        rightLegs_( dynamixel::PortHandler::getPortHandler(
+                           rightLegsDevPath.c_str() ) ),
+        leftLegs_( dynamixel::PortHandler::getPortHandler(
+                           leftLegsDevPath.c_str() ) ),
         packetHandler_( dynamixel::PacketHandler::getPacketHandler(
                                 PROTOCOL_VERSION ) ) {
-  if( !portHandler_->openPort() )
-      throw FailedOpeningPortException("Failed to open the port \"" + port + '\"');
-  if( !portHandler_->setBaudRate( baudRate ) )
+    preparePortHandler( rightLegs_, baudRate );
+    preparePortHandler( leftLegs_, baudRate );
+    preparePortHandlersByLegNumberMap();
+}
+void BoardGalgo::preparePortHandler( const tPortHandler& portHandler,
+                                     int baudRate ) {
+  if( !portHandler->openPort() )
+      throw FailedOpeningPortException(
+            std::string( "Failed to open the port \"" ) +
+            portHandler->getPortName() + '\"');
+  if( !portHandler->setBaudRate( baudRate ) )
       throw FailedChangingBaudRateException("Failed to change the baudrate to " + std::to_string( baudRate ) ) ;
 }
+void BoardGalgo::preparePortHandlersByLegNumberMap() {
+    portHandlersByLegNumber_.insert( std::make_pair( 1, rightLegs_ ) );
+    portHandlersByLegNumber_.insert( std::make_pair( 2, rightLegs_ ) );
+    portHandlersByLegNumber_.insert( std::make_pair( 3, leftLegs_ ) );
+    portHandlersByLegNumber_.insert( std::make_pair( 4, leftLegs_ ) );
+}
 BoardGalgo::~BoardGalgo() {
-  portHandler_->closePort();
+  rightLegs_->closePort();
+  leftLegs_->closePort();
 }
 
 void BoardGalgo::reboot( int legNo, int jointNo ) {
     tId dynamixel = convert( legNo, jointNo );
     uint8_t error;
-    int communicationResult = packetHandler_->reboot( portHandler_.get(), dynamixel,
+    int communicationResult = packetHandler_->reboot( portHandlersByLegNumber_.at( legNo ).get(), dynamixel,
             &error );
     handle( communicationResult, error );
 }
@@ -57,11 +78,14 @@ BoardGalgo::tId BoardGalgo::convert( int legNo, int jointNo ) {
 }
 
 void BoardGalgo::toggleTorque( int legNo, int joinNo, bool onOrOff ) {
-    toggleTorque( convert( legNo, joinNo ), onOrOff );
+    uint8_t error;
+    int communicationResult = packetHandler_->write1ByteTxRx( portHandlersByLegNumber_.at( legNo ).get(),
+            convert( legNo, joinNo ), TORQUE_ENABLE, onOrOff, &error );
+    handle( communicationResult, error );
 }
 void BoardGalgo::toggleTorque( int legNo,
         const std::vector< bool >& onOrOff ) {
-    dynamixel::GroupSyncWrite groupSyncWrite( portHandler_.get(), packetHandler_.get(),
+    dynamixel::GroupSyncWrite groupSyncWrite( portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(),
             TORQUE_ENABLE, 1 );
     uint8_t convertedOnOrOff;
     for( int joinNo = 0; joinNo < 3; ++joinNo ) {
@@ -72,18 +96,18 @@ void BoardGalgo::toggleTorque( int legNo,
     groupSyncWrite.clearParam();
 }
 void BoardGalgo::toggleTorque( const std::vector< bool >& onOrOff ) {
-    dynamixel::GroupSyncWrite groupSyncWrite( portHandler_.get(), packetHandler_.get(),
-            TORQUE_ENABLE, 1 );
-    uint8_t convertedOnOrOff;
-    for( int legNo = 0, i = 0; legNo < 4; ++legNo ) {
-        for( int joinNo = 0; joinNo < 3; ++joinNo, ++i ) {
-            convertedOnOrOff = onOrOff[ i ];
-            groupSyncWrite.addParam( convert( legNo, joinNo ),
-                    &convertedOnOrOff );
-        }
-    }
-    handle( groupSyncWrite.txPacket() );
-    groupSyncWrite.clearParam();
+    // dynamixel::GroupSyncWrite groupSyncWrite( portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(),
+    //         TORQUE_ENABLE, 1 );
+    // uint8_t convertedOnOrOff;
+    // for( int legNo = 0, i = 0; legNo < 4; ++legNo ) {
+    //     for( int joinNo = 0; joinNo < 3; ++joinNo, ++i ) {
+    //         convertedOnOrOff = onOrOff[ i ];
+    //         groupSyncWrite.addParam( convert( legNo, joinNo ),
+    //                 &convertedOnOrOff );
+    //     }
+    // }
+    // handle( groupSyncWrite.txPacket() );
+    // groupSyncWrite.clearParam();
 }
 
 void BoardGalgo::setLED(int legNo, int jointNo, bool powered){
@@ -91,13 +115,13 @@ void BoardGalgo::setLED(int legNo, int jointNo, bool powered){
     uint8_t dxl_error = 0;
     int dxl_comm_result = COMM_TX_FAIL;
 
-    dxl_comm_result = packetHandler_->write1ByteTxRx(portHandler_.get(), id, LED, powered, &dxl_error);
+    dxl_comm_result = packetHandler_->write1ByteTxRx(portHandlersByLegNumber_.at( legNo ).get(), id, LED, powered, &dxl_error);
     handle(dxl_comm_result, dxl_error);
 }
 
 void BoardGalgo::setLED(int legNo, const std::vector<bool>& powered){
     int dxl_comm_result = COMM_TX_FAIL;
-    dynamixel::GroupSyncWrite groupSyncWrite(portHandler_.get(), packetHandler_.get(), LED, 1);
+    dynamixel::GroupSyncWrite groupSyncWrite(portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(), LED, 1);
 
     uint8_t v;
 
@@ -111,37 +135,36 @@ void BoardGalgo::setLED(int legNo, const std::vector<bool>& powered){
 }
 
 void BoardGalgo::setLED(const std::vector<bool> &powered){
-    int dxl_comm_result = COMM_TX_FAIL;
-    dynamixel::GroupSyncWrite groupSyncWrite(portHandler_.get(), packetHandler_.get(), LED, 1);
+    // int dxl_comm_result = COMM_TX_FAIL;
+    // dynamixel::GroupSyncWrite groupSyncWrite(portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(), LED, 1);
 
-    uint8_t v;
-    int ix = 0;
+    // uint8_t v;
+    // int ix = 0;
 
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < 3; j++){
-            v = powered[ix];
-            groupSyncWrite.addParam(convert(i, j), &v);
-            ix++;
-        }
-    }
+    // for(int i = 0; i < 4; i++){
+    //     for(int j = 0; j < 3; j++){
+    //         v = powered[ix];
+    //         groupSyncWrite.addParam(convert(i, j), &v);
+    //         ix++;
+    //     }
+    // }
 
-    dxl_comm_result = groupSyncWrite.txPacket();
-    handle(dxl_comm_result);
+    // dxl_comm_result = groupSyncWrite.txPacket();
+    // handle(dxl_comm_result);
 }
 
 void BoardGalgo::setOperatingMode(int legNo, int jointNo, uint8_t operatingMode){
-    tId dynamixel = convert(legNo, jointNo);
     uint8_t error;
 
-    toggleTorque(dynamixel, false);
+    toggleTorque(legNo, jointNo, false);
 
-    int communicationResult = packetHandler_->write1ByteTxRx(portHandler_.get(), dynamixel, OPERATING_MODE, operatingMode, &error);
+    int communicationResult = packetHandler_->write1ByteTxRx(portHandlersByLegNumber_.at( legNo ).get(), convert(legNo, jointNo), OPERATING_MODE, operatingMode, &error);
     handle(communicationResult, error);
 }
 
 void BoardGalgo::setOperatingMode(int legNo, const std::vector<uint8_t>& operatingMode){
     int dxl_comm_result = COMM_TX_FAIL;
-    dynamixel::GroupSyncWrite groupSyncWrite(portHandler_.get(), packetHandler_.get(), OPERATING_MODE, 1);
+    dynamixel::GroupSyncWrite groupSyncWrite(portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(), OPERATING_MODE, 1);
 
     std::vector<bool> torque(3, false);
     toggleTorque(legNo, torque);
@@ -158,49 +181,41 @@ void BoardGalgo::setOperatingMode(int legNo, const std::vector<uint8_t>& operati
 }
 
 void BoardGalgo::setOperatingMode(const std::vector<uint8_t>& operatingMode){
-    int dxl_comm_result = COMM_TX_FAIL;
-    dynamixel::GroupSyncWrite groupSyncWrite(portHandler_.get(), packetHandler_.get(), OPERATING_MODE, 1);
+    // int dxl_comm_result = COMM_TX_FAIL;
+    // dynamixel::GroupSyncWrite groupSyncWrite(portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(), OPERATING_MODE, 1);
 
-    std::vector<bool> torque(12, false);
-    toggleTorque(torque);
+    // std::vector<bool> torque(12, false);
+    // toggleTorque(torque);
 
-    uint8_t v;
-    int ix = 0;
+    // uint8_t v;
+    // int ix = 0;
 
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < 3; j++){
-            v = operatingMode[ix];
-            groupSyncWrite.addParam(convert(i, j), &v);
-            ix++;
-        }
-    }
+    // for(int i = 0; i < 4; i++){
+    //     for(int j = 0; j < 3; j++){
+    //         v = operatingMode[ix];
+    //         groupSyncWrite.addParam(convert(i, j), &v);
+    //         ix++;
+    //     }
+    // }
 
-    dxl_comm_result = groupSyncWrite.txPacket();
-    handle(dxl_comm_result);
-}
-
-void BoardGalgo::toggleTorque( tId dynamixel, bool onOrOff ) {
-    uint8_t error;
-    int communicationResult = packetHandler_->write1ByteTxRx( portHandler_.get(),
-            dynamixel, TORQUE_ENABLE, onOrOff, &error );
-    handle( communicationResult, error );
+    // dxl_comm_result = groupSyncWrite.txPacket();
+    // handle(dxl_comm_result);
 }
 
 uint16_t BoardGalgo::convertAngle( double angle ) {
     return static_cast< uint16_t >( angle * 11.375 );
 }
 unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
-    tId dynamixel = convert( legNo, jointNo );
-    toggleTorque( dynamixel, true );
+    toggleTorque( legNo, jointNo, true );
     uint8_t error;
-    int communicationResult = packetHandler_->write4ByteTxRx( portHandler_.get(),
-            dynamixel, GOAL_POSITION, convertAngle( angle ), &error );
+    int communicationResult = packetHandler_->write4ByteTxRx( portHandlersByLegNumber_.at( legNo ).get(),
+            convert( legNo, jointNo ), GOAL_POSITION, convertAngle( angle ), &error );
     handle( communicationResult, error );
 
     return 0;
 }
 unsigned int BoardGalgo::setPosition(int legNo, const std::vector<double>& angle){
-    dynamixel::GroupSyncWrite groupSyncWrite( portHandler_.get(), packetHandler_.get(),
+    dynamixel::GroupSyncWrite groupSyncWrite( portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(),
             GOAL_POSITION, 4 );
     toggleTorque( legNo, std::vector< bool >( 3, true ) );
     uint8_t angleAsBytes[ 4 ];
@@ -217,23 +232,23 @@ unsigned int BoardGalgo::setPosition(int legNo, const std::vector<double>& angle
     groupSyncWrite.clearParam();
 }
 unsigned int BoardGalgo::setPosition(const std::vector<double>& angle){
-    dynamixel::GroupSyncWrite groupSyncWrite( portHandler_.get(), packetHandler_.get(),
-            GOAL_POSITION, 4 );
-    toggleTorque( std::vector< bool >( 4 * 3, true ) );
-    uint8_t angleAsBytes[ 4 ];
-    for( int legNo = 0, i = 0; legNo < 4; ++legNo ) {
-        for( int joinNo = 0; joinNo < 3; ++joinNo, ++i ) {
-            uint16_t convertedAngle = convertAngle( angle[ i ] );
-            angleAsBytes[ 0 ] = DXL_LOBYTE( DXL_LOWORD( convertedAngle ) );
-            angleAsBytes[ 1 ] = DXL_HIBYTE( DXL_LOWORD( convertedAngle ) );
-            angleAsBytes[ 2 ] = DXL_LOBYTE( DXL_HIWORD( convertedAngle ) );
-            angleAsBytes[ 3 ] = DXL_HIBYTE( DXL_HIWORD( convertedAngle ) );
-            groupSyncWrite.addParam( convert( legNo, joinNo ),
-                    angleAsBytes );
-        }
-    }
-    handle( groupSyncWrite.txPacket() );
-    groupSyncWrite.clearParam();
+    // dynamixel::GroupSyncWrite groupSyncWrite( portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(),
+    //         GOAL_POSITION, 4 );
+    // toggleTorque( std::vector< bool >( 4 * 3, true ) );
+    // uint8_t angleAsBytes[ 4 ];
+    // for( int legNo = 0, i = 0; legNo < 4; ++legNo ) {
+    //     for( int joinNo = 0; joinNo < 3; ++joinNo, ++i ) {
+    //         uint16_t convertedAngle = convertAngle( angle[ i ] );
+    //         angleAsBytes[ 0 ] = DXL_LOBYTE( DXL_LOWORD( convertedAngle ) );
+    //         angleAsBytes[ 1 ] = DXL_HIBYTE( DXL_LOWORD( convertedAngle ) );
+    //         angleAsBytes[ 2 ] = DXL_LOBYTE( DXL_HIWORD( convertedAngle ) );
+    //         angleAsBytes[ 3 ] = DXL_HIBYTE( DXL_HIWORD( convertedAngle ) );
+    //         groupSyncWrite.addParam( convert( legNo, joinNo ),
+    //                 angleAsBytes );
+    //     }
+    // }
+    // handle( groupSyncWrite.txPacket() );
+    // groupSyncWrite.clearParam();
 }
 
 uint32_t BoardGalgo::convertSpeed(double value){
@@ -241,17 +256,16 @@ uint32_t BoardGalgo::convertSpeed(double value){
 }
 
 unsigned int BoardGalgo::setSpeed(int legNo, int jointNo, double speed){
-    tId dynamixel = convert(legNo, jointNo);
     uint8_t error;
 
-    toggleTorque(dynamixel, true);
-    int communicationResult = packetHandler_->write4ByteTxRx(portHandler_.get(), dynamixel, GOAL_VELOCITY, convertSpeed(speed), &error);
+    toggleTorque(legNo, jointNo, true);
+    int communicationResult = packetHandler_->write4ByteTxRx(portHandlersByLegNumber_.at( legNo ).get(), convert(legNo, jointNo), GOAL_VELOCITY, convertSpeed(speed), &error);
     handle(communicationResult, error);
 }
 
 unsigned int BoardGalgo::setSpeed(int legNo, const std::vector<double>& speed){
     int dxl_comm_result = COMM_TX_FAIL;
-    dynamixel::GroupSyncWrite groupSyncWrite(portHandler_.get(), packetHandler_.get(), GOAL_VELOCITY, 4);
+    dynamixel::GroupSyncWrite groupSyncWrite(portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(), GOAL_VELOCITY, 4);
 
     std::vector<bool> torque(3, true);
     toggleTorque(legNo, torque);
@@ -273,30 +287,30 @@ unsigned int BoardGalgo::setSpeed(int legNo, const std::vector<double>& speed){
 }
 
 unsigned int BoardGalgo::setSpeed(const std::vector<double>& speed){
-    int dxl_comm_result = COMM_TX_FAIL;
-    dynamixel::GroupSyncWrite groupSyncWrite(portHandler_.get(), packetHandler_.get(), GOAL_VELOCITY, 4);
+    // int dxl_comm_result = COMM_TX_FAIL;
+    // dynamixel::GroupSyncWrite groupSyncWrite(portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(), GOAL_VELOCITY, 4);
 
-    std::vector<bool> torque(12, true);
-    toggleTorque(torque);
+    // std::vector<bool> torque(12, true);
+    // toggleTorque(torque);
 
-    uint32_t s;
-    uint8_t v[4];
-    int ix = 0;
+    // uint32_t s;
+    // uint8_t v[4];
+    // int ix = 0;
 
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < 3; j++){
-            s = convertSpeed(speed[ix]);
-            v[0] = DXL_LOBYTE(DXL_LOWORD(s));
-            v[1] = DXL_HIBYTE(DXL_LOWORD(s));
-            v[2] = DXL_LOBYTE(DXL_HIWORD(s));
-            v[3] = DXL_HIBYTE(DXL_HIWORD(s));
-            groupSyncWrite.addParam(convert(i, j), v);
-            ix++;
-        }
-    }
+    // for(int i = 0; i < 4; i++){
+    //     for(int j = 0; j < 3; j++){
+    //         s = convertSpeed(speed[ix]);
+    //         v[0] = DXL_LOBYTE(DXL_LOWORD(s));
+    //         v[1] = DXL_HIBYTE(DXL_LOWORD(s));
+    //         v[2] = DXL_LOBYTE(DXL_HIWORD(s));
+    //         v[3] = DXL_HIBYTE(DXL_HIWORD(s));
+    //         groupSyncWrite.addParam(convert(i, j), v);
+    //         ix++;
+    //     }
+    // }
 
-    dxl_comm_result = groupSyncWrite.txPacket();
-    handle(dxl_comm_result);
+    // dxl_comm_result = groupSyncWrite.txPacket();
+    // handle(dxl_comm_result);
 }
 
 unsigned int BoardGalgo::setComplianceMargin(int legNo, int jointNo, double margin){}
@@ -318,7 +332,7 @@ unsigned int BoardGalgo::readPosition(int legNo, int jointNo, double& angle){
     tId dynamixel = convert( legNo, jointNo );
     uint32_t presentPosition;
     uint8_t error;
-    int communicationResult = packetHandler_->read4ByteTxRx(portHandler_.get(), dynamixel,
+    int communicationResult = packetHandler_->read4ByteTxRx(portHandlersByLegNumber_.at( legNo ).get(), dynamixel,
             PRESENT_POSITION, &presentPosition, &error);
 
     handle( communicationResult, error );
@@ -349,7 +363,7 @@ unsigned int BoardGalgo::readCurrent(int legNo, int jointNo, double& servoCurren
     int dxl_comm_result = COMM_TX_FAIL;
     uint16_t v = 0;
 
-    dxl_comm_result = packetHandler_->read2ByteTxRx(portHandler_.get(), id, PRESENT_CURRENT, &v, &dxl_error);
+    dxl_comm_result = packetHandler_->read2ByteTxRx(portHandlersByLegNumber_.at( legNo ).get(), id, PRESENT_CURRENT, &v, &dxl_error);
     servoCurrent = convertCurrent(v);
     handle(dxl_comm_result, dxl_error);
 
@@ -358,7 +372,7 @@ unsigned int BoardGalgo::readCurrent(int legNo, int jointNo, double& servoCurren
 
 unsigned int BoardGalgo::readCurrent(int legNo, std::vector<double>& servoCurrent){
     int dxl_comm_result = COMM_TX_FAIL;
-    dynamixel::GroupSyncRead groupSyncRead(portHandler_.get(), packetHandler_.get(), PRESENT_CURRENT, 2);
+    dynamixel::GroupSyncRead groupSyncRead(portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(), PRESENT_CURRENT, 2);
 
     for(int i = 0; i < 3; i++){
         groupSyncRead.addParam(convert(legNo, i));
@@ -373,26 +387,26 @@ unsigned int BoardGalgo::readCurrent(int legNo, std::vector<double>& servoCurren
 }
 
 unsigned int BoardGalgo::readCurrent(std::vector<double>& servoCurrent){
-    int dxl_comm_result = COMM_TX_FAIL;
-    dynamixel::GroupSyncRead groupSyncRead(portHandler_.get(), packetHandler_.get(), PRESENT_CURRENT, 2);
+    // int dxl_comm_result = COMM_TX_FAIL;
+    // dynamixel::GroupSyncRead groupSyncRead(portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(), PRESENT_CURRENT, 2);
 
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < 3; j++){
-            groupSyncRead.addParam(convert(i, j));
-        }
-    }
+    // for(int i = 0; i < 4; i++){
+    //     for(int j = 0; j < 3; j++){
+    //         groupSyncRead.addParam(convert(i, j));
+    //     }
+    // }
 
-    dxl_comm_result = groupSyncRead.txRxPacket();
-    handle(dxl_comm_result);
+    // dxl_comm_result = groupSyncRead.txRxPacket();
+    // handle(dxl_comm_result);
 
-    int ix = 0;
+    // int ix = 0;
 
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < 3; j++){
-            servoCurrent[ix] = convertCurrent((uint16_t)groupSyncRead.getData(convert(i, j), PRESENT_CURRENT, 2));
-            ix++;
-        }
-    }
+    // for(int i = 0; i < 4; i++){
+    //     for(int j = 0; j < 3; j++){
+    //         servoCurrent[ix] = convertCurrent((uint16_t)groupSyncRead.getData(convert(i, j), PRESENT_CURRENT, 2));
+    //         ix++;
+    //     }
+    // }
 }
 
 unsigned int BoardGalgo::readTorque(int legNo, int jointNo, double& servoTorque){}
