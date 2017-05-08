@@ -1,6 +1,7 @@
 #ifndef _BOARD_GALGO_H_
 #define _BOARD_GALGO_H_
 
+#include <memory>
 #include "../../3rdParty/dynamixel3/include/dynamixel_sdk.h"
 #include "board.h"
 #include "math.h"
@@ -270,6 +271,7 @@ class BoardGalgo : Board {
         static const uint8_t OPERATINGMODE_POSITION;
 
 private:
+    typedef std::shared_ptr< dynamixel::PortHandler > tPortHandler;
     typedef uint8_t tId;
     typedef uint16_t tAddress;
     const float PROTOCOL_VERSION = 2.0;
@@ -298,7 +300,7 @@ private:
     double convertCurrent(uint16_t value);
     int convertToIndex(int legNo, int jointNo);
     double convertRadToDeg(double angle);
-    dynamixel::PortHandler *portHandler_;
+    tPortHandler portHandler_;
 
     /// Default offset values of angles for serwomotors.
     int angleOffset[12];
