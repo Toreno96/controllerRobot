@@ -272,6 +272,7 @@ class BoardGalgo : Board {
 
 private:
     typedef std::shared_ptr< dynamixel::PortHandler > tPortHandler;
+    typedef std::shared_ptr< dynamixel::PacketHandler > tPacketHandler;
     typedef uint8_t tId;
     typedef uint16_t tAddress;
     const float PROTOCOL_VERSION = 2.0;
@@ -287,11 +288,9 @@ private:
     const int MAX_SPEED = 350;
     const int MAX_CURRENT = 1193;
 
-    void handle( dynamixel::PacketHandler *packetHandler,
-            int communicationResult );
-    void handle( dynamixel::PacketHandler *packetHandler, uint8_t error );
-    void handle( dynamixel::PacketHandler *packetHandler,
-            int communicationResult, uint8_t error );
+    void handle( int communicationResult );
+    void handle( uint8_t error );
+    void handle( int communicationResult, uint8_t error );
     void toggleTorque( tId dynamixel, bool onOrOff );
     tId convert( int legNo, int jointNo );
     uint16_t convertAngle( double angle );
@@ -301,6 +300,7 @@ private:
     int convertToIndex(int legNo, int jointNo);
     double convertRadToDeg(double angle);
     tPortHandler portHandler_;
+    tPacketHandler packetHandler_;
 
     /// Default offset values of angles for serwomotors.
     int angleOffset[12];
