@@ -18,16 +18,22 @@ int main()
 */
         //Board* board = createBoardDynamixel();
 
-        std::string portName;
-        std::cout << "Enter port name:\n> ";
-        std::cin >> portName;
-        controller::BoardGalgo bg( portName, 3000000 );
+        controller::BoardGalgo bg( "/dev/ttyUSB0", "/dev/ttyUSB1", 3000000 );
 
         // Odkomentować wybrane funkcje w celu przeprowadzenia testów
 
-        //BoardGalgo bg = BoardGalgo("/dev/ttyUSB0", 3000000);
-
-        //bg.setLED(1,1,1);
+    for( int i = 0; i < 5; ++i ) {
+        bg.setLED(1, std::vector<bool>(2, 1));
+        bg.setLED(2, 1, 1);
+        bg.setLED(3, 1, 1);
+        bg.setLED(4, 1, 1);
+        std::this_thread::sleep_for( std::chrono::milliseconds( 500 ) );
+        bg.setLED(1, std::vector<bool>(2, 0));
+        bg.setLED(2, 1, 0);
+        bg.setLED(3, 1, 0);
+        bg.setLED(4, 1, 0);
+        std::this_thread::sleep_for( std::chrono::milliseconds( 500 ) );
+    }
 
         //double goalPositionAngle;
         //std::cout << "Enter position angle:\n> ";
@@ -47,20 +53,20 @@ int main()
         //std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
         //bg.setSpeed( 1, std::vector< double >{ 0.0, 0.0, 0.0 } );
 
-        bg.toggleTorque( 1, 1, false );
-        std::cout << "11 joint torque disabled\n";
-        std::this_thread::sleep_for( std::chrono::seconds( 10 ) );
-        bg.toggleTorque( 1, 1, true );
-        std::cout << "11 joint torque enabled\n";
-        std::this_thread::sleep_for( std::chrono::seconds( 10 ) );
-        bg.toggleTorque( 1, 1, false );
-        std::cout << "11 joint torque disabled\n";
-        std::this_thread::sleep_for( std::chrono::seconds( 10 ) );
-        bg.toggleTorque( 1, std::vector< bool >( 3, true ) );
-        std::cout << "1 leg torque enabled\n";
-        std::this_thread::sleep_for( std::chrono::seconds( 10 ) );
-        bg.toggleTorque( std::vector< bool >( 4 * 3, false ) );
-        std::cout << "all legs torque disabled\n";
+        // bg.toggleTorque( 1, 1, false );
+        // std::cout << "11 joint torque disabled\n";
+        // std::this_thread::sleep_for( std::chrono::seconds( 10 ) );
+        // bg.toggleTorque( 1, 1, true );
+        // std::cout << "11 joint torque enabled\n";
+        // std::this_thread::sleep_for( std::chrono::seconds( 10 ) );
+        // bg.toggleTorque( 1, 1, false );
+        // std::cout << "11 joint torque disabled\n";
+        // std::this_thread::sleep_for( std::chrono::seconds( 10 ) );
+        // bg.toggleTorque( 1, std::vector< bool >( 3, true ) );
+        // std::cout << "1 leg torque enabled\n";
+        // std::this_thread::sleep_for( std::chrono::seconds( 10 ) );
+        // bg.toggleTorque( std::vector< bool >( 4 * 3, false ) );
+        // std::cout << "all legs torque disabled\n";
     }
     catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;
