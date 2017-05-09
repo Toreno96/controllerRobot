@@ -272,6 +272,7 @@ class BoardGalgo : Board {
 
         static const uint8_t OPERATINGMODE_VELOCITY;
         static const uint8_t OPERATINGMODE_POSITION;
+        static const uint8_t OPERATINGMODE_CURRENT_BASED_POSITION;
 
 private:
     typedef std::shared_ptr< dynamixel::PortHandler > tPortHandler;
@@ -282,13 +283,14 @@ private:
     const tAddress OPERATING_MODE = 11;
     const tAddress TORQUE_ENABLE = 64;
     const tAddress LED = 65;
-    const tAddress GOAL_VELOCITY = 104;
+    //const tAddress GOAL_VELOCITY = 104;
+    const tAddress PROFILE_VELOCITY = 112;
     const tAddress GOAL_POSITION = 116;
     const tAddress PRESENT_CURRENT = 126;
     const tAddress PRESENT_VELOCITY	= 128;
     const tAddress PRESENT_POSITION = 132;
 
-    const int MAX_SPEED = 350;
+    const int MAX_SPEED = 1023;
     const int MAX_CURRENT = 1193;
 
     void preparePortHandler( const tPortHandler& portHandler, int baudRate );
@@ -297,8 +299,8 @@ private:
     void handle( uint8_t error );
     void handle( int communicationResult, uint8_t error );
     tId convert( int legNo, int jointNo );
-    uint16_t convertAngle( double angle );
-    double convert( uint32_t position );
+    uint16_t convertAngle(int legNo, int jointNo, double angle );
+    double convert(int legNo, int jointNo, uint32_t position);
     uint32_t convertSpeed(double value);
     double convertCurrent(uint16_t value);
     int convertToIndex(int legNo, int jointNo);
@@ -310,6 +312,11 @@ private:
 
     /// Default offset values of angles for serwomotors.
     int angleOffset[12];
+
+    /// Default values of angles for serwomotors.
+    int zeroAngle[12];
+
+    int signOfAngle[12];
 };
 
 } // namespace controller
