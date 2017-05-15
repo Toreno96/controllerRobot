@@ -276,10 +276,10 @@ class BoardGalgo : Board {
         static constexpr uint8_t OPERATINGMODE_CURRENT_BASED_POSITION = 5;
 
 private:
-    typedef std::shared_ptr< dynamixel::PortHandler > tPortHandler;
-    typedef std::shared_ptr< dynamixel::PacketHandler > tPacketHandler;
-    typedef uint8_t tId;
-    typedef uint16_t tAddress;
+    using tPortHandler = std::shared_ptr< dynamixel::PortHandler >;
+    using tPacketHandler = std::shared_ptr< dynamixel::PacketHandler >;
+    using tId = uint8_t;
+    using tAddress = uint16_t;
     static constexpr float PROTOCOL_VERSION = 2.0;
     static constexpr tAddress OPERATING_MODE = 11;
     static constexpr tAddress TORQUE_ENABLE = 64;
