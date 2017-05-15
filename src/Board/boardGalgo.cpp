@@ -4,10 +4,6 @@
 
 namespace controller {
 
-const uint8_t BoardGalgo::OPERATINGMODE_VELOCITY = 1;
-const uint8_t BoardGalgo::OPERATINGMODE_POSITION = 3;
-const uint8_t BoardGalgo::OPERATINGMODE_CURRENT_BASED_POSITION = 5;
-
 BoardGalgo::BoardGalgo( const std::string &rightLegsDevPath,
                         const std::string &leftLegsDevPath,
                         int baudRate ) :

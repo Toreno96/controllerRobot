@@ -270,28 +270,27 @@ class BoardGalgo : Board {
         */
         void setDefault(void);
 
-        static const uint8_t OPERATINGMODE_VELOCITY;
-        static const uint8_t OPERATINGMODE_POSITION;
-        static const uint8_t OPERATINGMODE_CURRENT_BASED_POSITION;
+        static constexpr uint8_t OPERATINGMODE_VELOCITY = 1;
+        static constexpr uint8_t OPERATINGMODE_POSITION = 3;
+        static constexpr uint8_t OPERATINGMODE_CURRENT_BASED_POSITION = 5;
 
 private:
     typedef std::shared_ptr< dynamixel::PortHandler > tPortHandler;
     typedef std::shared_ptr< dynamixel::PacketHandler > tPacketHandler;
     typedef uint8_t tId;
     typedef uint16_t tAddress;
-    const float PROTOCOL_VERSION = 2.0;
-    const tAddress OPERATING_MODE = 11;
-    const tAddress TORQUE_ENABLE = 64;
-    const tAddress LED = 65;
-    //const tAddress GOAL_VELOCITY = 104;
-    const tAddress PROFILE_VELOCITY = 112;
-    const tAddress GOAL_POSITION = 116;
-    const tAddress PRESENT_CURRENT = 126;
-    const tAddress PRESENT_VELOCITY	= 128;
-    const tAddress PRESENT_POSITION = 132;
-
-    const int MAX_SPEED = 1023;
-    const int MAX_CURRENT = 1193;
+    static constexpr float PROTOCOL_VERSION = 2.0;
+    static constexpr tAddress OPERATING_MODE = 11;
+    static constexpr tAddress TORQUE_ENABLE = 64;
+    static constexpr tAddress LED = 65;
+    //static constexpr tAddress GOAL_VELOCITY = 104;
+    static constexpr tAddress PROFILE_VELOCITY = 112;
+    static constexpr tAddress GOAL_POSITION = 116;
+    static constexpr tAddress PRESENT_CURRENT = 126;
+    static constexpr tAddress PRESENT_VELOCITY	= 128;
+    static constexpr tAddress PRESENT_POSITION = 132;
+    static constexpr int MAX_SPEED = 1023;
+    static constexpr int MAX_CURRENT = 1193;
 
     void preparePortHandler( const tPortHandler& portHandler, int baudRate );
     void preparePortHandlersByLegNumberMap();
