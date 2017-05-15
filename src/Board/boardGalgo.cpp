@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cmath>
 #include <utility>
 #include "Board/boardGalgo.h"
 #include "Board/exceptions.h"

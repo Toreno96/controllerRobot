@@ -6,7 +6,6 @@
 #include <memory>
 #include "../../3rdParty/dynamixel3/include/dynamixel_sdk.h"
 #include "board.h"
-#include "math.h"
 
 namespace controller {
 
