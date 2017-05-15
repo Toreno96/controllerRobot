@@ -115,7 +115,10 @@ if(BUILD_CONTROLLER)
         file(GLOB BOARD_HEADERS
             "${CMAKE_SOURCE_DIR}/include/Board/*.h"
         )
-        add_library(Board STATIC ${BOARD_SOURCES} ${BOARD_HEADERS})
+        file( GLOB BOARD_HELPERS_HEADERS
+            "${CMAKE_SOURCE_DIR}/include/Helpers/*.h"
+        )
+        add_library(Board STATIC ${BOARD_SOURCES} ${BOARD_HEADERS} ${BOARD_HELPERS_HEADERS})
         TARGET_LINK_LIBRARIES(Board dynamixel dynamixel3 tinyxml2)
         INSTALL(TARGETS Board RUNTIME DESTINATION bin LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
         INSTALL(FILES ${BOARD_HEADERS} DESTINATION include/walkers/Board/)

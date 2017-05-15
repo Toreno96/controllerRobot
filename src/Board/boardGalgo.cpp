@@ -1,6 +1,8 @@
+#include <algorithm>
 #include <utility>
 #include "Board/boardGalgo.h"
 #include "Board/exceptions.h"
+#include "Helpers/algorithm.h"
 
 namespace controller {
 
@@ -83,6 +85,32 @@ void BoardGalgo::handle( int communicationResult, uint8_t error ) {
 BoardGalgo::tId BoardGalgo::convert( int legNo, int jointNo ) {
     return static_cast< tId >( legNo * 10 + jointNo );
 }
+std::array< BoardGalgo::tId, BoardGalgo::JOINTS_COUNT_IN_SINGLE_LEG >
+        BoardGalgo::getSingleLegIds( int legNo ) {
+    std::array< tId, JOINTS_COUNT_IN_SINGLE_LEG > jointsIds;
+    int jointNumber = FIRST_JOINT_NUMBER;
+    std::generate( jointsIds.begin(), jointsIds.end(),
+            [ this, legNo, &jointNumber ]() {
+                return convert( legNo, jointNumber++ );
+            } );
+    return jointsIds;
+}
+std::array< BoardGalgo::tId, BoardGalgo::JOINTS_COUNT_IN_TWO_LEGS >
+            BoardGalgo::getTwoLegsIds( int legNo1, int legNo2 ) {
+    return merge( getSingleLegIds( legNo1 ), getSingleLegIds( legNo2 ) );
+}
+std::array< BoardGalgo::tId, BoardGalgo::JOINTS_COUNT_IN_TWO_LEGS >
+        BoardGalgo::getRightLegsIds() {
+    return getTwoLegsIds( 1, 2 );
+}
+std::array< BoardGalgo::tId, BoardGalgo::JOINTS_COUNT_IN_TWO_LEGS >
+        BoardGalgo::getLeftLegsIds() {
+    return getTwoLegsIds( 3, 4 );
+}
+std::array< BoardGalgo::tId, BoardGalgo::JOINTS_COUNT_IN_ALL_LEGS >
+        BoardGalgo::getAllLegsIds() {
+    return merge( getRightLegsIds(), getLeftLegsIds() );
+}
 
 void BoardGalgo::toggleTorque( int legNo, int joinNo, bool onOrOff ) {
     uint8_t error;
@@ -130,11 +158,11 @@ void BoardGalgo::setLED(int legNo, const std::vector<bool>& powered){
     int dxl_comm_result = COMM_TX_FAIL;
     dynamixel::GroupSyncWrite groupSyncWrite(portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(), LED, 1);
 
-    uint8_t v;
-
-    for(int i = 1; i <= 2; i++){
-        v = powered[i];
-        groupSyncWrite.addParam(convert(legNo, i), &v);
+    auto jointsIds = getSingleLegIds( legNo );
+    auto itPowered = powered.begin();
+    for( auto jointId : jointsIds ) {
+        uint8_t poweredRaw = static_cast< uint8_t >( *itPowered++ );
+        groupSyncWrite.addParam(jointId, &poweredRaw);
     }
 
     dxl_comm_result = groupSyncWrite.txPacket();
