@@ -22,12 +22,12 @@ struct Angle {
 
     template< typename T = U >
     operator Angle< typename std::enable_if_t<
-        !std::is_same< T, tAngleUnitRadians >::value,
-        tAngleUnitRadians > >();
+            !std::is_same< T, tAngleUnitRadians >::value,
+            tAngleUnitRadians > >();
     template< typename T = U >
     operator Angle< typename std::enable_if_t<
-        !std::is_same< T, tAngleUnitDynamixel >::value,
-        tAngleUnitDynamixel > >();
+            !std::is_same< T, tAngleUnitDynamixel >::value,
+            tAngleUnitDynamixel > >();
 
     static constexpr typename U::value_type full();
 };
