@@ -23,4 +23,7 @@ int main() {
   std::cout << "a5.val = " << a5.val << '\n';
   tAngleRadians a6 = a2;
   std::cout << "a6.val = " << a6.val << '\n';
+
+  tAngleDynamixel a7( tAngleRadians( M_PI ) );
+  std::cout << "a7.val = " << a7.val << '\n';
 }
