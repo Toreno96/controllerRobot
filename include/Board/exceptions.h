@@ -1,35 +1,34 @@
 #ifndef exceptions_h
 #define exceptions_h
 
-#include <exception>
+#include <stdexcept>
 #include <string>
 
-using std::exception;
 using std::string;
+using std::to_string;
+using std::runtime_error;
 
 
 namespace controller{
 
 
-class FailedOpeningPortException: public exception{
+class FailedOpeningPortException: public runtime_error{
 public:
-    FailedOpeningPortException(string description);
-    virtual const char* what() const throw();
-
-private:
-    string _desc;
+    FailedOpeningPortException();
+    FailedOpeningPortException(const string& portName);
 };
 
-
-class FailedChangingBaudRateException: public exception{
+class FailedChangingBaudRateException: public runtime_error{
 public:
-    FailedChangingBaudRateException(string description);
-    virtual const char* what() const throw();
-
-private:
-    string _desc;
+    FailedChangingBaudRateException();
+    FailedChangingBaudRateException(const uint32_t& baudRate);
 };
 
+class NotSupportedException: public runtime_error{
+public:
+    NotSupportedException();
+    NotSupportedException(const string& description);
+};
 
 }
 

@@ -283,14 +283,13 @@ private:
     const tAddress OPERATING_MODE = 11;
     const tAddress TORQUE_ENABLE = 64;
     const tAddress LED = 65;
-    //const tAddress GOAL_VELOCITY = 104;
     const tAddress PROFILE_VELOCITY = 112;
     const tAddress GOAL_POSITION = 116;
     const tAddress PRESENT_CURRENT = 126;
     const tAddress PRESENT_VELOCITY	= 128;
     const tAddress PRESENT_POSITION = 132;
 
-    const int MAX_SPEED = 1023;
+    const int MAX_SPEED = 480;
     const int MAX_CURRENT = 1193;
 
     void preparePortHandler( const tPortHandler& portHandler, int baudRate );
@@ -298,13 +297,28 @@ private:
     void handle( int communicationResult );
     void handle( uint8_t error );
     void handle( int communicationResult, uint8_t error );
+
+/*
+    //tId         convertJointToId( int legNo, int jointNo );
+    uint16_t    convertAngleToDynamixel(int legNo, int jointNo, double angle );
+    double      convertDynamixelToAngle(int legNo, int jointNo, uint32_t position);
+    uint32_t    convertSpeedToDynamixel(double value);
+    double      convertDynamixelToCurrent(uint16_t value);
+    int         convertJointToIndex(int legNo, int jointNo);
+    double      convertRadToDeg(double angle);
+*/
+
     tId convert( int legNo, int jointNo );
-    uint16_t convertAngle(int legNo, int jointNo, double angle );
+     uint16_t convertAngle(int legNo, int jointNo, double angle );
     double convert(int legNo, int jointNo, uint32_t position);
     uint32_t convertSpeed(double value);
     double convertCurrent(uint16_t value);
     int convertToIndex(int legNo, int jointNo);
     double convertRadToDeg(double angle);
+
+
+
+
     tPortHandler rightLegs_;
     tPortHandler leftLegs_;
     std::map< int, tPortHandler > portHandlersByLegNumber_;

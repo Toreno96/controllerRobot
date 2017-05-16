@@ -1,18 +1,21 @@
 #include "Board/exceptions.h"
 
-controller::FailedOpeningPortException::FailedOpeningPortException(string description){
-    this->_desc = description;
-}
+controller::FailedOpeningPortException::FailedOpeningPortException():
+    runtime_error("Failed to open the USB port.\n"){}
 
-const char* controller::FailedOpeningPortException::what() const throw(){
-    return this->_desc.c_str();
-}
+controller::FailedOpeningPortException::FailedOpeningPortException(const string& portName):
+    runtime_error("Failed to open the port " + portName + ".\n"){}
 
 
-controller::FailedChangingBaudRateException::FailedChangingBaudRateException(string description){
-    this->_desc = description;
-}
+controller::FailedChangingBaudRateException::FailedChangingBaudRateException():
+    runtime_error("Failed to change the baudrate.\n"){}
 
-const char* controller::FailedChangingBaudRateException::what() const throw(){
-    return this->_desc.c_str();
-}
+controller::FailedChangingBaudRateException::FailedChangingBaudRateException(const uint32_t& baudRate):
+    runtime_error("Failed to change the baudrate to " + to_string(baudRate) + ".\n"){}
+
+
+controller::NotSupportedException::NotSupportedException():
+    runtime_error("This function is not supported.\n"){}
+
+controller::NotSupportedException::NotSupportedException(const string& description):
+    runtime_error("This function is not supported: " + description + "\n"){}

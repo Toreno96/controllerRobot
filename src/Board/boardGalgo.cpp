@@ -22,10 +22,10 @@ BoardGalgo::BoardGalgo( const std::string &rightLegsDevPath,
     preparePortHandler( leftLegs_, baudRate );
     preparePortHandlersByLegNumberMap();
 
-    zeroAngle[0] = 270; zeroAngle[1]  = 0; zeroAngle[2]  = 0;
-    zeroAngle[3] = 135; zeroAngle[4]  = 0; zeroAngle[5]  = 0;
-    zeroAngle[6] = 90; zeroAngle[7]  = 0; zeroAngle[8]  = 0;
-    zeroAngle[9] = 90; zeroAngle[10] = 0; zeroAngle[11] = 0;
+    zeroAngle[0] = 90; zeroAngle[1]  = 0; zeroAngle[2]  = 0;
+    zeroAngle[3] = 90; zeroAngle[4]  = 0; zeroAngle[5]  = 0;
+    zeroAngle[6] = -90; zeroAngle[7]  = 0; zeroAngle[8]  = 0;
+    zeroAngle[9] = -90; zeroAngle[10] = 0; zeroAngle[11] = 0;
 
     signOfAngle[0] = -1; signOfAngle[1]  = 1; signOfAngle[2]  = 1;
     signOfAngle[3] = -1; signOfAngle[4]  = 1; signOfAngle[5]  = 1;
@@ -39,7 +39,7 @@ void BoardGalgo::preparePortHandler( const tPortHandler& portHandler,
             std::string( "Failed to open the port \"" ) +
             portHandler->getPortName() + '\"');
   if( !portHandler->setBaudRate( baudRate ) )
-      throw FailedChangingBaudRateException("Failed to change the baudrate to " + std::to_string( baudRate ) ) ;
+      throw FailedChangingBaudRateException(baudRate);
 }
 void BoardGalgo::preparePortHandlersByLegNumberMap() {
     portHandlersByLegNumber_.insert( std::make_pair( 1, rightLegs_ ) );
@@ -213,9 +213,14 @@ void BoardGalgo::setOperatingMode(const std::vector<uint8_t>& operatingMode){
     // handle(dxl_comm_result);
 }
 
-uint16_t BoardGalgo::convertAngle(int legNo, int jointNo, double angle) {
+uint16_t BoardGalgo::convertAngle(int legNo, int jointNo, double angle){
     int ix = convertToIndex(legNo, jointNo);
-    return static_cast<uint16_t>((signOfAngle[ix] * angle + zeroAngle[ix]) * 11.375 );
+    double a = (signOfAngle[ix] * angle + zeroAngle[ix]) * 11.375;
+
+    //if(a < 0) a += 360;
+    //std::cout << (a) << std::endl;
+    //a*=11.375;
+    return static_cast<uint16_t>(a);
 }
 unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
     toggleTorque( legNo, jointNo, true );
@@ -350,12 +355,27 @@ unsigned int BoardGalgo::readPosition(int legNo, int jointNo, double& angle){
             PRESENT_POSITION, &presentPosition, &error);
 
     handle( communicationResult, error );
-
     angle = convert(legNo, jointNo, presentPosition );
 
     return 0;
 }
-unsigned int BoardGalgo::readPosition(int legNo, std::vector<double>& angle){}
+
+unsigned int BoardGalgo::readPosition(int legNo, std::vector<double>& angle){
+    int dxl_comm_result = COMM_TX_FAIL;
+    dynamixel::GroupSyncRead groupSyncRead(portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(), PRESENT_POSITION, 4);
+
+    for(int i = 1; i <= 2; i++){
+        groupSyncRead.addParam(convert(legNo, i));
+    }
+
+    dxl_comm_result = groupSyncRead.txRxPacket();
+    handle(dxl_comm_result);
+
+    for(int i = 1; i <= 2; i++){
+        angle[i] = convert(legNo, i, (uint16_t)groupSyncRead.getData(convert(legNo, i), PRESENT_POSITION, 4));
+    }
+}
+
 unsigned int BoardGalgo::readPosition(std::vector<double>& angle){}
 
 unsigned int BoardGalgo::readForce(int legNo, double& contactForce){}
