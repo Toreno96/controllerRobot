@@ -1,5 +1,4 @@
 CMakeLists.txt.user
 build/
-spikes/
 .vscode/
 *.out
