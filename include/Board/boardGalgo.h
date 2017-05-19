@@ -17,7 +17,7 @@ class BoardGalgo : Board {
         ~BoardGalgo();
 
         // TO-DO Dokumentacja doxygen poniższych funkcji toggleTorque
-        void toggleTorque( int legNo, int joinNo, bool onOrOff );
+        void toggleTorque( int legNo, int jointNo, bool onOrOff );
         void toggleTorque( int legNo, const std::vector< bool >& onOrOff );
         void toggleTorque( const std::vector< bool >& onOrOff );
 

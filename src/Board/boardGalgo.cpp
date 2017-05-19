@@ -113,10 +113,10 @@ std::array< BoardGalgo::tId, BoardGalgo::JOINTS_COUNT_IN_ALL_LEGS >
     return merge( getRightLegsIds(), getLeftLegsIds() );
 }
 
-void BoardGalgo::toggleTorque( int legNo, int joinNo, bool onOrOff ) {
+void BoardGalgo::toggleTorque( int legNo, int jointNo, bool onOrOff ) {
     uint8_t error;
     int communicationResult = packetHandler_->write1ByteTxRx( portHandlersByLegNumber_.at( legNo ).get(),
-            convert( legNo, joinNo ), TORQUE_ENABLE, onOrOff, &error );
+            convert( legNo, jointNo ), TORQUE_ENABLE, onOrOff, &error );
     handle( communicationResult, error );
 }
 void BoardGalgo::toggleTorque( int legNo,
@@ -124,9 +124,9 @@ void BoardGalgo::toggleTorque( int legNo,
     dynamixel::GroupSyncWrite groupSyncWrite( portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(),
             TORQUE_ENABLE, 1 );
     uint8_t convertedOnOrOff;
-    for( int joinNo = 1; joinNo <= 2; ++joinNo ) {
-        convertedOnOrOff = onOrOff[ joinNo ];
-        groupSyncWrite.addParam( convert( legNo, joinNo ), &convertedOnOrOff );
+    for( int jointNo = 1; jointNo <= 2; ++jointNo ) {
+        convertedOnOrOff = onOrOff[ jointNo ];
+        groupSyncWrite.addParam( convert( legNo, jointNo ), &convertedOnOrOff );
     }
     handle( groupSyncWrite.txPacket() );
     groupSyncWrite.clearParam();
@@ -136,9 +136,9 @@ void BoardGalgo::toggleTorque( const std::vector< bool >& onOrOff ) {
     //         TORQUE_ENABLE, 1 );
     // uint8_t convertedOnOrOff;
     // for( int legNo = 0, i = 0; legNo < 4; ++legNo ) {
-    //     for( int joinNo = 0; joinNo < 3; ++joinNo, ++i ) {
+    //     for( int jointNo = 0; jointNo < 3; ++jointNo, ++i ) {
     //         convertedOnOrOff = onOrOff[ i ];
-    //         groupSyncWrite.addParam( convert( legNo, joinNo ),
+    //         groupSyncWrite.addParam( convert( legNo, jointNo ),
     //                 &convertedOnOrOff );
     //     }
     // }
@@ -256,13 +256,13 @@ unsigned int BoardGalgo::setPosition(int legNo, const std::vector<double>& angle
             GOAL_POSITION, 4 );
     toggleTorque( legNo, std::vector< bool >( 3, true ) );
     uint8_t angleAsBytes[ 4 ];
-    for( int joinNo = 1; joinNo <= 2; ++joinNo ) {
-        uint16_t convertedAngle = convertAngle( legNo, joinNo, angle[ joinNo ] );
+    for( int jointNo = 1; jointNo <= 2; ++jointNo ) {
+        uint16_t convertedAngle = convertAngle( legNo, jointNo, angle[ jointNo ] );
         angleAsBytes[ 0 ] = DXL_LOBYTE( DXL_LOWORD( convertedAngle ) );
         angleAsBytes[ 1 ] = DXL_HIBYTE( DXL_LOWORD( convertedAngle ) );
         angleAsBytes[ 2 ] = DXL_LOBYTE( DXL_HIWORD( convertedAngle ) );
         angleAsBytes[ 3 ] = DXL_HIBYTE( DXL_HIWORD( convertedAngle ) );
-        groupSyncWrite.addParam( convert( legNo, joinNo ),
+        groupSyncWrite.addParam( convert( legNo, jointNo ),
                 angleAsBytes );
     }
     handle( groupSyncWrite.txPacket() );
@@ -274,13 +274,13 @@ unsigned int BoardGalgo::setPosition(const std::vector<double>& angle){
     // toggleTorque( std::vector< bool >( 4 * 3, true ) );
     // uint8_t angleAsBytes[ 4 ];
     // for( int legNo = 0, i = 0; legNo < 4; ++legNo ) {
-    //     for( int joinNo = 0; joinNo < 3; ++joinNo, ++i ) {
+    //     for( int jointNo = 0; jointNo < 3; ++jointNo, ++i ) {
     //         uint16_t convertedAngle = convertAngle( angle[ i ] );
     //         angleAsBytes[ 0 ] = DXL_LOBYTE( DXL_LOWORD( convertedAngle ) );
     //         angleAsBytes[ 1 ] = DXL_HIBYTE( DXL_LOWORD( convertedAngle ) );
     //         angleAsBytes[ 2 ] = DXL_LOBYTE( DXL_HIWORD( convertedAngle ) );
     //         angleAsBytes[ 3 ] = DXL_HIBYTE( DXL_HIWORD( convertedAngle ) );
-    //         groupSyncWrite.addParam( convert( legNo, joinNo ),
+    //         groupSyncWrite.addParam( convert( legNo, jointNo ),
     //                 angleAsBytes );
     //     }
     // }
