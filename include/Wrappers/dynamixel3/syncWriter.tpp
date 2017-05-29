@@ -33,8 +33,8 @@ Iterator SyncWriter< T >::write( const std::vector< tId >& receivers,
 }
 template< typename T > template< typename U, typename UnaryFunction >
 void SyncWriter< T >::write( const std::vector< tId >& receivers,
-                                 const std::vector< U >& values,
-                                 const UnaryFunction& converter ) {
+                             const std::vector< U >& values,
+                             const UnaryFunction& converter ) {
     write( receivers, values.begin(), converter );
 }
 template< typename T > template< typename Iterator >
@@ -46,7 +46,7 @@ Iterator SyncWriter< T >::write( const std::vector< tId >& receivers,
 }
 template< typename T >
 void SyncWriter< T >::write( const std::vector< tId >& receivers,
-                                 const std::vector< T >& values ) {
+                             const std::vector< T >& values ) {
     write( receivers, values.begin() );
 }
 
