@@ -326,6 +326,7 @@ private:
     static constexpr tAddress OPERATING_MODE = 11;
     static constexpr tAddress TORQUE_ENABLE = 64;
     static constexpr tAddress LED = 65;
+    static constexpr tAddress GOAL_CURRENT = 102;
     //static constexpr tAddress GOAL_VELOCITY = 104;
     static constexpr tAddress PROFILE_VELOCITY = 112;
     static constexpr tAddress GOAL_POSITION = 116;
