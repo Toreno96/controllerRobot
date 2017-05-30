@@ -4,6 +4,9 @@
 #include "Board/boardGalgo.h"
 #include "Board/exceptions.h"
 #include "Helpers/algorithm.h"
+#include "Wrappers/dynamixel3/communicationResult.h"
+#include "Wrappers/dynamixel3/syncReader.h"
+#include "Wrappers/dynamixel3/syncWriter.h"
 
 namespace controller {
 
@@ -145,25 +148,20 @@ void BoardGalgo::toggleTorque( const std::vector< bool >& onOrOff ) {
 void BoardGalgo::setLED(int legNo, int jointNo, bool powered){
     tId id = convert(legNo, jointNo);
     uint8_t dxl_error = 0;
-    int dxl_comm_result = COMM_TX_FAIL;
-
-    dxl_comm_result = packetHandler_->write1ByteTxRx(portHandlersByLegNumber_.at(legNo).get(), id, LED, powered, &dxl_error);
-    handle(dxl_comm_result, dxl_error);
+    int dxl_comm_result = packetHandler_->write1ByteTxRx(portHandlersByLegNumber_.at(legNo).get(), id, LED, powered, &dxl_error);
+    dynamixel3wrapper::CommunicationResult communicationResult(packetHandler_.get(),
+            dxl_comm_result, dxl_error);
+    communicationResult.handle();
 }
 
 void BoardGalgo::setLED(int legNo, const std::vector<bool>& powered){
-    int dxl_comm_result = COMM_TX_FAIL;
-    dynamixel::GroupSyncWrite groupSyncWrite(portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(), LED, 1);
-
-    auto jointsIds = getSingleLegIds( legNo );
-    auto itPowered = powered.begin();
-    for( auto jointId : jointsIds ) {
-        uint8_t poweredRaw = static_cast< uint8_t >( *itPowered++ );
-        groupSyncWrite.addParam(jointId, &poweredRaw);
-    }
-
-    dxl_comm_result = groupSyncWrite.txPacket();
-    handle(dxl_comm_result);
+    dynamixel3wrapper::SyncWriter< bool > writer(
+            portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(),
+            LED );
+    auto receivers = getSingleLegIds( legNo );
+    writer.write( receivers, powered, []( bool value ){
+        return static_cast< uint8_t >( value );
+    } );
 }
 
 void BoardGalgo::setLED(const std::vector<bool> &powered){
