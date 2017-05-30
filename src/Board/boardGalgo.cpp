@@ -155,35 +155,29 @@ std::vector< BoardGalgo::tId > BoardGalgo::getAllLegsIds() {
 
 void BoardGalgo::toggleTorque( int legNo, int jointNo, uint8_t boolean ) {
     uint8_t error;
-    int communicationResult = packetHandler_->write1ByteTxRx( portHandlersByLegNumber_.at( legNo ).get(),
-            convert( legNo, jointNo ), TORQUE_ENABLE, boolean, &error );
-    handle( communicationResult, error );
+    int result = packetHandler_->write1ByteTxRx( portHandlersByLegNumber_.at( legNo ).get(), convert( legNo, jointNo ), TORQUE_ENABLE, boolean, &error );
+    dynamixel3wrapper::CommunicationResult communicationResult( packetHandler_.get(), result, error);
+    communicationResult.handle();
 }
 void BoardGalgo::toggleTorque( int legNo,
         const std::vector< uint8_t >& boolean ) {
-    dynamixel::GroupSyncWrite groupSyncWrite( portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(),
-            TORQUE_ENABLE, 1 );
-    uint8_t convertedOnOrOff;
-    for( int jointNo = 1; jointNo <= 2; ++jointNo ) {
-        convertedOnOrOff = boolean[ jointNo ];
-        groupSyncWrite.addParam( convert( legNo, jointNo ), &convertedOnOrOff );
-    }
-    handle( groupSyncWrite.txPacket() );
-    groupSyncWrite.clearParam();
+    dynamixel3wrapper::SyncWriter< uint8_t > writer(
+            portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(),
+            TORQUE_ENABLE );
+    auto receivers = getSingleLegIds( legNo );
+    writer.write( receivers, boolean );
 }
 void BoardGalgo::toggleTorque( const std::vector< uint8_t >& boolean ) {
-    // dynamixel::GroupSyncWrite groupSyncWrite( portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(),
-    //         TORQUE_ENABLE, 1 );
-    // uint8_t convertedOnOrOff;
-    // for( int legNo = 0, i = 0; legNo < 4; ++legNo ) {
-    //     for( int jointNo = 0; jointNo < 3; ++jointNo, ++i ) {
-    //         convertedOnOrOff = boolean[ i ];
-    //         groupSyncWrite.addParam( convert( legNo, jointNo ),
-    //                 &convertedOnOrOff );
-    //     }
-    // }
-    // handle( groupSyncWrite.txPacket() );
-    // groupSyncWrite.clearParam();
+    dynamixel3wrapper::SyncWriter< uint8_t > rightWriter(
+            rightLegs_.get(), packetHandler_.get(),
+            TORQUE_ENABLE );
+    dynamixel3wrapper::SyncWriter< uint8_t > leftWriter(
+            leftLegs_.get(), packetHandler_.get(),
+            TORQUE_ENABLE );
+    auto rightReceivers = getRightLegsIds();
+    auto leftReceivers = getLeftLegsIds();
+    auto it = rightWriter.write( rightReceivers, boolean.begin() );
+    leftWriter.write( leftReceivers, it );
 }
 
 void BoardGalgo::setLED(int legNo, int jointNo, uint8_t boolean){
