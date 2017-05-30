@@ -165,22 +165,20 @@ void BoardGalgo::setLED(int legNo, const std::vector<bool>& powered){
 }
 
 void BoardGalgo::setLED(const std::vector<bool> &powered){
-    // int dxl_comm_result = COMM_TX_FAIL;
-    // dynamixel::GroupSyncWrite groupSyncWrite(portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(), LED, 1);
-
-    // uint8_t v;
-    // int ix = 0;
-
-    // for(int i = 0; i < 4; i++){
-    //     for(int j = 0; j < 3; j++){
-    //         v = powered[ix];
-    //         groupSyncWrite.addParam(convert(i, j), &v);
-    //         ix++;
-    //     }
-    // }
-
-    // dxl_comm_result = groupSyncWrite.txPacket();
-    // handle(dxl_comm_result);
+    dynamixel3wrapper::SyncWriter< uint8_t > rightWriter(
+            rightLegs_.get(), packetHandler_.get(),
+            LED );
+    dynamixel3wrapper::SyncWriter< uint8_t > leftWriter(
+            leftLegs_.get(), packetHandler_.get(),
+            LED );
+    auto rightReceivers = getRightLegsIds();
+    auto leftReceivers = getLeftLegsIds();
+    auto it = rightWriter.write( rightReceivers, powered.begin(), []( bool value ){
+        return static_cast< uint8_t >( value );
+    } );
+    leftWriter.write( leftReceivers, it, []( bool value ){
+        return static_cast< uint8_t >( value );
+    } );
 }
 
 void BoardGalgo::setOperatingMode(int legNo, int jointNo, uint8_t operatingMode){
