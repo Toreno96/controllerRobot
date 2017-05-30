@@ -155,7 +155,7 @@ void BoardGalgo::setLED(int legNo, int jointNo, bool powered){
 }
 
 void BoardGalgo::setLED(int legNo, const std::vector<bool>& powered){
-    dynamixel3wrapper::SyncWriter< bool > writer(
+    dynamixel3wrapper::SyncWriter< uint8_t > writer(
             portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(),
             LED );
     auto receivers = getSingleLegIds( legNo );
