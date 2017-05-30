@@ -255,45 +255,36 @@ uint16_t BoardGalgo::convertAngle(int legNo, int jointNo, double angle){
 }
 unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
     uint8_t error;
-    int communicationResult = packetHandler_->write4ByteTxRx( portHandlersByLegNumber_.at( legNo ).get(),
-            convert( legNo, jointNo ), GOAL_POSITION, convertAngle( legNo, jointNo, angle ), &error );
-    handle( communicationResult, error );
-
+    int result = packetHandler_->write4ByteTxRx( portHandlersByLegNumber_.at( legNo ).get(), convert( legNo, jointNo ), GOAL_POSITION, tAngleDynamixel( tAngleRadians( angle ) ).val, &error );
+    dynamixel3wrapper::CommunicationResult communicationResult( packetHandler_.get(), result, error);
+    communicationResult.handle();
     return 0;
 }
 unsigned int BoardGalgo::setPosition(int legNo, const std::vector<double>& angle){
-    dynamixel::GroupSyncWrite groupSyncWrite( portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(),
-            GOAL_POSITION, 4 );
-    uint8_t angleAsBytes[ 4 ];
-    for( int jointNo = 1; jointNo <= 2; ++jointNo ) {
-        uint16_t convertedAngle = convertAngle( legNo, jointNo, angle[ jointNo ] );
-        angleAsBytes[ 0 ] = DXL_LOBYTE( DXL_LOWORD( convertedAngle ) );
-        angleAsBytes[ 1 ] = DXL_HIBYTE( DXL_LOWORD( convertedAngle ) );
-        angleAsBytes[ 2 ] = DXL_LOBYTE( DXL_HIWORD( convertedAngle ) );
-        angleAsBytes[ 3 ] = DXL_HIBYTE( DXL_HIWORD( convertedAngle ) );
-        groupSyncWrite.addParam( convert( legNo, jointNo ),
-                angleAsBytes );
-    }
-    handle( groupSyncWrite.txPacket() );
-    groupSyncWrite.clearParam();
+    dynamixel3wrapper::SyncWriter< uint32_t > writer(
+            portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(),
+            GOAL_POSITION );
+    auto receivers = getSingleLegIds( legNo );
+    writer.write( receivers, angle, []( double value ){
+        return tAngleDynamixel( tAngleRadians( value ) ).val;
+    } );
+    return 0;
 }
 unsigned int BoardGalgo::setPosition(const std::vector<double>& angle){
-    // dynamixel::GroupSyncWrite groupSyncWrite( portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(),
-    //         GOAL_POSITION, 4 );
-    // uint8_t angleAsBytes[ 4 ];
-    // for( int legNo = 0, i = 0; legNo < 4; ++legNo ) {
-    //     for( int jointNo = 0; jointNo < 3; ++jointNo, ++i ) {
-    //         uint16_t convertedAngle = convertAngle( angle[ i ] );
-    //         angleAsBytes[ 0 ] = DXL_LOBYTE( DXL_LOWORD( convertedAngle ) );
-    //         angleAsBytes[ 1 ] = DXL_HIBYTE( DXL_LOWORD( convertedAngle ) );
-    //         angleAsBytes[ 2 ] = DXL_LOBYTE( DXL_HIWORD( convertedAngle ) );
-    //         angleAsBytes[ 3 ] = DXL_HIBYTE( DXL_HIWORD( convertedAngle ) );
-    //         groupSyncWrite.addParam( convert( legNo, jointNo ),
-    //                 angleAsBytes );
-    //     }
-    // }
-    // handle( groupSyncWrite.txPacket() );
-    // groupSyncWrite.clearParam();
+    dynamixel3wrapper::SyncWriter< uint32_t > rightWriter(
+            rightLegs_.get(), packetHandler_.get(),
+            GOAL_POSITION );
+    dynamixel3wrapper::SyncWriter< uint32_t > leftWriter(
+            leftLegs_.get(), packetHandler_.get(),
+            GOAL_POSITION );
+    auto rightReceivers = getRightLegsIds();
+    auto leftReceivers = getLeftLegsIds();
+    auto converter = []( double value ){
+        return tAngleDynamixel( tAngleRadians( value ) ).val;
+    };
+    auto it = rightWriter.write( rightReceivers, angle.begin(), converter );
+    leftWriter.write( leftReceivers, it, converter );
+    return 0;
 }
 
 uint32_t BoardGalgo::convertSpeed(double value){
@@ -369,35 +360,36 @@ double BoardGalgo::convert(int legNo, int jointNo, uint32_t position) {
 }
 
 unsigned int BoardGalgo::readPosition(int legNo, int jointNo, double& angle){
-    tId dynamixel = convert( legNo, jointNo );
     uint32_t presentPosition;
     uint8_t error;
-    int communicationResult = packetHandler_->read4ByteTxRx(portHandlersByLegNumber_.at( legNo ).get(), dynamixel,
-            PRESENT_POSITION, &presentPosition, &error);
-
-    handle( communicationResult, error );
-    angle = convert(legNo, jointNo, presentPosition );
-
+    int result = packetHandler_->read4ByteTxRx(portHandlersByLegNumber_.at( legNo ).get(), convert( legNo, jointNo ), PRESENT_POSITION, &presentPosition, &error);
+    dynamixel3wrapper::CommunicationResult communicationResult( packetHandler_.get(), result, error );
+    communicationResult.handle();
+    angle = tAngleRadians( tAngleDynamixel( presentPosition ) ).val;
     return 0;
 }
 
 unsigned int BoardGalgo::readPosition(int legNo, std::vector<double>& angle){
-    int dxl_comm_result = COMM_TX_FAIL;
-    dynamixel::GroupSyncRead groupSyncRead(portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(), PRESENT_POSITION, 4);
-
-    for(int i = 1; i <= 2; i++){
-        groupSyncRead.addParam(convert(legNo, i));
-    }
-
-    dxl_comm_result = groupSyncRead.txRxPacket();
-    handle(dxl_comm_result);
-
-    for(int i = 1; i <= 2; i++){
-        angle[i] = convert(legNo, i, (uint16_t)groupSyncRead.getData(convert(legNo, i), PRESENT_POSITION, 4));
-    }
+    dynamixel3wrapper::SyncReader< uint32_t > reader( portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(), PRESENT_POSITION );
+    auto receivers = getSingleLegIds( legNo );
+    angle = reader.read< double >( receivers, []( uint32_t value ){
+        return tAngleRadians( tAngleDynamixel( value ) ).val;
+    } );
+    return 0;
 }
 
-unsigned int BoardGalgo::readPosition(std::vector<double>& angle){}
+unsigned int BoardGalgo::readPosition(std::vector<double>& angle){
+    dynamixel3wrapper::SyncReader< uint32_t > rightReader( rightLegs_.get(), packetHandler_.get(), PRESENT_POSITION );
+    dynamixel3wrapper::SyncReader< uint32_t > leftReader( leftLegs_.get(), packetHandler_.get(), PRESENT_POSITION );
+    auto rightReceivers = getRightLegsIds();
+    auto leftReceivers = getLeftLegsIds();
+    auto converter = []( uint32_t value ){
+        return tAngleRadians( tAngleDynamixel( value ) ).val;
+    };
+    angle = merge( rightReader.read< double >( rightReceivers, converter ),
+            leftReader.read< double >( leftReceivers, converter ) );
+    return 0;
+}
 
 unsigned int BoardGalgo::readForce(int legNo, double& contactForce){}
 unsigned int BoardGalgo::readForce(const std::vector<double>& contactForce){}
