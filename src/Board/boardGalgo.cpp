@@ -293,53 +293,38 @@ uint32_t BoardGalgo::convertSpeed(double value){
 
 unsigned int BoardGalgo::setSpeed(int legNo, int jointNo, double speed){
     uint8_t error;
-
-    int communicationResult = packetHandler_->write4ByteTxRx(portHandlersByLegNumber_.at(legNo).get(), convert(legNo, jointNo), PROFILE_VELOCITY, convertSpeed(speed), &error);
-    handle(communicationResult, error);
+    int result = packetHandler_->write4ByteTxRx( portHandlersByLegNumber_.at( legNo ).get(), convert( legNo, jointNo ), PROFILE_VELOCITY, tSpeedDynamixel( tSpeedInterval( speed ) ).val, &error );
+    dynamixel3wrapper::CommunicationResult communicationResult( packetHandler_.get(), result, error);
+    communicationResult.handle();
+    return 0;
 }
 
 unsigned int BoardGalgo::setSpeed(int legNo, const std::vector<double>& speed){
-    int dxl_comm_result = COMM_TX_FAIL;
-    dynamixel::GroupSyncWrite groupSyncWrite(portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(), PROFILE_VELOCITY, 4);
-
-    uint32_t s;
-    uint8_t v[4];
-
-    for(int i = 1; i <= 2; i++){
-        s = convertSpeed(speed[i]);
-        v[0] = DXL_LOBYTE(DXL_LOWORD(s));
-        v[1] = DXL_HIBYTE(DXL_LOWORD(s));
-        v[2] = DXL_LOBYTE(DXL_HIWORD(s));
-        v[3] = DXL_HIBYTE(DXL_HIWORD(s));
-        groupSyncWrite.addParam(convert(legNo, i), v);
-    }
-
-    dxl_comm_result = groupSyncWrite.txPacket();
-    handle(dxl_comm_result);
+    dynamixel3wrapper::SyncWriter< uint32_t > writer(
+            portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(),
+            PROFILE_VELOCITY );
+    auto receivers = getSingleLegIds( legNo );
+    writer.write( receivers, speed, []( double value ){
+        return tSpeedDynamixel( tSpeedInterval( value ) ).val;
+    } );
+    return 0;
 }
 
 unsigned int BoardGalgo::setSpeed(const std::vector<double>& speed){
-    // int dxl_comm_result = COMM_TX_FAIL;
-    // dynamixel::GroupSyncWrite groupSyncWrite(portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(), GOAL_VELOCITY, 4);
-
-    // uint32_t s;
-    // uint8_t v[4];
-    // int ix = 0;
-
-    // for(int i = 0; i < 4; i++){
-    //     for(int j = 0; j < 3; j++){
-    //         s = convertSpeed(speed[ix]);
-    //         v[0] = DXL_LOBYTE(DXL_LOWORD(s));
-    //         v[1] = DXL_HIBYTE(DXL_LOWORD(s));
-    //         v[2] = DXL_LOBYTE(DXL_HIWORD(s));
-    //         v[3] = DXL_HIBYTE(DXL_HIWORD(s));
-    //         groupSyncWrite.addParam(convert(i, j), v);
-    //         ix++;
-    //     }
-    // }
-
-    // dxl_comm_result = groupSyncWrite.txPacket();
-    // handle(dxl_comm_result);
+    dynamixel3wrapper::SyncWriter< uint32_t > rightWriter(
+            rightLegs_.get(), packetHandler_.get(),
+            PROFILE_VELOCITY );
+    dynamixel3wrapper::SyncWriter< uint32_t > leftWriter(
+            leftLegs_.get(), packetHandler_.get(),
+            PROFILE_VELOCITY );
+    auto rightReceivers = getRightLegsIds();
+    auto leftReceivers = getLeftLegsIds();
+    auto converter = []( double value ){
+        return tSpeedDynamixel( tSpeedInterval( value ) ).val;
+    };
+    auto it = rightWriter.write( rightReceivers, speed.begin(), converter );
+    leftWriter.write( leftReceivers, it, converter );
+    return 0;
 }
 
 unsigned int BoardGalgo::setComplianceMargin(int legNo, int jointNo, double margin){}
