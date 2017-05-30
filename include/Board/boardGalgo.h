@@ -18,14 +18,14 @@ class BoardGalgo : Board {
         ~BoardGalgo();
 
         // TO-DO Dokumentacja doxygen poniższych funkcji toggleTorque
-        void toggleTorque( int legNo, int jointNo, bool onOrOff );
-        void toggleTorque( int legNo, const std::vector< bool >& onOrOff );
-        void toggleTorque( const std::vector< bool >& onOrOff );
+        void toggleTorque( int legNo, int jointNo, uint8_t boolean );
+        void toggleTorque( int legNo, const std::vector< uint8_t >& boolean );
+        void toggleTorque( const std::vector< uint8_t >& boolean );
 
         // TO-DO Dokumentacja doxygen poniższych funkcji setLED
-        void setLED(int legNo, int jointNo, bool powered);
-        void setLED(int legNo, const std::vector<bool>& powered);
-        void setLED(const std::vector<bool>& powered);
+        void setLED(int legNo, int jointNo, uint8_t boolean);
+        void setLED(int legNo, const std::vector<uint8_t>& boolean);
+        void setLED(const std::vector<uint8_t>& boolean);
 
         void setOperatingMode(int legNo, int jointNo, uint8_t operatingMode);
         void setOperatingMode(int legNo, const std::vector<uint8_t>& operatingMode);

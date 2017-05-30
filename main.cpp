@@ -24,14 +24,14 @@ int main()
 
     for( int i = 0; i < 5; ++i ) {
         // bg.setLED(1, std::vector<bool>(3, 1));
-        bg.setLED( std::vector< bool >( 12, 1 ) );
+        bg.setLED( std::vector< uint8_t >( 12, 1 ) );
         // bg.setLED(1, 1, 1);
         // bg.setLED(2, 1, 1);
         // bg.setLED(3, 1, 1);
         // bg.setLED(4, 1, 1);
         std::this_thread::sleep_for( std::chrono::milliseconds( 500 ) );
         // bg.setLED(1, std::vector<bool>(3, 0));
-        bg.setLED( std::vector< bool >( 12, 0 ) );
+        bg.setLED( std::vector< uint8_t >( 12, 0 ) );
         // bg.setLED(1, 1, 0);
         // bg.setLED(2, 1, 0);
         // bg.setLED(3, 1, 0);
