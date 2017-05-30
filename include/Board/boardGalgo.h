@@ -15,13 +15,38 @@ Board* createBoardGalgo( const std::string &rightLegsDevPath,
                          const std::string &leftLegsDevPath,
                          int baudRate );
 
+Board* createBoardGalgo(std::string configFilename);
+
 class BoardGalgo : public Board {
     public:
         using Ptr = std::unique_ptr< BoardGalgo >;
         BoardGalgo( const std::string &rightLegsDevPath,
                     const std::string &leftLegsDevPath,
                     int baudRate );
+
+        BoardGalgo(std::string configFilename);
+
         ~BoardGalgo();
+
+        class Config {
+            public:
+
+                Config(){
+                }
+
+                Config(std::string configFilename) {
+                    load(configFilename);
+                }
+
+                void load(std::string configFilename);
+
+                /// rightLegsDevPath
+                std::string rightLegsDevPath;
+                /// rightLegsDevPath
+                std::string leftLegsDevPath;
+                /// baudrate
+                int baudRate;
+        };
 
         // TO-DO Dokumentacja doxygen poniższych funkcji toggleTorque
         void toggleTorque( int legNo, int jointNo, uint8_t boolean );
@@ -282,6 +307,7 @@ class BoardGalgo : public Board {
         static constexpr uint8_t OPERATINGMODE_CURRENT_BASED_POSITION = 5;
 
 private:
+    Config config;
     using tPortHandler = std::shared_ptr< dynamixel::PortHandler >;
     using tPacketHandler = std::shared_ptr< dynamixel::PacketHandler >;
     using tId = dynamixel3wrapper::tId;

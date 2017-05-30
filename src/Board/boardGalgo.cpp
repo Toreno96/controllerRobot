@@ -7,6 +7,7 @@
 #include "Wrappers/dynamixel3/communicationResult.h"
 #include "Wrappers/dynamixel3/syncReader.h"
 #include "Wrappers/dynamixel3/syncWriter.h"
+#include "../3rdParty/tinyXML/tinyxml2.h"
 
 namespace controller {
 
@@ -37,6 +38,43 @@ BoardGalgo::BoardGalgo( const std::string &rightLegsDevPath,
     signOfAngle[6] = 1; signOfAngle[7]  = 1; signOfAngle[8]  = 1;
     signOfAngle[9] = 1; signOfAngle[10] = 1; signOfAngle[11] = 1;
 }
+
+BoardGalgo::BoardGalgo(std::string configFilename) :
+        Board( "Board Galgo", TYPE_GALGO ),
+        config(configFilename),
+        rightLegs_( dynamixel::PortHandler::getPortHandler(
+                           config.rightLegsDevPath.c_str() ) ),
+        leftLegs_( dynamixel::PortHandler::getPortHandler(
+                           config.leftLegsDevPath.c_str() ) ),
+        packetHandler_( dynamixel::PacketHandler::getPacketHandler(
+                                PROTOCOL_VERSION ) ) {
+    preparePortHandler( rightLegs_, config.baudRate );
+    preparePortHandler( leftLegs_, config.baudRate );
+    preparePortHandlersByLegNumberMap();
+    toggleTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, 1 ) );
+
+    zeroAngle[0] = 90; zeroAngle[1]  = 0; zeroAngle[2]  = 0;
+    zeroAngle[3] = 90; zeroAngle[4]  = 0; zeroAngle[5]  = 0;
+    zeroAngle[6] = -90; zeroAngle[7]  = 0; zeroAngle[8]  = 0;
+    zeroAngle[9] = -90; zeroAngle[10] = 0; zeroAngle[11] = 0;
+
+    signOfAngle[0] = -1; signOfAngle[1]  = 1; signOfAngle[2]  = 1;
+    signOfAngle[3] = -1; signOfAngle[4]  = 1; signOfAngle[5]  = 1;
+    signOfAngle[6] = 1; signOfAngle[7]  = 1; signOfAngle[8]  = 1;
+    signOfAngle[9] = 1; signOfAngle[10] = 1; signOfAngle[11] = 1;
+}
+
+//------------------------------------------------------------------------------
+void BoardGalgo::Config::load(std::string configFilename){
+    tinyxml2::XMLDocument configSrv;
+    configSrv.LoadFile(std::string("../../resources/" + configFilename).c_str());
+    if (configSrv.ErrorID())
+        std::cout << "unable to load board Galgo config file.\n";
+    rightLegsDevPath = configSrv.FirstChildElement("boardGalgo")->FirstChildElement("parameters")->Attribute("rightLegsDevPath");
+    leftLegsDevPath = configSrv.FirstChildElement("boardGalgo")->FirstChildElement("parameters")->Attribute("leftLegsDevPath");
+    configSrv.FirstChildElement("boardGalgo")->FirstChildElement("parameters")->QueryIntAttribute("baudRate",&baudRate);
+}
+
 void BoardGalgo::preparePortHandler( const tPortHandler& portHandler,
                                      int baudRate ) {
   if( !portHandler->openPort() )
@@ -481,6 +519,11 @@ Board* createBoardGalgo( const std::string &rightLegsDevPath,
                          const std::string &leftLegsDevPath,
                          int baudRate ) {
     boardGalgo.reset( new BoardGalgo( rightLegsDevPath, leftLegsDevPath, baudRate ) );
+    return boardGalgo.get();
+}
+
+Board* createBoardGalgo(std::string configFilename) {
+    boardGalgo.reset( new BoardGalgo(configFilename) );
     return boardGalgo.get();
 }
 
