@@ -28,8 +28,8 @@ std::vector< U > SyncReader< T >::read( const std::vector< tId >& receivers,
     std::vector< U > values( receivers.size() );
     auto receiver = receivers.begin();
     for( auto& value : values ) {
-        value = converter( internalReader_.getData( *receiver++, data_,
-                GroupCommunicationHelper< T >::getDataLength() ) );
+        value = converter( static_cast< T >( internalReader_.getData( *receiver++, data_,
+                GroupCommunicationHelper< T >::getDataLength() ) ) );
     }
     return values;
 }
