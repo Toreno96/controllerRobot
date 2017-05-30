@@ -10,6 +10,8 @@
 
 namespace controller {
 
+BoardGalgo::Ptr boardGalgo;
+
 BoardGalgo::BoardGalgo( const std::string &rightLegsDevPath,
                         const std::string &leftLegsDevPath,
                         int baudRate ) :
@@ -474,5 +476,12 @@ void BoardGalgo::setOffset(const std::vector<double> offset){
 }
 
 void BoardGalgo::setDefault(void){}
+
+Board* createBoardGalgo( const std::string &rightLegsDevPath,
+                         const std::string &leftLegsDevPath,
+                         int baudRate ) {
+    boardGalgo.reset( new BoardGalgo( rightLegsDevPath, leftLegsDevPath, baudRate ) );
+    return boardGalgo.get();
+}
 
 } // namespace controller

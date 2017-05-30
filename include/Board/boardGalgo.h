@@ -10,8 +10,14 @@
 
 namespace controller {
 
-class BoardGalgo : Board {
+/// create a single board controller (with usb2dynamixel)
+Board* createBoardGalgo( const std::string &rightLegsDevPath,
+                         const std::string &leftLegsDevPath,
+                         int baudRate );
+
+class BoardGalgo : public Board {
     public:
+        using Ptr = std::unique_ptr< BoardGalgo >;
         BoardGalgo( const std::string &rightLegsDevPath,
                     const std::string &leftLegsDevPath,
                     int baudRate );
