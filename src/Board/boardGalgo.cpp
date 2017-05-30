@@ -86,9 +86,8 @@ void BoardGalgo::handle( int communicationResult, uint8_t error ) {
 BoardGalgo::tId BoardGalgo::convert( int legNo, int jointNo ) {
     return static_cast< tId >( legNo * 10 + jointNo );
 }
-std::array< BoardGalgo::tId, BoardGalgo::JOINTS_COUNT_IN_SINGLE_LEG >
-        BoardGalgo::getSingleLegIds( int legNo ) {
-    std::array< tId, JOINTS_COUNT_IN_SINGLE_LEG > jointsIds;
+std::vector< BoardGalgo::tId > BoardGalgo::getSingleLegIds( int legNo ) {
+    std::vector< tId > jointsIds( JOINTS_COUNT_IN_SINGLE_LEG );
     int jointNumber = FIRST_JOINT_NUMBER;
     std::generate( jointsIds.begin(), jointsIds.end(),
             [ this, legNo, &jointNumber ]() {
@@ -96,20 +95,17 @@ std::array< BoardGalgo::tId, BoardGalgo::JOINTS_COUNT_IN_SINGLE_LEG >
             } );
     return jointsIds;
 }
-std::array< BoardGalgo::tId, BoardGalgo::JOINTS_COUNT_IN_TWO_LEGS >
-            BoardGalgo::getTwoLegsIds( int legNo1, int legNo2 ) {
+std::vector< BoardGalgo::tId >
+        BoardGalgo::getTwoLegsIds( int legNo1, int legNo2 ) {
     return merge( getSingleLegIds( legNo1 ), getSingleLegIds( legNo2 ) );
 }
-std::array< BoardGalgo::tId, BoardGalgo::JOINTS_COUNT_IN_TWO_LEGS >
-        BoardGalgo::getRightLegsIds() {
+std::vector< BoardGalgo::tId > BoardGalgo::getRightLegsIds() {
     return getTwoLegsIds( 1, 2 );
 }
-std::array< BoardGalgo::tId, BoardGalgo::JOINTS_COUNT_IN_TWO_LEGS >
-        BoardGalgo::getLeftLegsIds() {
+std::vector< BoardGalgo::tId > BoardGalgo::getLeftLegsIds() {
     return getTwoLegsIds( 3, 4 );
 }
-std::array< BoardGalgo::tId, BoardGalgo::JOINTS_COUNT_IN_ALL_LEGS >
-        BoardGalgo::getAllLegsIds() {
+std::vector< BoardGalgo::tId > BoardGalgo::getAllLegsIds() {
     return merge( getRightLegsIds(), getLeftLegsIds() );
 }
 

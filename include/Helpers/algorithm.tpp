@@ -2,10 +2,10 @@
 
 namespace controller {
 
-template< typename T, std::size_t In1, std::size_t In2 >
-std::array< T, In1 + In2 > merge( const std::array< T, In1 >& in1,
-                                  const std::array< T, In2 >& in2 ) {
-    std::array< T, In1 + In2 > out;
+template< typename T >
+std::vector< T > merge( const std::vector< T > in1,
+                        const std::vector< T > in2 ) {
+    std::vector< T > out( in1.size() + in2.size() );
     std::merge( in1.begin(), in1.end(), in2.begin(), in2.end(), out.begin() );
     return out;
 }

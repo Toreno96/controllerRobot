@@ -293,10 +293,6 @@ private:
     static constexpr int MAX_CURRENT = 1193;
     static constexpr int FIRST_JOINT_NUMBER = 1;
     static constexpr std::size_t JOINTS_COUNT_IN_SINGLE_LEG = 2;
-    static constexpr std::size_t JOINTS_COUNT_IN_TWO_LEGS =
-            JOINTS_COUNT_IN_SINGLE_LEG * 2;
-    static constexpr std::size_t JOINTS_COUNT_IN_ALL_LEGS =
-            JOINTS_COUNT_IN_SINGLE_LEG * 4;
 
     void preparePortHandler( const tPortHandler& portHandler, int baudRate );
     void preparePortHandlersByLegNumberMap();
@@ -305,15 +301,11 @@ private:
     void handle( int communicationResult, uint8_t error );
 
     tId convert( int legNo, int jointNo );
-    std::array< tId, JOINTS_COUNT_IN_SINGLE_LEG > getSingleLegIds( int legNo );
-    std::array< tId, JOINTS_COUNT_IN_TWO_LEGS >
-            getTwoLegsIds( int legNo1, int legNo2 );
-    std::array< tId, JOINTS_COUNT_IN_TWO_LEGS >
-            getRightLegsIds();
-    std::array< tId, JOINTS_COUNT_IN_TWO_LEGS >
-            getLeftLegsIds();
-    std::array< tId, JOINTS_COUNT_IN_ALL_LEGS >
-            getAllLegsIds();
+    std::vector< tId > getSingleLegIds( int legNo );
+    std::vector< tId > getTwoLegsIds( int legNo1, int legNo2 );
+    std::vector< tId > getRightLegsIds();
+    std::vector< tId > getLeftLegsIds();
+    std::vector< tId > getAllLegsIds();
     uint16_t convertAngle(int legNo, int jointNo, double angle );
     double convert(int legNo, int jointNo, uint32_t position);
     uint32_t convertSpeed(double value);

@@ -2,13 +2,13 @@
 #define _HELPERS_ALGORITHM_H_
 
 #include <algorithm>
-#include <array>
+#include <vector>
 
 namespace controller {
 
-template< typename T, std::size_t In1, std::size_t In2 >
-std::array< T, In1 + In2 > merge( const std::array< T, In1 >& in1,
-                                  const std::array< T, In2 >& in2 );
+template< typename T >
+std::vector< T > merge( const std::vector< T > in1,
+                        const std::vector< T > in2 );
 
 } // namespace controller
 
