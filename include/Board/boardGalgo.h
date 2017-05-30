@@ -6,6 +6,7 @@
 #include <memory>
 #include "../../3rdParty/dynamixel3/include/dynamixel_sdk.h"
 #include "board.h"
+#include "Wrappers/dynamixel3/globals.h"
 
 namespace controller {
 
@@ -277,8 +278,8 @@ class BoardGalgo : Board {
 private:
     using tPortHandler = std::shared_ptr< dynamixel::PortHandler >;
     using tPacketHandler = std::shared_ptr< dynamixel::PacketHandler >;
-    using tId = uint8_t;
-    using tAddress = uint16_t;
+    using tId = dynamixel3wrapper::tId;
+    using tAddress = dynamixel3wrapper::tAddress;
     static constexpr float PROTOCOL_VERSION = 2.0;
     static constexpr tAddress OPERATING_MODE = 11;
     static constexpr tAddress TORQUE_ENABLE = 64;
