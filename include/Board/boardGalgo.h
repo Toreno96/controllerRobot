@@ -6,6 +6,9 @@
 #include <memory>
 #include "../../3rdParty/dynamixel3/include/dynamixel_sdk.h"
 #include "board.h"
+#include "Helpers/angle.h"
+#include "Helpers/current.h"
+#include "Helpers/speed.h"
 #include "Wrappers/dynamixel3/globals.h"
 
 namespace controller {
@@ -312,6 +315,13 @@ private:
     using tPacketHandler = std::shared_ptr< dynamixel::PacketHandler >;
     using tId = dynamixel3wrapper::tId;
     using tAddress = dynamixel3wrapper::tAddress;
+    using tAngleDynamixel = Angle< tAngleUnitDynamixel >;
+    using tAngleRadians = Angle< tAngleUnitRadians >;
+    using tCurrentDynamixel = Current< tCurrentUnitDynamixel >;
+    using tCurrentInterval = Current< tCurrentUnitInterval >;
+    using tCurrentAmpers = Current< tCurrentUnitAmpers >;
+    using tSpeedInterval = Speed< tSpeedUnitInterval >;
+    using tSpeedDynamixel = Speed< tSpeedUnitDynamixel >;
     static constexpr float PROTOCOL_VERSION = 2.0;
     static constexpr tAddress OPERATING_MODE = 11;
     static constexpr tAddress TORQUE_ENABLE = 64;
