@@ -293,7 +293,7 @@ private:
     static constexpr int MAX_SPEED = 1023;
     static constexpr int MAX_CURRENT = 1193;
     static constexpr int FIRST_JOINT_NUMBER = 1;
-    static constexpr std::size_t JOINTS_COUNT_IN_SINGLE_LEG = 2;
+    static constexpr std::size_t JOINTS_COUNT_IN_SINGLE_LEG = 3;
 
     void preparePortHandler( const tPortHandler& portHandler, int baudRate );
     void preparePortHandlersByLegNumberMap();
