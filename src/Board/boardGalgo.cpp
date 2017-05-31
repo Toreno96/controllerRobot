@@ -401,7 +401,7 @@ unsigned int BoardGalgo::readPosition(std::vector<double>& angle){
     auto converter = []( uint32_t value ){
         return tAngleRadians( tAngleDynamixel( value ) ).val;
     };
-    angle = merge( rightReader.read< double >( rightReceivers, converter ),
+    angle = unsortedMerge( rightReader.read< double >( rightReceivers, converter ),
             leftReader.read< double >( leftReceivers, converter ) );
     return 0;
 }
@@ -445,7 +445,7 @@ unsigned int BoardGalgo::readCurrent(std::vector<double>& servoCurrent){
     auto converter = []( uint16_t value ){
         return tCurrentAmpers( tCurrentDynamixel( value ) ).val;
     };
-    servoCurrent = merge( rightReader.read< double >( rightReceivers, converter ),
+    servoCurrent = unsortedMerge( rightReader.read< double >( rightReceivers, converter ),
             leftReader.read< double >( leftReceivers, converter ) );
     return 0;
 }
