@@ -7,8 +7,8 @@
 namespace controller {
 
 template< typename T >
-std::vector< T > merge( const std::vector< T > in1,
-                        const std::vector< T > in2 );
+std::vector< T > merge( const std::vector< T >& in1,
+                        const std::vector< T >& in2 );
 
 } // namespace controller
 
