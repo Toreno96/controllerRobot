@@ -51,10 +51,10 @@ class BoardGalgo : public Board {
                 int baudRate;
         };
 
-        // TO-DO Dokumentacja doxygen poniższych funkcji toggleTorque
-        void toggleTorque( int legNo, int jointNo, uint8_t boolean );
-        void toggleTorque( int legNo, const std::vector< uint8_t >& boolean );
-        void toggleTorque( const std::vector< uint8_t >& boolean );
+        // TO-DO Dokumentacja doxygen poniższych funkcji setTorque
+        void setTorque( int legNo, int jointNo, uint8_t boolean );
+        void setTorque( int legNo, const std::vector< uint8_t >& boolean );
+        void setTorque( const std::vector< uint8_t >& boolean );
 
         // TO-DO Dokumentacja doxygen poniższych funkcji setLED
         void setLED(int legNo, int jointNo, uint8_t boolean);

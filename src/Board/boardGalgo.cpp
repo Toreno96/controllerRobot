@@ -26,7 +26,7 @@ BoardGalgo::BoardGalgo( const std::string &rightLegsDevPath,
     preparePortHandler( rightLegs_, baudRate );
     preparePortHandler( leftLegs_, baudRate );
     preparePortHandlersByLegNumberMap();
-    toggleTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, 1 ) );
+    setTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, 1 ) );
 
     zeroAngle[0] = 90; zeroAngle[1]  = 0; zeroAngle[2]  = 0;
     zeroAngle[3] = 90; zeroAngle[4]  = 0; zeroAngle[5]  = 0;
@@ -51,7 +51,7 @@ BoardGalgo::BoardGalgo(std::string configFilename) :
     preparePortHandler( rightLegs_, config.baudRate );
     preparePortHandler( leftLegs_, config.baudRate );
     preparePortHandlersByLegNumberMap();
-    toggleTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, 1 ) );
+    setTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, 1 ) );
 
     zeroAngle[0] = 90; zeroAngle[1]  = 0; zeroAngle[2]  = 0;
     zeroAngle[3] = 90; zeroAngle[4]  = 0; zeroAngle[5]  = 0;
@@ -153,13 +153,13 @@ std::vector< BoardGalgo::tId > BoardGalgo::getAllLegsIds() {
     return merge( getRightLegsIds(), getLeftLegsIds() );
 }
 
-void BoardGalgo::toggleTorque( int legNo, int jointNo, uint8_t boolean ) {
+void BoardGalgo::setTorque( int legNo, int jointNo, uint8_t boolean ) {
     uint8_t error;
     int result = packetHandler_->write1ByteTxRx( portHandlersByLegNumber_.at( legNo ).get(), convert( legNo, jointNo ), TORQUE_ENABLE, boolean, &error );
     dynamixel3wrapper::CommunicationResult communicationResult( packetHandler_.get(), result, error);
     communicationResult.handle();
 }
-void BoardGalgo::toggleTorque( int legNo,
+void BoardGalgo::setTorque( int legNo,
         const std::vector< uint8_t >& boolean ) {
     dynamixel3wrapper::SyncWriter< uint8_t > writer(
             portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(),
@@ -167,7 +167,7 @@ void BoardGalgo::toggleTorque( int legNo,
     auto receivers = getSingleLegIds( legNo );
     writer.write( receivers, boolean );
 }
-void BoardGalgo::toggleTorque( const std::vector< uint8_t >& boolean ) {
+void BoardGalgo::setTorque( const std::vector< uint8_t >& boolean ) {
     dynamixel3wrapper::SyncWriter< uint8_t > rightWriter(
             rightLegs_.get(), packetHandler_.get(),
             TORQUE_ENABLE );
@@ -211,26 +211,26 @@ void BoardGalgo::setLED(const std::vector<uint8_t> &boolean){
 }
 
 void BoardGalgo::setOperatingMode(int legNo, int jointNo, uint8_t operatingMode){
-    toggleTorque( legNo, jointNo, 0 );
+    setTorque( legNo, jointNo, 0 );
     uint8_t error;
     int result = packetHandler_->write1ByteTxRx( portHandlersByLegNumber_.at( legNo ).get(), convert( legNo, jointNo ), OPERATING_MODE, operatingMode, &error );
     dynamixel3wrapper::CommunicationResult communicationResult( packetHandler_.get(), result, error);
     communicationResult.handle();
-    toggleTorque( legNo, jointNo, 1 );
+    setTorque( legNo, jointNo, 1 );
 }
 
 void BoardGalgo::setOperatingMode(int legNo, const std::vector<uint8_t>& operatingMode){
-    toggleTorque( legNo, std::vector< uint8_t >( JOINTS_COUNT_IN_SINGLE_LEG, 0 ) );
+    setTorque( legNo, std::vector< uint8_t >( JOINTS_COUNT_IN_SINGLE_LEG, 0 ) );
     dynamixel3wrapper::SyncWriter< uint8_t > writer(
             portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(),
             OPERATING_MODE );
     auto receivers = getSingleLegIds( legNo );
     writer.write( receivers, operatingMode );
-    toggleTorque( legNo, std::vector< uint8_t >( JOINTS_COUNT_IN_SINGLE_LEG, 1 ) );
+    setTorque( legNo, std::vector< uint8_t >( JOINTS_COUNT_IN_SINGLE_LEG, 1 ) );
 }
 
 void BoardGalgo::setOperatingMode(const std::vector<uint8_t>& operatingMode){
-    toggleTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, 0 ) );
+    setTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, 0 ) );
     dynamixel3wrapper::SyncWriter< uint8_t > rightWriter(
             rightLegs_.get(), packetHandler_.get(),
             OPERATING_MODE );
@@ -241,7 +241,7 @@ void BoardGalgo::setOperatingMode(const std::vector<uint8_t>& operatingMode){
     auto leftReceivers = getLeftLegsIds();
     auto it = rightWriter.write( rightReceivers, operatingMode.begin() );
     leftWriter.write( leftReceivers, it );
-    toggleTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, 1 ) );
+    setTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, 1 ) );
 }
 
 uint16_t BoardGalgo::convertAngle(int legNo, int jointNo, double angle){
