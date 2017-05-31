@@ -66,8 +66,6 @@ class BoardGalgo : public Board {
         void setOperatingMode(const std::vector<uint8_t>& operatingMode);
 
         void reboot( int legNo, int jointNo );
-        void reboot( int legNo );
-        void reboot();
         
        /**
         * \brief Set reference position value for servomotor.
@@ -340,20 +338,12 @@ private:
 
     void preparePortHandler( const tPortHandler& portHandler, int baudRate );
     void preparePortHandlersByLegNumberMap();
-    void handle( int communicationResult );
-    void handle( uint8_t error );
-    void handle( int communicationResult, uint8_t error );
 
     tId convert( int legNo, int jointNo );
     std::vector< tId > getSingleLegIds( int legNo );
     std::vector< tId > getTwoLegsIds( int legNo1, int legNo2 );
     std::vector< tId > getRightLegsIds();
     std::vector< tId > getLeftLegsIds();
-    std::vector< tId > getAllLegsIds();
-    uint16_t convertAngle(int legNo, int jointNo, double angle );
-    double convert(int legNo, int jointNo, uint32_t position);
-    uint32_t convertSpeed(double value);
-    double convertCurrent(uint16_t value);
     int convertToIndex(int legNo, int jointNo);
     double convertRadToDeg(double angle);
 

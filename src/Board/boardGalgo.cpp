@@ -98,33 +98,10 @@ BoardGalgo::~BoardGalgo() {
 void BoardGalgo::reboot( int legNo, int jointNo ) {
     tId dynamixel = convert( legNo, jointNo );
     uint8_t error;
-    int communicationResult = packetHandler_->reboot( portHandlersByLegNumber_.at( legNo ).get(), dynamixel,
+    int result = packetHandler_->reboot( portHandlersByLegNumber_.at( legNo ).get(), dynamixel,
             &error );
-    handle( communicationResult, error );
-}
-// WIP
-void BoardGalgo::reboot( int legNo ) {}
-void BoardGalgo::reboot() {}
-
-// TO-DO Customowe wyjątki;
-// umożliwienie wypisania TxRxResult po złapaniu wyjątku
-void BoardGalgo::handle( int communicationResult ) {
-    if( communicationResult != COMM_SUCCESS ) {
-        packetHandler_->printTxRxResult( communicationResult );
-        throw std::runtime_error( "Dynamixel communication unsuccessful" );
-    }
-}
-void BoardGalgo::handle( uint8_t error ) {
-    if( error != 0 ) {
-        printf( "Dynamixel error: " );
-        packetHandler_->printRxPacketError( error );
-    }
-}
-void BoardGalgo::handle( int communicationResult, uint8_t error ) {
-    #ifndef NDEBUG
-    handle( communicationResult );
-    #endif // #ifndef NDEBUG
-    handle( error );
+    dynamixel3wrapper::CommunicationResult communicationResult( packetHandler_.get(), result, error);
+    communicationResult.handle();
 }
 
 BoardGalgo::tId BoardGalgo::convert( int legNo, int jointNo ) {
@@ -148,9 +125,6 @@ std::vector< BoardGalgo::tId > BoardGalgo::getRightLegsIds() {
 }
 std::vector< BoardGalgo::tId > BoardGalgo::getLeftLegsIds() {
     return getTwoLegsIds( 3, 4 );
-}
-std::vector< BoardGalgo::tId > BoardGalgo::getAllLegsIds() {
-    return merge( getRightLegsIds(), getLeftLegsIds() );
 }
 
 void BoardGalgo::setTorque( int legNo, int jointNo, uint8_t boolean ) {
@@ -244,15 +218,6 @@ void BoardGalgo::setOperatingMode(const std::vector<uint8_t>& operatingMode){
     setTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, 1 ) );
 }
 
-uint16_t BoardGalgo::convertAngle(int legNo, int jointNo, double angle){
-    int ix = convertToIndex(legNo, jointNo);
-    double a = (signOfAngle[ix] * angle + zeroAngle[ix]) * 11.375;
-
-    //if(a < 0) a += 360;
-    //std::cout << (a) << std::endl;
-    //a*=11.375;
-    return static_cast<uint16_t>(a);
-}
 unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
     uint8_t error;
     int result = packetHandler_->write4ByteTxRx( portHandlersByLegNumber_.at( legNo ).get(), convert( legNo, jointNo ), GOAL_POSITION, tAngleDynamixel( tAngleRadians( angle ) ).val, &error );
@@ -285,10 +250,6 @@ unsigned int BoardGalgo::setPosition(const std::vector<double>& angle){
     auto it = rightWriter.write( rightReceivers, angle.begin(), converter );
     leftWriter.write( leftReceivers, it, converter );
     return 0;
-}
-
-uint32_t BoardGalgo::convertSpeed(double value){
-    return static_cast<uint32_t>(value * MAX_SPEED);
 }
 
 unsigned int BoardGalgo::setSpeed(int legNo, int jointNo, double speed){
@@ -369,11 +330,6 @@ unsigned int BoardGalgo::setTorqueLimit(const std::vector<double>& torqueLimit){
     return 0;
 }
 
-double BoardGalgo::convert(int legNo, int jointNo, uint32_t position) {
-    int ix = convertToIndex(legNo, jointNo);
-    return signOfAngle[ix] * ((position / 11.375) - zeroAngle[ix]);
-}
-
 unsigned int BoardGalgo::readPosition(int legNo, int jointNo, double& angle){
     uint32_t presentPosition;
     uint8_t error;
@@ -414,10 +370,6 @@ unsigned int BoardGalgo::readTorqueForce(const std::vector<double>& valueTF){}
 
 bool BoardGalgo::readContact(int legNo){}
 void BoardGalgo::readContacts(std::vector<bool>& contact){}
-
-double BoardGalgo::convertCurrent(uint16_t value){
-    return (int16_t)value/((double)MAX_CURRENT);
-}
 
 unsigned int BoardGalgo::readCurrent(int legNo, int jointNo, double& servoCurrent){
     uint16_t presentCurrent;
