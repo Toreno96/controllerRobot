@@ -21,7 +21,7 @@ public:
 class FailedChangingBaudRateException: public runtime_error{
 public:
     FailedChangingBaudRateException();
-    FailedChangingBaudRateException(const uint32_t& baudRate);
+    FailedChangingBaudRateException(int baudRate);
 };
 
 class NotSupportedException: public runtime_error{

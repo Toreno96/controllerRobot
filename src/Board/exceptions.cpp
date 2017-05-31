@@ -10,7 +10,7 @@ controller::FailedOpeningPortException::FailedOpeningPortException(const string&
 controller::FailedChangingBaudRateException::FailedChangingBaudRateException():
     runtime_error("Failed to change the baudrate.\n"){}
 
-controller::FailedChangingBaudRateException::FailedChangingBaudRateException(const uint32_t& baudRate):
+controller::FailedChangingBaudRateException::FailedChangingBaudRateException(int baudRate):
     runtime_error("Failed to change the baudrate to " + to_string(baudRate) + ".\n"){}
 
 
