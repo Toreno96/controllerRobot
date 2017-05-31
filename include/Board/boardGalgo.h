@@ -322,6 +322,7 @@ private:
     using tSpeedDynamixel = Speed< tSpeedUnitDynamixel >;
     static constexpr float PROTOCOL_VERSION = 2.0;
     static constexpr tAddress OPERATING_MODE = 11;
+    static constexpr tAddress HOMING_OFFSET = 20;
     static constexpr tAddress TORQUE_ENABLE = 64;
     static constexpr tAddress LED = 65;
     static constexpr tAddress GOAL_CURRENT = 102;

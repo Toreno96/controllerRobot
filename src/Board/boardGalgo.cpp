@@ -443,19 +443,44 @@ double BoardGalgo::convertRadToDeg(double angle){
 }
 
 void BoardGalgo::setOffset(int legNo, int jointNo, double offset){
-    angleOffset[convertToIndex(legNo, jointNo)] += (int)convertRadToDeg(offset);
+    tAngleRadians angle(tAngleRadians::full());
+    angle.val = offset;
+    tAngleDynamixel value = angle;
+
+    angleOffset[convertToIndex(legNo, jointNo)] = value.val;
+
+    setTorque(legNo, jointNo, false);
+    uint8_t error;
+    int result = packetHandler_->write4ByteTxRx(portHandlersByLegNumber_.at(legNo).get(),
+            convert(legNo, jointNo), HOMING_OFFSET, value.val, &error);
+    dynamixel3wrapper::CommunicationResult communicationResult( packetHandler_.get(), result, error);
+    communicationResult.handle();
 }
 
 void BoardGalgo::setOffset(int legNo, const std::vector<double> offset){
-    for(int i = 1; i <= 2; i++){
-         angleOffset[convertToIndex(legNo, i)] += (int)convertRadToDeg(offset[i]);
-    }
+    dynamixel3wrapper::SyncWriter<uint32_t> writer(
+            portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(),
+            HOMING_OFFSET);
+    auto receivers = getSingleLegIds(legNo);
+    writer.write(receivers, offset, [](double value){
+        return tAngleDynamixel(tAngleRadians(value)).val;
+    });
 }
 
 void BoardGalgo::setOffset(const std::vector<double> offset){
-    for(int i = 0; i < 12; i++){
-         angleOffset[i] += (int)convertRadToDeg(offset[i]);
-    }
+    dynamixel3wrapper::SyncWriter<uint32_t> rightWriter(
+            rightLegs_.get(), packetHandler_.get(),
+            HOMING_OFFSET);
+    dynamixel3wrapper::SyncWriter<uint32_t> leftWriter(
+            leftLegs_.get(), packetHandler_.get(),
+            HOMING_OFFSET);
+    auto rightReceivers = getRightLegsIds();
+    auto leftReceivers = getLeftLegsIds();
+    auto converter = [](double value){
+        return tAngleDynamixel(tAngleRadians(value)).val;
+    };
+    auto it = rightWriter.write(rightReceivers, offset.begin(), converter);
+    leftWriter.write(leftReceivers, it, converter);
 }
 
 void BoardGalgo::setDefault(void){
