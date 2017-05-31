@@ -409,6 +409,7 @@ unsigned int BoardGalgo::readCurrent(int legNo, std::vector<double>& servoCurren
     servoCurrent = reader.read< double >( receivers, []( uint16_t value ){
         return tCurrentAmpers( tCurrentDynamixel( value ) ).val;
     } );
+    return 0;
 }
 
 unsigned int BoardGalgo::readCurrent(std::vector<double>& servoCurrent){
