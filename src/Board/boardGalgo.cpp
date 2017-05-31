@@ -78,9 +78,7 @@ void BoardGalgo::Config::load(std::string configFilename){
 void BoardGalgo::preparePortHandler( const tPortHandler& portHandler,
                                      int baudRate ) {
   if( !portHandler->openPort() )
-      throw FailedOpeningPortException(
-            std::string( "Failed to open the port \"" ) +
-            portHandler->getPortName() + '\"');
+      throw FailedOpeningPortException( portHandler->getPortName() );
   if( !portHandler->setBaudRate( baudRate ) )
       throw FailedChangingBaudRateException(baudRate);
 }
@@ -288,13 +286,25 @@ unsigned int BoardGalgo::setSpeed(const std::vector<double>& speed){
     return 0;
 }
 
-unsigned int BoardGalgo::setComplianceMargin(int legNo, int jointNo, double margin){}
-unsigned int BoardGalgo::setComplianceMargin(int legNo, const std::vector<double> margin){}
-unsigned int BoardGalgo::setComplianceMargin(const std::vector<double> margin){}
+unsigned int BoardGalgo::setComplianceMargin(int legNo, int jointNo, double margin){
+    throw NotSupportedException();
+}
+unsigned int BoardGalgo::setComplianceMargin(int legNo, const std::vector<double> margin){
+    throw NotSupportedException();
+}
+unsigned int BoardGalgo::setComplianceMargin(const std::vector<double> margin){
+    throw NotSupportedException();
+}
 
-unsigned int BoardGalgo::setComplianceSlope(int legNo, int jointNo, double slope){}
-unsigned int BoardGalgo::setComplianceSlope(int legNo, const std::vector<double>& slope){}
-unsigned int BoardGalgo::setComplianceSlope(const std::vector<double>& slope){}
+unsigned int BoardGalgo::setComplianceSlope(int legNo, int jointNo, double slope){
+    throw NotSupportedException();
+}
+unsigned int BoardGalgo::setComplianceSlope(int legNo, const std::vector<double>& slope){
+    throw NotSupportedException();
+}
+unsigned int BoardGalgo::setComplianceSlope(const std::vector<double>& slope){
+    throw NotSupportedException();
+}
 
 unsigned int BoardGalgo::setTorqueLimit(int legNo, int jointNo, double torqueLimit){
     uint8_t error;
@@ -362,14 +372,26 @@ unsigned int BoardGalgo::readPosition(std::vector<double>& angle){
     return 0;
 }
 
-unsigned int BoardGalgo::readForce(int legNo, double& contactForce){}
-unsigned int BoardGalgo::readForce(const std::vector<double>& contactForce){}
+unsigned int BoardGalgo::readForce(int legNo, double& contactForce){
+    throw NotSupportedException();
+}
+unsigned int BoardGalgo::readForce(const std::vector<double>& contactForce){
+    throw NotSupportedException();
+}
 
-unsigned int BoardGalgo::readTorqueForce(int legNo, walkers::TorqueForce& valueTF){}
-unsigned int BoardGalgo::readTorqueForce(const std::vector<double>& valueTF){}
+unsigned int BoardGalgo::readTorqueForce(int legNo, walkers::TorqueForce& valueTF){
+    throw NotSupportedException();
+}
+unsigned int BoardGalgo::readTorqueForce(const std::vector<double>& valueTF){
+    throw NotSupportedException();
+}
 
-bool BoardGalgo::readContact(int legNo){}
-void BoardGalgo::readContacts(std::vector<bool>& contact){}
+bool BoardGalgo::readContact(int legNo){
+    throw NotSupportedException();
+}
+void BoardGalgo::readContacts(std::vector<bool>& contact){
+    throw NotSupportedException();
+}
 
 unsigned int BoardGalgo::readCurrent(int legNo, int jointNo, double& servoCurrent){
     uint16_t presentCurrent;
@@ -402,9 +424,15 @@ unsigned int BoardGalgo::readCurrent(std::vector<double>& servoCurrent){
     return 0;
 }
 
-unsigned int BoardGalgo::readTorque(int legNo, int jointNo, double& servoTorque){}
-unsigned int BoardGalgo::readTorque(int legNo,std::vector<double>& servoTorque){}
-unsigned int BoardGalgo::readTorque(std::vector<double>& servoTorque){}
+unsigned int BoardGalgo::readTorque(int legNo, int jointNo, double& servoTorque){
+    throw NotSupportedException();
+}
+unsigned int BoardGalgo::readTorque(int legNo,std::vector<double>& servoTorque){
+    throw NotSupportedException();
+}
+unsigned int BoardGalgo::readTorque(std::vector<double>& servoTorque){
+    throw NotSupportedException();
+}
 
 int BoardGalgo::convertToIndex(int legNo, int jointNo){
     return (legNo - 1) * 3 + jointNo - 1;
@@ -430,7 +458,9 @@ void BoardGalgo::setOffset(const std::vector<double> offset){
     }
 }
 
-void BoardGalgo::setDefault(void){}
+void BoardGalgo::setDefault(void){
+    throw NotSupportedException();
+}
 
 Board* createBoardGalgo( const std::string &rightLegsDevPath,
                          const std::string &leftLegsDevPath,
