@@ -17,7 +17,7 @@ Speed< U >::operator Speed< typename std::enable_if_t<
         tSpeedUnitDynamixel > >() {
     if( std::is_same< T, tSpeedUnitInterval >::value ) {
         return Speed< tSpeedUnitDynamixel >( static_cast< uint32_t >(
-                val * Speed< tSpeedUnitDynamixel >::full() ) );
+                val_ * Speed< tSpeedUnitDynamixel >::full() ) );
     }
 }
 template< typename U > template< typename T >
@@ -25,7 +25,7 @@ Speed< U >::operator Speed< typename std::enable_if_t<
         !std::is_same< T, tSpeedUnitInterval >::value,
         tSpeedUnitInterval > >() {
     if( std::is_same< T, tSpeedUnitDynamixel >::value ) {
-        return Speed< tSpeedUnitInterval >( val /
+        return Speed< tSpeedUnitInterval >( val_ /
                 Speed< tSpeedUnitDynamixel >::full() );
     }
 }

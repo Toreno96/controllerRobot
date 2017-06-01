@@ -16,24 +16,29 @@ using tCurrentUnitInterval = CurrentUnit< double, 0, 1, 0 >;
 using tCurrentUnitAmpers = CurrentUnit< double, 0, 0, 1 >;
 
 template< typename U >
-struct Current {
-    typename U::value_type val;
-    explicit Current( typename U::value_type d ) : val( d ) {}
+class Current {
+    private:
+        typename U::value_type val_;
+    public:
+        explicit Current( typename U::value_type d ) : val_( d ) {}
+        typename U::value_type val() {
+            return val_;
+        }
 
-    template< typename T = U >
-    operator Current< typename std::enable_if_t<
-            !std::is_same< T, tCurrentUnitDynamixel >::value,
-            tCurrentUnitDynamixel > >();
-    template< typename T = U >
-    operator Current< typename std::enable_if_t<
-            !std::is_same< T, tCurrentUnitInterval >::value,
-            tCurrentUnitInterval > >();
-    template< typename T = U >
-    operator Current< typename std::enable_if_t<
-            !std::is_same< T, tCurrentUnitAmpers >::value,
-            tCurrentUnitAmpers > >();
+        template< typename T = U >
+        operator Current< typename std::enable_if_t<
+                !std::is_same< T, tCurrentUnitDynamixel >::value,
+                tCurrentUnitDynamixel > >();
+        template< typename T = U >
+        operator Current< typename std::enable_if_t<
+                !std::is_same< T, tCurrentUnitInterval >::value,
+                tCurrentUnitInterval > >();
+        template< typename T = U >
+        operator Current< typename std::enable_if_t<
+                !std::is_same< T, tCurrentUnitAmpers >::value,
+                tCurrentUnitAmpers > >();
 
-    static constexpr typename U::value_type full();
+        static constexpr typename U::value_type full();
 };
 
 } // namespace controller

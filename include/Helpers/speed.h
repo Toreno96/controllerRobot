@@ -15,20 +15,25 @@ using tSpeedUnitDynamixel = SpeedUnit< uint32_t, 1, 0 >;
 using tSpeedUnitInterval = SpeedUnit< double, 0, 1 >;
 
 template< typename U >
-struct Speed {
-    typename U::value_type val;
-    explicit Speed( typename U::value_type d ) : val( d ) {}
+class Speed {
+    private:
+        typename U::value_type val_;
+    public:
+        explicit Speed( typename U::value_type d ) : val_( d ) {}
+        typename U::value_type val() {
+            return val_;
+        }
 
-    template< typename T = U >
-    operator Speed< typename std::enable_if_t<
-            !std::is_same< T, tSpeedUnitDynamixel >::value,
-            tSpeedUnitDynamixel > >();
-    template< typename T = U >
-    operator Speed< typename std::enable_if_t<
-            !std::is_same< T, tSpeedUnitInterval >::value,
-            tSpeedUnitInterval > >();
+        template< typename T = U >
+        operator Speed< typename std::enable_if_t<
+                !std::is_same< T, tSpeedUnitDynamixel >::value,
+                tSpeedUnitDynamixel > >();
+        template< typename T = U >
+        operator Speed< typename std::enable_if_t<
+                !std::is_same< T, tSpeedUnitInterval >::value,
+                tSpeedUnitInterval > >();
 
-    static constexpr typename U::value_type full();
+        static constexpr typename U::value_type full();
 };
 
 } // namespace controller

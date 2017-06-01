@@ -20,11 +20,11 @@ Current< U >::operator Current< typename std::enable_if_t<
         !std::is_same< T, tCurrentUnitDynamixel >::value,
         tCurrentUnitDynamixel > >() {
     if( std::is_same< T, tCurrentUnitInterval >::value ) {
-        return Current< tCurrentUnitDynamixel >( static_cast< uint16_t >( val *
+        return Current< tCurrentUnitDynamixel >( static_cast< uint16_t >( val_ *
                 Current< tCurrentUnitDynamixel >::full() ) );
     }
     else if( std::is_same< T, tCurrentUnitAmpers >::value ) {
-        return Current< tCurrentUnitDynamixel >( static_cast< uint16_t >( val /
+        return Current< tCurrentUnitDynamixel >( static_cast< uint16_t >( val_ /
                 ( Current< tCurrentUnitAmpers >::full() /
                 Current< tCurrentUnitDynamixel >::full() ) ) );
     }
@@ -34,11 +34,11 @@ Current< U >::operator Current< typename std::enable_if_t<
         !std::is_same< T, tCurrentUnitInterval >::value,
         tCurrentUnitInterval > >() {
     if( std::is_same< T, tCurrentUnitDynamixel >::value ) {
-        return Current< tCurrentUnitInterval >( val /
+        return Current< tCurrentUnitInterval >( val_ /
                 Current< tCurrentUnitDynamixel >::full() );
     }
     else if( std::is_same< T, tCurrentUnitAmpers >::value ) {
-        return Current< tCurrentUnitInterval >( val /
+        return Current< tCurrentUnitInterval >( val_ /
                 Current< tCurrentUnitAmpers >::full() );
     }
 }
@@ -47,12 +47,12 @@ Current< U >::operator Current< typename std::enable_if_t<
       !std::is_same< T, tCurrentUnitAmpers >::value,
       tCurrentUnitAmpers > >() {
     if( std::is_same< T, tCurrentUnitDynamixel >::value ) {
-        return Current< tCurrentUnitAmpers >( val *
+        return Current< tCurrentUnitAmpers >( val_ *
                 ( Current< tCurrentUnitAmpers >::full() /
                 Current< tCurrentUnitDynamixel >::full() ) );
     }
     else if( std::is_same< T, tCurrentUnitInterval >::value ) {
-        return Current< tCurrentUnitAmpers >( val *
+        return Current< tCurrentUnitAmpers >( val_ *
                 Current< tCurrentUnitAmpers >::full() );
     }
 }

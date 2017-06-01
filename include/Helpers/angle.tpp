@@ -17,7 +17,7 @@ Angle< U >::operator Angle< typename std::enable_if_t<
         tAngleUnitDynamixel > >() {
     if( std::is_same< T, tAngleUnitRadians >::value ) {
         return Angle< tAngleUnitDynamixel >( static_cast< uint32_t >(
-                val * Angle< tAngleUnitDynamixel >::full() /
+                val_ * Angle< tAngleUnitDynamixel >::full() /
                 Angle< tAngleUnitRadians>::full() ) );
     }
 }
@@ -26,7 +26,7 @@ Angle< U >::operator Angle< typename std::enable_if_t<
         !std::is_same< T, tAngleUnitRadians >::value,
         tAngleUnitRadians > >() {
     if( std::is_same< T, tAngleUnitDynamixel >::value ) {
-        return Angle< tAngleUnitRadians >( val *
+        return Angle< tAngleUnitRadians >( val_ *
                 Angle< tAngleUnitRadians>::full() /
                 Angle< tAngleUnitDynamixel >::full() );
     }
