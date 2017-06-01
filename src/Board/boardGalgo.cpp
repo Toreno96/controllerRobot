@@ -446,7 +446,7 @@ double BoardGalgo::convertRadToDeg(double angle){
 void BoardGalgo::setOffset(int legNo, int jointNo, double offset){
     tAngleDynamixel convertedOffset = tAngleRadians( offset );
 
-    angleOffset[convertToIndex(legNo, jointNo)] = convertedOffset.val();
+    angleOffset[convertToIndex(legNo, jointNo)] = static_cast< int >( convertedOffset.val() );
 
     setTorque(legNo, jointNo, false);
     uint8_t error;
