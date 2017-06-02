@@ -16,7 +16,7 @@ int main() {
     portHandler->openPort();
     portHandler->setBaudRate( 3000000 );
     tPacketHandler packetHandler(
-        dynamixel::PacketHandler::getPacketHandler( 2.0 ) );
+            dynamixel::PacketHandler::getPacketHandler( 2.0 ) );
     SyncWriter< uint8_t > writer( portHandler.get(), packetHandler.get(), 65 );
     
     std::vector< tId > receivers1{ 11, 12, 13, 21, 22, 23 };

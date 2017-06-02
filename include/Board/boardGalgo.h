@@ -302,63 +302,63 @@ class BoardGalgo : public Board {
         static constexpr uint8_t OPERATINGMODE_POSITION = 3;
         static constexpr uint8_t OPERATINGMODE_CURRENT_BASED_POSITION = 5;
 
-private:
-    Config config;
-    using tPortHandler = std::shared_ptr< dynamixel::PortHandler >;
-    using tPacketHandler = std::shared_ptr< dynamixel::PacketHandler >;
-    using tId = dynamixel3wrapper::tId;
-    using tAddress = dynamixel3wrapper::tAddress;
-    using tAngleDynamixel = Angle< tAngleUnitDynamixel >;
-    using tAngleRadians = Angle< tAngleUnitRadians >;
-    using tCurrentDynamixel = Current< tCurrentUnitDynamixel >;
-    using tCurrentInterval = Current< tCurrentUnitInterval >;
-    using tCurrentAmpers = Current< tCurrentUnitAmpers >;
-    using tSpeedInterval = Speed< tSpeedUnitInterval >;
-    using tSpeedDynamixel = Speed< tSpeedUnitDynamixel >;
-    static constexpr float PROTOCOL_VERSION = 2.0;
-    static constexpr tAddress OPERATING_MODE = 11;
-    static constexpr tAddress HOMING_OFFSET = 20;
-    static constexpr tAddress TORQUE_ENABLE = 64;
-    static constexpr tAddress LED = 65;
-    static constexpr tAddress GOAL_CURRENT = 102;
-    //static constexpr tAddress GOAL_VELOCITY = 104;
-    static constexpr tAddress PROFILE_VELOCITY = 112;
-    static constexpr tAddress GOAL_POSITION = 116;
-    static constexpr tAddress PRESENT_CURRENT = 126;
-    static constexpr tAddress PRESENT_VELOCITY	= 128;
-    static constexpr tAddress PRESENT_POSITION = 132;
-    static constexpr int MAX_SPEED = 1023;
-    static constexpr int MAX_CURRENT = 1193;
-    static constexpr int FIRST_JOINT_NUMBER = 1;
-    static constexpr std::size_t JOINTS_COUNT_IN_SINGLE_LEG = 3;
+    private:
+        Config config;
+        using tPortHandler = std::shared_ptr< dynamixel::PortHandler >;
+        using tPacketHandler = std::shared_ptr< dynamixel::PacketHandler >;
+        using tId = dynamixel3wrapper::tId;
+        using tAddress = dynamixel3wrapper::tAddress;
+        using tAngleDynamixel = Angle< tAngleUnitDynamixel >;
+        using tAngleRadians = Angle< tAngleUnitRadians >;
+        using tCurrentDynamixel = Current< tCurrentUnitDynamixel >;
+        using tCurrentInterval = Current< tCurrentUnitInterval >;
+        using tCurrentAmpers = Current< tCurrentUnitAmpers >;
+        using tSpeedInterval = Speed< tSpeedUnitInterval >;
+        using tSpeedDynamixel = Speed< tSpeedUnitDynamixel >;
+        static constexpr float PROTOCOL_VERSION = 2.0;
+        static constexpr tAddress OPERATING_MODE = 11;
+        static constexpr tAddress HOMING_OFFSET = 20;
+        static constexpr tAddress TORQUE_ENABLE = 64;
+        static constexpr tAddress LED = 65;
+        static constexpr tAddress GOAL_CURRENT = 102;
+        //static constexpr tAddress GOAL_VELOCITY = 104;
+        static constexpr tAddress PROFILE_VELOCITY = 112;
+        static constexpr tAddress GOAL_POSITION = 116;
+        static constexpr tAddress PRESENT_CURRENT = 126;
+        static constexpr tAddress PRESENT_VELOCITY	= 128;
+        static constexpr tAddress PRESENT_POSITION = 132;
+        static constexpr int MAX_SPEED = 1023;
+        static constexpr int MAX_CURRENT = 1193;
+        static constexpr int FIRST_JOINT_NUMBER = 1;
+        static constexpr std::size_t JOINTS_COUNT_IN_SINGLE_LEG = 3;
 
-    void preparePortHandler( const tPortHandler& portHandler, int baudRate );
-    void preparePortHandlersByLegNumberMap();
+        void preparePortHandler( const tPortHandler& portHandler, int baudRate );
+        void preparePortHandlersByLegNumberMap();
 
-    tId convert( int legNo, int jointNo );
-    std::vector< tId > getSingleLegIds( int legNo );
-    std::vector< tId > getTwoLegsIds( int legNo1, int legNo2 );
-    std::vector< tId > getRightLegsIds();
-    std::vector< tId > getLeftLegsIds();
-    int convertToIndex(int legNo, int jointNo);
+        tId convert( int legNo, int jointNo );
+        std::vector< tId > getSingleLegIds( int legNo );
+        std::vector< tId > getTwoLegsIds( int legNo1, int legNo2 );
+        std::vector< tId > getRightLegsIds();
+        std::vector< tId > getLeftLegsIds();
+        int convertToIndex(int legNo, int jointNo);
 
-    // TO-DO Dokumentacja doxygen poniższych funkcji setTorque
-    void setTorque( int legNo, int jointNo, uint8_t boolean );
-    void setTorque( int legNo, const std::vector< uint8_t >& boolean );
-    void setTorque( const std::vector< uint8_t >& boolean );
+        // TO-DO Dokumentacja doxygen poniższych funkcji setTorque
+        void setTorque( int legNo, int jointNo, uint8_t boolean );
+        void setTorque( int legNo, const std::vector< uint8_t >& boolean );
+        void setTorque( const std::vector< uint8_t >& boolean );
 
-    tPortHandler rightLegs_;
-    tPortHandler leftLegs_;
-    std::map< int, tPortHandler > portHandlersByLegNumber_;
-    tPacketHandler packetHandler_;
+        tPortHandler rightLegs_;
+        tPortHandler leftLegs_;
+        std::map< int, tPortHandler > portHandlersByLegNumber_;
+        tPacketHandler packetHandler_;
 
-    /// Default offset values of angles for serwomotors.
-    int angleOffset[12];
+        /// Default offset values of angles for serwomotors.
+        int angleOffset[12];
 
-    /// Default values of angles for serwomotors.
-    int zeroAngle[12];
+        /// Default values of angles for serwomotors.
+        int zeroAngle[12];
 
-    int signOfAngle[12];
+        int signOfAngle[12];
 };
 
 } // namespace controller
