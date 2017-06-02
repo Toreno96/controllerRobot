@@ -439,10 +439,6 @@ int BoardGalgo::convertToIndex(int legNo, int jointNo){
     return (legNo - 1) * 3 + jointNo - 1;
 }
 
-double BoardGalgo::convertRadToDeg(double angle){
-    return angle * (180/M_PI);
-}
-
 void BoardGalgo::setOffset(int legNo, int jointNo, double offset){
     tAngleDynamixel convertedOffset = tAngleRadians( offset );
 

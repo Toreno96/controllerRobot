@@ -346,7 +346,6 @@ private:
     std::vector< tId > getRightLegsIds();
     std::vector< tId > getLeftLegsIds();
     int convertToIndex(int legNo, int jointNo);
-    double convertRadToDeg(double angle);
 
     tPortHandler rightLegs_;
     tPortHandler leftLegs_;
