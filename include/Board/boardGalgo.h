@@ -51,11 +51,6 @@ class BoardGalgo : public Board {
                 int baudRate;
         };
 
-        // TO-DO Dokumentacja doxygen poniższych funkcji setTorque
-        void setTorque( int legNo, int jointNo, uint8_t boolean );
-        void setTorque( int legNo, const std::vector< uint8_t >& boolean );
-        void setTorque( const std::vector< uint8_t >& boolean );
-
         // TO-DO Dokumentacja doxygen poniższych funkcji setLED
         void setLED(int legNo, int jointNo, uint8_t boolean);
         void setLED(int legNo, const std::vector<uint8_t>& boolean);
@@ -346,6 +341,11 @@ private:
     std::vector< tId > getRightLegsIds();
     std::vector< tId > getLeftLegsIds();
     int convertToIndex(int legNo, int jointNo);
+
+    // TO-DO Dokumentacja doxygen poniższych funkcji setTorque
+    void setTorque( int legNo, int jointNo, uint8_t boolean );
+    void setTorque( int legNo, const std::vector< uint8_t >& boolean );
+    void setTorque( const std::vector< uint8_t >& boolean );
 
     tPortHandler rightLegs_;
     tPortHandler leftLegs_;
