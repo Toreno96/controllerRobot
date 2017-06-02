@@ -94,6 +94,8 @@ BoardGalgo::~BoardGalgo() {
 }
 
 void BoardGalgo::reboot( int legNo, int jointNo ) {
+    ++legNo;
+    ++jointNo;
     tId dynamixel = convert( legNo, jointNo );
     uint8_t error;
     int result = packetHandler_->reboot( portHandlersByLegNumber_.at( legNo ).get(), dynamixel,
@@ -153,6 +155,8 @@ void BoardGalgo::setTorque( const std::vector< uint8_t >& boolean ) {
 }
 
 void BoardGalgo::setLED(int legNo, int jointNo, uint8_t boolean){
+    ++legNo;
+    ++jointNo;
     tId id = convert(legNo, jointNo);
     uint8_t dxl_error = 0;
     int dxl_comm_result = packetHandler_->write1ByteTxRx(portHandlersByLegNumber_.at(legNo).get(), id, LED, boolean, &dxl_error);
@@ -162,6 +166,7 @@ void BoardGalgo::setLED(int legNo, int jointNo, uint8_t boolean){
 }
 
 void BoardGalgo::setLED(int legNo, const std::vector<uint8_t>& boolean){
+    ++legNo;
     dynamixel3wrapper::SyncWriter< uint8_t > writer(
             portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(),
             LED );
@@ -183,6 +188,8 @@ void BoardGalgo::setLED(const std::vector<uint8_t> &boolean){
 }
 
 void BoardGalgo::setOperatingMode(int legNo, int jointNo, uint8_t operatingMode){
+    ++legNo;
+    ++jointNo;
     setTorque( legNo, jointNo, 0 );
     uint8_t error;
     int result = packetHandler_->write1ByteTxRx( portHandlersByLegNumber_.at( legNo ).get(), convert( legNo, jointNo ), OPERATING_MODE, operatingMode, &error );
@@ -192,6 +199,7 @@ void BoardGalgo::setOperatingMode(int legNo, int jointNo, uint8_t operatingMode)
 }
 
 void BoardGalgo::setOperatingMode(int legNo, const std::vector<uint8_t>& operatingMode){
+    ++legNo;
     setTorque( legNo, std::vector< uint8_t >( JOINTS_COUNT_IN_SINGLE_LEG, 0 ) );
     dynamixel3wrapper::SyncWriter< uint8_t > writer(
             portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(),
@@ -217,6 +225,8 @@ void BoardGalgo::setOperatingMode(const std::vector<uint8_t>& operatingMode){
 }
 
 unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
+    ++legNo;
+    ++jointNo;
     uint8_t error;
     int result = packetHandler_->write4ByteTxRx( portHandlersByLegNumber_.at( legNo ).get(), convert( legNo, jointNo ), GOAL_POSITION, tAngleDynamixel( tAngleRadians( angle ) ).val(), &error );
     dynamixel3wrapper::CommunicationResult communicationResult( packetHandler_.get(), result, error);
@@ -224,6 +234,7 @@ unsigned int BoardGalgo::setPosition(int legNo, int jointNo, double angle){
     return 0;
 }
 unsigned int BoardGalgo::setPosition(int legNo, const std::vector<double>& angle){
+    ++legNo;
     dynamixel3wrapper::SyncWriter< uint32_t > writer(
             portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(),
             GOAL_POSITION );
@@ -251,6 +262,8 @@ unsigned int BoardGalgo::setPosition(const std::vector<double>& angle){
 }
 
 unsigned int BoardGalgo::setSpeed(int legNo, int jointNo, double speed){
+    ++legNo;
+    ++jointNo;
     uint8_t error;
     int result = packetHandler_->write4ByteTxRx( portHandlersByLegNumber_.at( legNo ).get(), convert( legNo, jointNo ), PROFILE_VELOCITY, tSpeedDynamixel( tSpeedInterval( speed ) ).val(), &error );
     dynamixel3wrapper::CommunicationResult communicationResult( packetHandler_.get(), result, error);
@@ -259,6 +272,7 @@ unsigned int BoardGalgo::setSpeed(int legNo, int jointNo, double speed){
 }
 
 unsigned int BoardGalgo::setSpeed(int legNo, const std::vector<double>& speed){
+    ++legNo;
     dynamixel3wrapper::SyncWriter< uint32_t > writer(
             portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(),
             PROFILE_VELOCITY );
@@ -307,6 +321,8 @@ unsigned int BoardGalgo::setComplianceSlope(const std::vector<double>& slope){
 }
 
 unsigned int BoardGalgo::setTorqueLimit(int legNo, int jointNo, double torqueLimit){
+    ++legNo;
+    ++jointNo;
     uint8_t error;
     int result = packetHandler_->write2ByteTxRx( portHandlersByLegNumber_.at( legNo ).get(), convert( legNo, jointNo ), GOAL_CURRENT, tCurrentDynamixel( tCurrentInterval( torqueLimit ) ).val(), &error );
     dynamixel3wrapper::CommunicationResult communicationResult( packetHandler_.get(), result, error);
@@ -314,6 +330,7 @@ unsigned int BoardGalgo::setTorqueLimit(int legNo, int jointNo, double torqueLim
     return 0;
 }
 unsigned int BoardGalgo::setTorqueLimit(int legNo, const std::vector<double>& torqueLimit){
+    ++legNo;
     dynamixel3wrapper::SyncWriter< uint16_t > writer(
             portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(),
             GOAL_CURRENT );
@@ -341,6 +358,8 @@ unsigned int BoardGalgo::setTorqueLimit(const std::vector<double>& torqueLimit){
 }
 
 unsigned int BoardGalgo::readPosition(int legNo, int jointNo, double& angle){
+    ++legNo;
+    ++jointNo;
     uint32_t presentPosition;
     uint8_t error;
     int result = packetHandler_->read4ByteTxRx(portHandlersByLegNumber_.at( legNo ).get(), convert( legNo, jointNo ), PRESENT_POSITION, &presentPosition, &error);
@@ -351,6 +370,7 @@ unsigned int BoardGalgo::readPosition(int legNo, int jointNo, double& angle){
 }
 
 unsigned int BoardGalgo::readPosition(int legNo, std::vector<double>& angle){
+    ++legNo;
     dynamixel3wrapper::SyncReader< uint32_t > reader( portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(), PRESENT_POSITION );
     auto receivers = getSingleLegIds( legNo );
     angle = reader.read< double >( receivers, []( uint32_t value ){
@@ -394,6 +414,8 @@ void BoardGalgo::readContacts(std::vector<bool>& contact){
 }
 
 unsigned int BoardGalgo::readCurrent(int legNo, int jointNo, double& servoCurrent){
+    ++legNo;
+    ++jointNo;
     uint16_t presentCurrent;
     uint8_t error;
     int result = packetHandler_->read2ByteTxRx(portHandlersByLegNumber_.at( legNo ).get(), convert( legNo, jointNo ), PRESENT_CURRENT, &presentCurrent, &error);
@@ -404,6 +426,7 @@ unsigned int BoardGalgo::readCurrent(int legNo, int jointNo, double& servoCurren
 }
 
 unsigned int BoardGalgo::readCurrent(int legNo, std::vector<double>& servoCurrent){
+    ++legNo;
     dynamixel3wrapper::SyncReader< uint16_t > reader( portHandlersByLegNumber_.at( legNo ).get(), packetHandler_.get(), PRESENT_CURRENT );
     auto receivers = getSingleLegIds( legNo );
     servoCurrent = reader.read< double >( receivers, []( uint16_t value ){
@@ -440,6 +463,8 @@ int BoardGalgo::convertToIndex(int legNo, int jointNo){
 }
 
 void BoardGalgo::setOffset(int legNo, int jointNo, double offset){
+    ++legNo;
+    ++jointNo;
     tAngleDynamixel convertedOffset = tAngleRadians( offset );
 
     angleOffset[convertToIndex(legNo, jointNo)] = static_cast< int >( convertedOffset.val() );
@@ -453,6 +478,7 @@ void BoardGalgo::setOffset(int legNo, int jointNo, double offset){
 }
 
 void BoardGalgo::setOffset(int legNo, const std::vector<double> offset){
+    ++legNo;
     dynamixel3wrapper::SyncWriter<uint32_t> writer(
             portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(),
             HOMING_OFFSET);
