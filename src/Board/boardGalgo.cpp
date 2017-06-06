@@ -15,7 +15,7 @@ BoardGalgo::Ptr boardGalgo;
 
 BoardGalgo::BoardGalgo( const std::string &rightLegsDevPath,
                         const std::string &leftLegsDevPath,
-                        int baudRate ) :
+                        int baudRate, uint8_t torqueEnable ) :
         Board( "Board Galgo", TYPE_GALGO ),
         rightLegs_( dynamixel::PortHandler::getPortHandler(
                            rightLegsDevPath.c_str() ) ),
@@ -26,7 +26,7 @@ BoardGalgo::BoardGalgo( const std::string &rightLegsDevPath,
     preparePortHandler( rightLegs_, baudRate );
     preparePortHandler( leftLegs_, baudRate );
     preparePortHandlersByLegNumberMap();
-    setTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, 1 ) );
+    setTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, torqueEnable ) );
 
     zeroAngle[0] = 90; zeroAngle[1]  = 0; zeroAngle[2]  = 0;
     zeroAngle[3] = 90; zeroAngle[4]  = 0; zeroAngle[5]  = 0;

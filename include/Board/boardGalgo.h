@@ -25,7 +25,7 @@ class BoardGalgo : public Board {
         using Ptr = std::unique_ptr< BoardGalgo >;
         BoardGalgo( const std::string &rightLegsDevPath,
                     const std::string &leftLegsDevPath,
-                    int baudRate );
+                    int baudRate, uint8_t torqueEnable = 1 );
 
         BoardGalgo(std::string configFilename);
 
