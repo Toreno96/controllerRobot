@@ -18,7 +18,9 @@ int main() {
     tPacketHandler packetHandler(
             dynamixel::PacketHandler::getPacketHandler( 2.0 ) );
     SyncWriter< uint8_t > writer( portHandler.get(), packetHandler.get(), 65 );
-    
+    // Compilation error if uncommented
+    // SyncWriter< bool > invalidWriter( portHandler.get(), packetHandler.get(), 65 );
+
     std::vector< tId > receivers1{ 11, 12, 13, 21, 22, 23 };
     std::vector< uint8_t > on( 6, 1 );
     std::vector< uint8_t > off( 6, 0 );

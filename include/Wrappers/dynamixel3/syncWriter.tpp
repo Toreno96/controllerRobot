@@ -12,7 +12,9 @@ SyncWriter< T >::SyncWriter( dynamixel::PortHandler* portHandler,
                              tAddress data ) :
         internalWriter_( portHandler, packetHandler, data,
                 GroupCommunicationHelper< T >::getDataLength() ),
-        data_( data ) {}
+        data_( data ) {
+    GroupCommunicationHelper< T >::checkType();
+}
 template< typename T > template< typename Iterator, typename UnaryFunction >
 Iterator SyncWriter< T >::write( const std::vector< tId >& receivers,
                                  Iterator values,

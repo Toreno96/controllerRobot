@@ -1,9 +1,17 @@
+#include <type_traits>
 #include "Wrappers/dynamixel3/groupCommunicationHelper.h"
 
 namespace controller {
 
 namespace dynamixel3wrapper {
 
+template< typename T >
+constexpr void GroupCommunicationHelper< T >::checkType() {
+    static_assert( std::is_same< T, uint8_t >::value ||
+            std::is_same< T, uint16_t >::value ||
+            std::is_same< T, uint32_t >::value,
+            "Such type of the T is not supported" );
+}
 template<>
 constexpr uint16_t GroupCommunicationHelper< uint8_t >::getDataLength() {
     return 1;

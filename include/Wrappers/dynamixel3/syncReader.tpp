@@ -12,7 +12,9 @@ SyncReader< T >::SyncReader( dynamixel::PortHandler* portHandler,
                              tAddress data ) :
         internalReader_( portHandler, packetHandler, data,
                 GroupCommunicationHelper< T >::getDataLength() ),
-        data_( data ) {}
+        data_( data ) {
+    GroupCommunicationHelper< T >::checkType();
+}
 template< typename T > template< typename U, typename UnaryFunction >
 std::vector< U > SyncReader< T >::read( const std::vector< tId >& receivers,
                                         const UnaryFunction& converter ) {

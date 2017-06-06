@@ -19,6 +19,8 @@ int main() {
     tPacketHandler packetHandler(
             dynamixel::PacketHandler::getPacketHandler( 2.0 ) );
     SyncReader< uint8_t > reader( portHandler.get(), packetHandler.get(), 65 );
+    // Compilation error if uncommented
+    // SyncReader< bool > invalidReader( portHandler.get(), packetHandler.get(), 65 );
     
     std::vector< tId > receivers{ 11, 12, 13, 21, 22, 23 };
     auto values = reader.read( receivers );

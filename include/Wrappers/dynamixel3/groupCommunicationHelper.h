@@ -17,6 +17,7 @@ class GroupCommunicationHelper {
     public:
         GroupCommunicationHelper() = delete;
     private:
+        static constexpr void checkType();
         static constexpr uint16_t getDataLength();
         friend class GroupWriteHelper< T >;
         friend class SyncWriter< T >;
