@@ -11,7 +11,7 @@ endif(NOT CMAKE_BUILD_TYPE)
 PROJECT(CONTROLLER)
 
 SET(CMAKE_CXX_FLAGS "-std=c++14 -Wall -Wextra -Wshadow -Wconversion -pthread")
-SET(CMAKE_CXX_FLAGS_DEBUG "-O0 -DEBUG -g")
+SET(CMAKE_CXX_FLAGS_DEBUG "-O0 -DDEBUG -g")
 SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 
 option( DISABLE_WARNINGS "Disable some of the non-critical warnings" ON )
