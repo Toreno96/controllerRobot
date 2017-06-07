@@ -2,6 +2,8 @@
 #define _WRAPPERS_DYNAMIXEL3_COMMUNICATION_RESULT_H_
 
 #include <cstdint>
+#include <stdexcept>
+#include <string>
 #include "../../../3rdParty/dynamixel3/include/dynamixel_sdk.h"
 
 namespace controller {
@@ -10,6 +12,10 @@ namespace dynamixel3wrapper {
 
 class CommunicationResult {
     public:
+        class Unsuccessful : public std::runtime_error {
+            public:
+                Unsuccessful( const std::string& result );
+        };
         CommunicationResult( dynamixel::PacketHandler* packetHandler,
                              int result, uint8_t error = 0 );
         void handle();

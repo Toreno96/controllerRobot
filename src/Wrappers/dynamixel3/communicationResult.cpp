@@ -5,12 +5,13 @@ namespace controller {
 
 namespace dynamixel3wrapper {
 
+CommunicationResult::Unsuccessful::Unsuccessful( const std::string& result ) :
+        std::runtime_error( "Dynamixel communication unsuccessful:\n\t" +
+                result ) {}
 CommunicationResult::CommunicationResult( dynamixel::PacketHandler*
                                                   packetHandler,
                                           int result, uint8_t error ) :
         packetHandler_( packetHandler ), result_( result ), error_( error ) {}
-// TO-DO Customowe wyjątki;
-// umożliwienie wypisania TxRxResult _po_ złapaniu wyjątku
 void CommunicationResult::handle() {
     #ifdef DEBUG
     handleResult();
@@ -18,11 +19,8 @@ void CommunicationResult::handle() {
     handleError();
 }
 void CommunicationResult::handleResult() {
-    if( result_ != COMM_SUCCESS ) {
-        std::cout << '\t';
-        packetHandler_->printTxRxResult( result_ );
-        throw std::runtime_error( "Dynamixel communication unsuccessful" );
-    }
+    if( result_ != COMM_SUCCESS )
+        throw Unsuccessful( packetHandler_->getTxRxResult( result_ ) );
 }
 void CommunicationResult::handleError() {
     if( error_ != 0 ) {
