@@ -18,13 +18,15 @@ int main()
 */
         //Board* board = createBoardDynamixel();
 
-        controller::BoardGalgo bg( "/dev/ttyUSB0", "/dev/ttyUSB1", 3000000, 1 );
-	bg.setOffset( std::vector< double >{
+        controller::BoardGalgo bg( "/dev/ttyUSB0", "/dev/ttyUSB1", 3000000, 1);
+        //bg.setOffset(std::vector<double>(12, 0));
+
+    bg.setOffset( std::vector< double >{
             0.0222482, 0.0176451, -0.313776,
             -0.0421948, 0.266211, -0.0145764,
-            2.0, 0.29076, -0.0636757,
+            -0.307638, 0.29076, -0.0636757,
             -0.0069046, 0.301501, 0.450333 } );
-    std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
+    //std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
 
     // Odkomentować wybrane funkcje w celu przeprowadzenia testów
 
@@ -47,14 +49,17 @@ int main()
 
 	// bg.setOperatingMode( std::vector<uint8_t>( 12, 3 ) );
 	// bg.setTorqueLimit( std::vector< double >( 12, 0.05 ) );
+
+
 	bg.setSpeed( std::vector< double >( 12, 0.05 ) );
 	 
     double goalPositionAngle;
     std::cout << "Enter position angle:\n> ";
     std::cin >> goalPositionAngle;
     // bg.setPosition( std::vector< double >( 12, goalPositionAngle ) );
-    bg.setPosition( 2, 0, goalPositionAngle );
+    bg.setPosition(std::vector<double>(12, goalPositionAngle));
     std::this_thread::sleep_for( std::chrono::seconds( 2 ) );
+
 
 	while( true ) {
 		std::vector< double > presentPosition( 3 );

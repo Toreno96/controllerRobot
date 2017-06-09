@@ -33,10 +33,11 @@ BoardGalgo::BoardGalgo( const std::string &rightLegsDevPath,
     zeroAngle[6] = -90; zeroAngle[7]  = 0; zeroAngle[8]  = 0;
     zeroAngle[9] = -90; zeroAngle[10] = 0; zeroAngle[11] = 0;
 
+    /*
     signOfAngle[0] = -1; signOfAngle[1]  = 1; signOfAngle[2]  = 1;
     signOfAngle[3] = -1; signOfAngle[4]  = 1; signOfAngle[5]  = 1;
     signOfAngle[6] = 1; signOfAngle[7]  = 1; signOfAngle[8]  = 1;
-    signOfAngle[9] = 1; signOfAngle[10] = 1; signOfAngle[11] = 1;
+    signOfAngle[9] = 1; signOfAngle[10] = 1; signOfAngle[11] = 1;*/
 }
 
 BoardGalgo::BoardGalgo(std::string configFilename) :
@@ -58,10 +59,12 @@ BoardGalgo::BoardGalgo(std::string configFilename) :
     zeroAngle[6] = -90; zeroAngle[7]  = 0; zeroAngle[8]  = 0;
     zeroAngle[9] = -90; zeroAngle[10] = 0; zeroAngle[11] = 0;
 
+    /*
     signOfAngle[0] = -1; signOfAngle[1]  = 1; signOfAngle[2]  = 1;
     signOfAngle[3] = -1; signOfAngle[4]  = 1; signOfAngle[5]  = 1;
     signOfAngle[6] = 1; signOfAngle[7]  = 1; signOfAngle[8]  = 1;
     signOfAngle[9] = 1; signOfAngle[10] = 1; signOfAngle[11] = 1;
+    */
 }
 
 //------------------------------------------------------------------------------
@@ -467,7 +470,7 @@ void BoardGalgo::setOffset(int legNo, int jointNo, double offset){
     ++jointNo;
     tAngleDynamixel convertedOffset = tAngleRadians( offset );
 
-    angleOffset[convertToIndex(legNo, jointNo)] = static_cast< int >( convertedOffset.val() );
+    //angleOffset[convertToIndex(legNo, jointNo)] = static_cast< int >( convertedOffset.val() );
 
     setTorque(legNo, jointNo, false);
     uint8_t error;
@@ -475,10 +478,14 @@ void BoardGalgo::setOffset(int legNo, int jointNo, double offset){
             convert(legNo, jointNo), HOMING_OFFSET, convertedOffset.val(), &error);
     dynamixel3wrapper::CommunicationResult communicationResult( packetHandler_.get(), result, error);
     communicationResult.handle();
+    setTorque(legNo, jointNo, true);
 }
 
 void BoardGalgo::setOffset(int legNo, const std::vector<double> offset){
     ++legNo;
+
+    setTorque(legNo, std::vector<uint8_t>(3, false));
+
     dynamixel3wrapper::SyncWriter<uint32_t> writer(
             portHandlersByLegNumber_.at(legNo).get(), packetHandler_.get(),
             HOMING_OFFSET);
@@ -486,9 +493,13 @@ void BoardGalgo::setOffset(int legNo, const std::vector<double> offset){
     writer.write(receivers, offset, [](double value){
         return tAngleDynamixel(tAngleRadians(value)).val();
     });
+
+    setTorque(legNo, std::vector<uint8_t>(3, true));
 }
 
 void BoardGalgo::setOffset(const std::vector<double> offset){
+    setTorque(std::vector<uint8_t>(12, false));
+
     dynamixel3wrapper::SyncWriter<uint32_t> rightWriter(
             rightLegs_.get(), packetHandler_.get(),
             HOMING_OFFSET);
@@ -502,6 +513,8 @@ void BoardGalgo::setOffset(const std::vector<double> offset){
     };
     auto it = rightWriter.write(rightReceivers, offset.begin(), converter);
     leftWriter.write(leftReceivers, it, converter);
+
+    setTorque(std::vector<uint8_t>(12, true));
 }
 
 void BoardGalgo::setDefault(void){
