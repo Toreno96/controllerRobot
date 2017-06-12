@@ -55,6 +55,43 @@ void Walk(controller::BoardGalgo& bg){
     }
 }
 
+void Greeting(controller::BoardGalgo& bg){
+    bg.setOperatingMode(std::vector<uint8_t>(12, 3));
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+    bg.setSpeed(std::vector<double>(12, 0.05));
+    bg.setPosition(std::vector<double>{
+                       1.57, 0.0, 0.0,
+                       1.57, 0.0, 0.0,
+                       -1.57, 0.0, 0.0,
+                       -1.57, 0.0, 0.0
+                   });
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+
+    bg.setSpeed(std::vector<double>(12, 0.025));
+    bg.setPosition(std::vector<double>{
+                       0.0, -1.57, 0.0,
+                       1.57, 0.0, 0.0,
+                       -1.57, 0.0, 0.0,
+                       -1.57, 0.0, 0.0
+                   });
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+    bg.setOperatingMode(0, 0, 5);
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    bg.setTorqueLimit(0,0,0.04);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+    bg.setOperatingMode(0, 0, 3);
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+    bg.setSpeed(0, 0, 0.025);
+    bg.setPosition(std::vector<double>{
+                       1.57, 0.0, 0.0,
+                       1.57, 0.0, 0.0,
+                       -1.57, 0.0, 0.0,
+                       -1.57, 0.0, 0.0
+                   });
+}
 
 void SetOffsets(controller::BoardGalgo& bg){
     bg.setOffset(std::vector<double>{
@@ -72,8 +109,9 @@ int main(){
 
         //SetOffsets(bg);
 
-       //RiseOfRobot(bg);
-       Walk(bg);
+        //RiseOfRobot(bg);
+        //Walk(bg);
+        Greeting(bg);
 
     } catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;
