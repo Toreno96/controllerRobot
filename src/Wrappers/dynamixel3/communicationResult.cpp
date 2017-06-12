@@ -1,6 +1,6 @@
 ///
 /// \file
-/// \brief Wrapper for Dynamixel SDK's communication result.
+/// \brief Wrapper of Dynamixel SDK's communication result.
 /// \author Daniel Staśczak
 ///
 

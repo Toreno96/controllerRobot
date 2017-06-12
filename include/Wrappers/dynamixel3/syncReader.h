@@ -1,6 +1,6 @@
 ///
 /// \file
-/// \brief Wrapper for Dynamixel SDK's GroupSyncRead.
+/// \brief Wrapper of Dynamixel SDK's GroupSyncRead.
 /// \author Daniel Staśczak
 ///
 

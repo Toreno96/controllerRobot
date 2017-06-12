@@ -1,6 +1,6 @@
 ///
 /// \file
-/// \brief Wrapper for Dynamixel SDK's GroupSyncWrite (experimental, test).
+/// \brief Wrapper of Dynamixel SDK's GroupSyncWrite (experimental, test).
 /// \author Daniel Staśczak
 ///
 
