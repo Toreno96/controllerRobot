@@ -1,13 +1,13 @@
 #include <algorithm>
 #include <cmath>
 #include <utility>
+#include "../3rdParty/tinyXML/tinyxml2.h"
 #include "Board/boardGalgo.h"
 #include "Board/exceptions.h"
 #include "Helpers/algorithm.h"
 #include "Wrappers/dynamixel3/communicationResult.h"
 #include "Wrappers/dynamixel3/syncReader.h"
 #include "Wrappers/dynamixel3/syncWriter.h"
-#include "../3rdParty/tinyXML/tinyxml2.h"
 
 namespace controller {
 
