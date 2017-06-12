@@ -31,7 +31,7 @@ The computer sometimes isn't able to communicate with servomotors, but it is a p
 
 ## Attributions
 We used the following code:
-- Dynamixel SDK (https://github.com/ROBOTIS-GIT/DynamixelSDK) - official library for communication with Dynamixel servomotors
+- [Dynamixel SDK](https://github.com/ROBOTIS-GIT/DynamixelSDK) - official library for communication with Dynamixel servomotors
 - Board class - interface from Dominik Belter
 - BoardDynamixel class - Board interface implementation for another robot, from Dominik Belter, on which we took pattern
 
