@@ -353,8 +353,6 @@ class BoardGalgo : public Board {
         /// Default offset values of angles for serwomotors.
         //int angleOffset[12];
 
-        /// Default values of angles for serwomotors.
-        int zeroAngle[12];
 
         //int signOfAngle[12];
 };
