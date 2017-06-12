@@ -1,5 +1,5 @@
 ## Overwiev
-This is a walking, four-legged robot. We made communication with its legs.
+This is a walking, four-legged robot Galgo. We made communication with its legs.
 
 ## Description
 The whole project consists of:
@@ -19,7 +19,8 @@ The whole project consists of:
 - SSH protocol to communicate with computer on robot
 
 ## How to run
-You should compile code using program make, and run it, using sudo command.
+You should compile code using program make, and run it, using sudo command. You can now select in main menu one of four demos to run on robot.<br />
+Robot can be controlled from any device supporting SSH protocol, for example from mobile phone.
 
 ## How to compile
 You should clone code from GitHub on Linux, run program cmake and compile code using program make.
@@ -32,6 +33,8 @@ We used following code:
 - Dynamixl SDK (https://github.com/ROBOTIS-GIT/DynamixelSDK) - used to send and receive data to/from servomotors
 - BoardDynamixel class from Dominik Belter, on which we took pattern
 - Board class - parent class for our project
+
+We also got a lot of help from Przemysław Walkowiak, who told us a lot about using C++ templates in units conversion.
 
 ## License
 MIT
