@@ -1,3 +1,4 @@
+#include "Wrappers/dynamixel3/addParamException.h"
 #include "Wrappers/dynamixel3/communicationResult.h"
 #include "Wrappers/dynamixel3/groupWriteHelper.h"
 #include "Wrappers/dynamixel3/syncWriter.h"
@@ -25,8 +26,7 @@ Iterator SyncWriter< T >::write( const std::vector< tId >& receivers,
         auto valueInLittleEndian =
                 GroupWriteHelper< T >::toLittleEndian( valueInDynamixel );
         if( !internalWriter_.addParam( receiver, valueInLittleEndian.data() ) )
-            // TO-DO Customowy wyjątek o bardziej przemyślanej treści
-            throw std::runtime_error( "Add param unsuccessful" );
+            throw AddParamException();
   }
   CommunicationResult communicationResult( internalWriter_.getPacketHandler(),
         internalWriter_.txPacket() );

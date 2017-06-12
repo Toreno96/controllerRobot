@@ -5,7 +5,7 @@ namespace controller {
 
 namespace dynamixel3wrapper {
 
-CommunicationResult::Unsuccessful::Unsuccessful( const std::string& result ) :
+CommunicationResult::UnsuccessfulException::UnsuccessfulException( const std::string& result ) :
         std::runtime_error( "Dynamixel communication unsuccessful:\n\t" +
                 result ) {}
 CommunicationResult::CommunicationResult( dynamixel::PacketHandler*
@@ -20,7 +20,7 @@ void CommunicationResult::handle() {
 }
 void CommunicationResult::handleResult() {
     if( result_ != COMM_SUCCESS )
-        throw Unsuccessful( packetHandler_->getTxRxResult( result_ ) );
+        throw UnsuccessfulException( packetHandler_->getTxRxResult( result_ ) );
 }
 void CommunicationResult::handleError() {
     if( error_ != 0 ) {

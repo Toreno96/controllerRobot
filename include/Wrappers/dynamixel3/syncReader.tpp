@@ -1,3 +1,4 @@
+#include "Wrappers/dynamixel3/addParamException.h"
 #include "Wrappers/dynamixel3/communicationResult.h"
 #include "Wrappers/dynamixel3/groupCommunicationHelper.h"
 #include "Wrappers/dynamixel3/syncReader.h"
@@ -21,8 +22,7 @@ std::vector< U > SyncReader< T >::read( const std::vector< tId >& receivers,
     internalReader_.clearParam();
     for( auto receiver : receivers ) {
         if( !internalReader_.addParam( receiver ) )
-            // TO-DO Customowy wyjątek o bardziej przemyślanej treści
-            throw std::runtime_error( "Add param unsuccessful" );
+            throw AddParamException();
     }
     CommunicationResult communicationResult( internalReader_.getPacketHandler(),
             internalReader_.txRxPacket() );

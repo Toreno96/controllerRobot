@@ -12,9 +12,9 @@ namespace dynamixel3wrapper {
 
 class CommunicationResult {
     public:
-        class Unsuccessful : public std::runtime_error {
+        class UnsuccessfulException : public std::runtime_error {
             public:
-                Unsuccessful( const std::string& result );
+                UnsuccessfulException( const std::string& result );
         };
         CommunicationResult( dynamixel::PacketHandler* packetHandler,
                              int result, uint8_t error = 0 );
