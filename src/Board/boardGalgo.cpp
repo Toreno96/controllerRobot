@@ -29,17 +29,6 @@ BoardGalgo::BoardGalgo( const std::string &rightLegsDevPath,
     preparePortHandler( leftLegs_, baudRate );
     preparePortHandlersByLegNumberMap();
     setTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, torqueEnable ) );
-
-    zeroAngle[0] = 90; zeroAngle[1]  = 0; zeroAngle[2]  = 0;
-    zeroAngle[3] = 90; zeroAngle[4]  = 0; zeroAngle[5]  = 0;
-    zeroAngle[6] = -90; zeroAngle[7]  = 0; zeroAngle[8]  = 0;
-    zeroAngle[9] = -90; zeroAngle[10] = 0; zeroAngle[11] = 0;
-
-    /*
-    signOfAngle[0] = -1; signOfAngle[1]  = 1; signOfAngle[2]  = 1;
-    signOfAngle[3] = -1; signOfAngle[4]  = 1; signOfAngle[5]  = 1;
-    signOfAngle[6] = 1; signOfAngle[7]  = 1; signOfAngle[8]  = 1;
-    signOfAngle[9] = 1; signOfAngle[10] = 1; signOfAngle[11] = 1;*/
 }
 
 BoardGalgo::BoardGalgo(std::string configFilename) :
@@ -55,18 +44,6 @@ BoardGalgo::BoardGalgo(std::string configFilename) :
     preparePortHandler( leftLegs_, config.baudRate );
     preparePortHandlersByLegNumberMap();
     setTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, 1 ) );
-
-    zeroAngle[0] = 90; zeroAngle[1]  = 0; zeroAngle[2]  = 0;
-    zeroAngle[3] = 90; zeroAngle[4]  = 0; zeroAngle[5]  = 0;
-    zeroAngle[6] = -90; zeroAngle[7]  = 0; zeroAngle[8]  = 0;
-    zeroAngle[9] = -90; zeroAngle[10] = 0; zeroAngle[11] = 0;
-
-    /*
-    signOfAngle[0] = -1; signOfAngle[1]  = 1; signOfAngle[2]  = 1;
-    signOfAngle[3] = -1; signOfAngle[4]  = 1; signOfAngle[5]  = 1;
-    signOfAngle[6] = 1; signOfAngle[7]  = 1; signOfAngle[8]  = 1;
-    signOfAngle[9] = 1; signOfAngle[10] = 1; signOfAngle[11] = 1;
-    */
 }
 
 //------------------------------------------------------------------------------
@@ -463,16 +440,10 @@ unsigned int BoardGalgo::readTorque(std::vector<double>& servoTorque){
     throw NotSupportedException();
 }
 
-int BoardGalgo::convertToIndex(int legNo, int jointNo){
-    return (legNo - 1) * 3 + jointNo - 1;
-}
-
 void BoardGalgo::setOffset(int legNo, int jointNo, double offset){
     ++legNo;
     ++jointNo;
     tAngleDynamixel convertedOffset = tAngleRadians( offset );
-
-    //angleOffset[convertToIndex(legNo, jointNo)] = static_cast< int >( convertedOffset.val() );
 
     setTorque(legNo, jointNo, false);
     uint8_t error;

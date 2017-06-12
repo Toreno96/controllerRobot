@@ -23,6 +23,9 @@ Board* createBoardGalgo(std::string configFilename);
 class BoardGalgo : public Board {
     public:
         using Ptr = std::unique_ptr< BoardGalgo >;
+        static const uint8_t OPERATINGMODE_POSITION;
+        static const uint8_t OPERATINGMODE_CURRENT_BASED_POSITION;
+
         BoardGalgo( const std::string &rightLegsDevPath,
                     const std::string &leftLegsDevPath,
                     int baudRate, uint8_t torqueEnable = 1 );
@@ -51,7 +54,6 @@ class BoardGalgo : public Board {
                 int baudRate;
         };
 
-        // TO-DO Dokumentacja doxygen poniższych funkcji setLED
         void setLED(int legNo, int jointNo, uint8_t boolean);
         void setLED(int legNo, const std::vector<uint8_t>& boolean);
         void setLED(const std::vector<uint8_t>& boolean);
@@ -298,9 +300,6 @@ class BoardGalgo : public Board {
         */
         void setDefault(void);
 
-        static const uint8_t OPERATINGMODE_POSITION;
-        static const uint8_t OPERATINGMODE_CURRENT_BASED_POSITION;
-
     private:
         Config config;
         using tPortHandler = std::shared_ptr< dynamixel::PortHandler >;
@@ -338,9 +337,7 @@ class BoardGalgo : public Board {
         std::vector< tId > getTwoLegsIds( int legNo1, int legNo2 );
         std::vector< tId > getRightLegsIds();
         std::vector< tId > getLeftLegsIds();
-        int convertToIndex(int legNo, int jointNo);
 
-        // TO-DO Dokumentacja doxygen poniższych funkcji setTorque
         void setTorque( int legNo, int jointNo, uint8_t boolean );
         void setTorque( int legNo, const std::vector< uint8_t >& boolean );
         void setTorque( const std::vector< uint8_t >& boolean );
@@ -349,14 +346,6 @@ class BoardGalgo : public Board {
         tPortHandler leftLegs_;
         std::map< int, tPortHandler > portHandlersByLegNumber_;
         tPacketHandler packetHandler_;
-
-        /// Default offset values of angles for serwomotors.
-        //int angleOffset[12];
-
-        /// Default values of angles for serwomotors.
-        int zeroAngle[12];
-
-        //int signOfAngle[12];
 };
 
 } // namespace controller
