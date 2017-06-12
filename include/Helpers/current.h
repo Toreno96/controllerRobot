@@ -1,3 +1,10 @@
+///
+/// \file
+/// \brief Strongly-typed current.
+/// \author Daniel Staśczak
+/// \author Przemysław Walkowiak
+///
+
 #ifndef _HELPERS_CURRENT_H_
 #define _HELPERS_CURRENT_H_
 

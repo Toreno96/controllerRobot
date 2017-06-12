@@ -1,3 +1,10 @@
+///
+/// \file
+/// \brief Board implementation for Galgo robot.
+/// \author Daniel Staśczak
+/// \author Marcin Orczyk
+///
+
 #ifndef _BOARD_GALGO_H_
 #define _BOARD_GALGO_H_
 

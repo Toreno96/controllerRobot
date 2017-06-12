@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief Wrapper for Dynamixel SDK's GroupSyncWrite (experimental, test).
+/// \author Daniel Staśczak
+///
+
 #include <memory>
 #include "dummies.h"
 #include "syncWriter.h"

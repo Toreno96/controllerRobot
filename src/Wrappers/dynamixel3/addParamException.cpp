@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief Add param exception.
+/// \author Daniel Staśczak
+///
+
 #include "Wrappers/dynamixel3/addParamException.h"
 
 namespace controller {

@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief Globals (constants, type aliases, etc).
+/// \author Daniel Staśczak
+///
+
 #ifndef _WRAPPERS_DYNAMIXEL3_GLOBALS_H_
 #define _WRAPPERS_DYNAMIXEL3_GLOBALS_H_
 

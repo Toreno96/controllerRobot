@@ -1,3 +1,10 @@
+///
+/// \file
+/// \brief Demos of BoardGalgo functionality.
+/// \author Daniel Staśczak
+/// \author Marcin Orczyk
+///
+
 #include <chrono>
 #include <iostream>
 #include <limits>

@@ -1,3 +1,10 @@
+///
+/// \file
+/// \brief Board implementation for Galgo robot.
+/// \author Daniel Staśczak
+/// \author Marcin Orczyk
+///
+
 #include <algorithm>
 #include <cmath>
 #include <utility>

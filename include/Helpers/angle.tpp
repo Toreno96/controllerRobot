@@ -1,3 +1,10 @@
+///
+/// \file
+/// \brief Strongly-typed angle.
+/// \author Daniel Staśczak
+/// \author Przemysław Walkowiak
+///
+
 #include "Helpers/angle.h"
 
 namespace controller {

@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief Wrapper for Dynamixel SDK's GroupSyncWrite (experimental).
+/// \author Daniel Staśczak
+///
+
 #pragma once
 
 #include <cstdint>

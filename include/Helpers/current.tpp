@@ -1,3 +1,10 @@
+///
+/// \file
+/// \brief Strongly-typed current.
+/// \author Daniel Staśczak
+/// \author Przemysław Walkowiak
+///
+
 #include "Helpers/current.h"
 
 namespace controller {

@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief Helper for group write.
+/// \author Daniel Staśczak
+///
+
 #ifndef _WRAPPERS_DYNAMIXEL3_GROUP_WRITE_HELPER_H_
 #define _WRAPPERS_DYNAMIXEL3_GROUP_WRITE_HELPER_H_
 

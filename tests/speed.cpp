@@ -1,3 +1,10 @@
+///
+/// \file
+/// \brief Strongly-typed speed (test).
+/// \author Daniel Staśczak
+///
+
+
 #include <cassert>
 #include <iostream>
 #include "Helpers/speed.h"

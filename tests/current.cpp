@@ -1,3 +1,10 @@
+///
+/// \file
+/// \brief Strongly-typed current (test).
+/// \author Daniel Staśczak
+///
+
+
 #include <cassert>
 #include <iostream>
 #include "Helpers/current.h"

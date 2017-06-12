@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief General-purpose helper algorithms.
+/// \author Daniel Staśczak
+///
+
 #ifndef _HELPERS_ALGORITHM_H_
 #define _HELPERS_ALGORITHM_H_
 

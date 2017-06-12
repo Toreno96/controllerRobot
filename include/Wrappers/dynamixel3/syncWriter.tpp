@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief Wrapper for Dynamixel SDK's GroupSyncWrite.
+/// \author Daniel Staśczak
+///
+
 #include "Wrappers/dynamixel3/addParamException.h"
 #include "Wrappers/dynamixel3/communicationResult.h"
 #include "Wrappers/dynamixel3/groupWriteHelper.h"

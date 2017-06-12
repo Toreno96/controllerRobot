@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief Wrapper for Dynamixel SDK's GroupSyncRead.
+/// \author Daniel Staśczak
+///
+
 #ifndef _WRAPPERS_DYNAMIXEL3_SYNC_READER_H_
 #define _WRAPPERS_DYNAMIXEL3_SYNC_READER_H_
 

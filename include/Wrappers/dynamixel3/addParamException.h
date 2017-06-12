@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief Add param exception.
+/// \author Daniel Staśczak
+///
+
 #ifndef _WRAPPERS_DYNAMIXEL3_ADD_PARAM_EXCEPTION_H_
 #define _WRAPPERS_DYNAMIXEL3_ADD_PARAM_EXCEPTION_H_
 

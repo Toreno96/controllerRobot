@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief Wrapper for Dynamixel SDK's communication result.
+/// \author Daniel Staśczak
+///
+
 #ifndef _WRAPPERS_DYNAMIXEL3_COMMUNICATION_RESULT_H_
 #define _WRAPPERS_DYNAMIXEL3_COMMUNICATION_RESULT_H_
 

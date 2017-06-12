@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief Helper for group write.
+/// \author Daniel Staśczak
+///
+
 #include "groupWriteHelper.h"
 
 namespace controller {

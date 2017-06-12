@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief Helper for group communication.
+/// \author Daniel Staśczak
+///
+
 #ifndef _WRAPPERS_DYNAMIXEL3_GROUP_COMMUNICATION_HELPER_H_
 #define _WRAPPERS_DYNAMIXEL3_GROUP_COMMUNICATION_HELPER_H_
 

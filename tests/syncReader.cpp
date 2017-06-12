@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief Wrapper for Dynamixel SDK's GroupSyncRead (test).
+/// \author Daniel Staśczak
+///
+
 // Compile with: clang++ -std=c++14  ./tests/syncReader.cpp ./src/Wrappers/dynamixel3/communicationResult.cpp ./3rdParty/dynamixel3/src/dynamixel_sdk/*.cpp ./3rdParty/dynamixel3/src/dynamixel_sdk_linux/port_handler_linux.cpp -I./include/ -I./3rdParty/dynamixel3/include/ -o ./tests/syncReader.out
 
 #include <chrono>

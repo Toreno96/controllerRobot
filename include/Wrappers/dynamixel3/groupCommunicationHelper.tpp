@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief Helper for group communication.
+/// \author Daniel Staśczak
+///
+
 #include <type_traits>
 #include "Wrappers/dynamixel3/groupCommunicationHelper.h"
 

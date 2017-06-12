@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief Dummy version of the most essential Dynamixel SDK's classes.
+/// \author Daniel Staśczak
+///
+
 #include "dummies.h"
 
 #include <iostream>

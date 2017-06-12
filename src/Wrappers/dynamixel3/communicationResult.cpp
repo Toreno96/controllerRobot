@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief Wrapper for Dynamixel SDK's communication result.
+/// \author Daniel Staśczak
+///
+
 #include <iostream>
 #include "Wrappers/dynamixel3/communicationResult.h"
 

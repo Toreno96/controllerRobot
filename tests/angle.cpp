@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief Strongly-typed angle (test).
+/// \author Daniel Staśczak
+///
+
 #include <cassert>
 #include <iostream>
 #include "Helpers/angle.h"

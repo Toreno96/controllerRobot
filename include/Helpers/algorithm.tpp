@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief General-purpose helper algorithms.
+/// \author Daniel Staśczak
+///
+
 #include "Helpers/algorithm.h"
 
 namespace controller {

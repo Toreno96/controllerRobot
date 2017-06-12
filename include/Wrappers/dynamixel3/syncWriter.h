@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief Wrapper for Dynamixel SDK's GroupSyncWrite.
+/// \author Daniel Staśczak
+///
+
 #ifndef _WRAPPERS_DYNAMIXEL3_SYNC_WRITER_H_
 #define _WRAPPERS_DYNAMIXEL3_SYNC_WRITER_H_
 

@@ -1,3 +1,10 @@
+///
+/// \file
+/// \brief Strongly-typed speed.
+/// \author Daniel Staśczak
+/// \author Przemysław Walkowiak
+///
+
 #include "Helpers/speed.h"
 
 namespace controller {

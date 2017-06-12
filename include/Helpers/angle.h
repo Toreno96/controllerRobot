@@ -1,3 +1,10 @@
+///
+/// \file
+/// \brief Strongly-typed angle.
+/// \author Daniel Staśczak
+/// \author Przemysław Walkowiak
+///
+
 #ifndef _HELPERS_ANGLE_H_
 #define _HELPERS_ANGLE_H_
 

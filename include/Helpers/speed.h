@@ -1,3 +1,10 @@
+///
+/// \file
+/// \brief Strongly-typed speed.
+/// \author Daniel Staśczak
+/// \author Przemysław Walkowiak
+///
+
 #ifndef _HELPERS_SPEED_H_
 #define _HELPERS_SPEED_H_
 

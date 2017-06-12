@@ -1,3 +1,10 @@
+///
+/// \file
+/// \brief Exceptions for BoardGalgo class.
+/// \author Daniel Staśczak
+/// \author Marcin Orczyk
+///
+
 #ifndef exceptions_h
 #define exceptions_h
 

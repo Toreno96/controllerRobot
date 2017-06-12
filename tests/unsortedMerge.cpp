@@ -1,3 +1,9 @@
+///
+/// \file
+/// \brief General-purpose helper algorithm (test).
+/// \author Daniel Staśczak
+///
+
 #include <iostream>
 #include <vector>
 #include "Helpers/algorithm.h"
