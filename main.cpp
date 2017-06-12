@@ -81,7 +81,7 @@ void Greeting(controller::BoardGalgo& bg){
     bg.setOperatingMode(0, 0, controller::BoardGalgo::OPERATINGMODE_CURRENT_BASED_POSITION);
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
     bg.setTorqueLimit(0,0,0.04);
-    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     bg.setOperatingMode(0, 0, controller::BoardGalgo::OPERATINGMODE_POSITION);
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
