@@ -298,8 +298,8 @@ class BoardGalgo : public Board {
         */
         void setDefault(void);
 
-        static constexpr uint8_t OPERATINGMODE_POSITION = 3;
-        static constexpr uint8_t OPERATINGMODE_CURRENT_BASED_POSITION = 5;
+        static const uint8_t OPERATINGMODE_POSITION;
+        static const uint8_t OPERATINGMODE_CURRENT_BASED_POSITION;
 
     private:
         Config config;

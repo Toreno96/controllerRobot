@@ -5,7 +5,7 @@
 #include <string>
 
 void RiseOfRobot(controller::BoardGalgo& bg){
-    bg.setOperatingMode(std::vector<uint8_t>(12, 3));
+    bg.setOperatingMode(std::vector<uint8_t>(12, controller::BoardGalgo::OPERATINGMODE_POSITION));
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
     bg.setSpeed(std::vector<double >(12, 0.01));
@@ -20,7 +20,7 @@ void RiseOfRobot(controller::BoardGalgo& bg){
 }
 
 void Walk(controller::BoardGalgo& bg){
-    bg.setOperatingMode(std::vector<uint8_t>(12, 3));
+    bg.setOperatingMode(std::vector<uint8_t>(12, controller::BoardGalgo::OPERATINGMODE_POSITION));
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
     bg.setSpeed(std::vector<double>{
                     0.02, 0.02, 0.04,
@@ -56,7 +56,7 @@ void Walk(controller::BoardGalgo& bg){
 }
 
 void Greeting(controller::BoardGalgo& bg){
-    bg.setOperatingMode(std::vector<uint8_t>(12, 3));
+    bg.setOperatingMode(std::vector<uint8_t>(12, controller::BoardGalgo::OPERATINGMODE_POSITION));
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
     bg.setSpeed(std::vector<double>(12, 0.05));
@@ -77,11 +77,11 @@ void Greeting(controller::BoardGalgo& bg){
                    });
 
     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-    bg.setOperatingMode(0, 0, 5);
+    bg.setOperatingMode(0, 0, controller::BoardGalgo::OPERATINGMODE_CURRENT_BASED_POSITION);
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
     bg.setTorqueLimit(0,0,0.04);
     std::this_thread::sleep_for(std::chrono::milliseconds(1500));
-    bg.setOperatingMode(0, 0, 3);
+    bg.setOperatingMode(0, 0, controller::BoardGalgo::OPERATINGMODE_POSITION);
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
     bg.setSpeed(0, 0, 0.025);
@@ -94,14 +94,14 @@ void Greeting(controller::BoardGalgo& bg){
 }
 
 void SleepAndWakeUp(controller::BoardGalgo& bg){
-    bg.setOperatingMode(std::vector<uint8_t>(12, 3));
+    bg.setOperatingMode(std::vector<uint8_t>(12, controller::BoardGalgo::OPERATINGMODE_POSITION));
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
     bg.setSpeed(std::vector<double>(12, 0.07));
     bg.setPosition(std::vector<double>(12, 0.0));
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-    bg.setOperatingMode(std::vector<uint8_t>(12, 5));
+    bg.setOperatingMode(std::vector<uint8_t>(12, controller::BoardGalgo::OPERATINGMODE_CURRENT_BASED_POSITION));
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
     bg.setTorqueLimit(std::vector<double>(12, 0.02));
 
