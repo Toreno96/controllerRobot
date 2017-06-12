@@ -23,6 +23,9 @@ Board* createBoardGalgo(std::string configFilename);
 class BoardGalgo : public Board {
     public:
         using Ptr = std::unique_ptr< BoardGalgo >;
+        static const uint8_t OPERATINGMODE_POSITION;
+        static const uint8_t OPERATINGMODE_CURRENT_BASED_POSITION;
+
         BoardGalgo( const std::string &rightLegsDevPath,
                     const std::string &leftLegsDevPath,
                     int baudRate, uint8_t torqueEnable = 1 );
@@ -296,9 +299,6 @@ class BoardGalgo : public Board {
         * \brief Set default value.
         */
         void setDefault(void);
-
-        static const uint8_t OPERATINGMODE_POSITION;
-        static const uint8_t OPERATINGMODE_CURRENT_BASED_POSITION;
 
     private:
         Config config;
