@@ -1,5 +1,6 @@
 #include "Board/boardGalgo.h"
 #include <iostream>
+#include <limits>
 #include <chrono>
 #include <thread>
 #include <string>
@@ -123,13 +124,39 @@ void SetOffsets(controller::BoardGalgo& bg){
 int main(){
     try {
         controller::BoardGalgo bg("/dev/ttyUSB0", "/dev/ttyUSB1", 3000000, 1);
+        SetOffsets(bg);
 
-        //SetOffsets(bg);
-
-        //RiseOfRobot(bg);
-        //Walk(bg);
-        //Greeting(bg);
-        SleepAndWakeUp(bg);
+        int selectedOption;
+        do {
+            std::cout << "\n"
+                    << "[1] Rise of the robot\n"
+                    << "[2] Walking\n"
+                    << "[3] Greetings\n"
+                    << "[4] Sleep and wake up\n\n"
+                    << "Select the demo or [5] to quit:\n"
+                    << "> ";
+            std::cin >> selectedOption;
+            std::cin.ignore( std::numeric_limits< std::streamsize >::max(), '\n' );
+            switch( selectedOption ) {
+                case 1:
+                    RiseOfRobot(bg);
+                    break;
+                case 2:
+                    Walk(bg);
+                    break;
+                case 3:
+                    Greeting(bg);
+                    break;
+                case 4:
+                    SleepAndWakeUp(bg);
+                    break;
+                case 5:
+                    break;
+                default:
+                    std::cout << "Wrong option selected!\n";
+                    break;
+            }
+        } while( selectedOption != 5 );
 
     } catch (const std::exception& ex) {
         std::cerr << ex.what() << std::endl;
