@@ -337,7 +337,6 @@ class BoardGalgo : public Board {
         std::vector< tId > getTwoLegsIds( int legNo1, int legNo2 );
         std::vector< tId > getRightLegsIds();
         std::vector< tId > getLeftLegsIds();
-        int convertToIndex(int legNo, int jointNo);
 
         void setTorque( int legNo, int jointNo, uint8_t boolean );
         void setTorque( int legNo, const std::vector< uint8_t >& boolean );

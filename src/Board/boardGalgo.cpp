@@ -440,10 +440,6 @@ unsigned int BoardGalgo::readTorque(std::vector<double>& servoTorque){
     throw NotSupportedException();
 }
 
-int BoardGalgo::convertToIndex(int legNo, int jointNo){
-    return (legNo - 1) * 3 + jointNo - 1;
-}
-
 void BoardGalgo::setOffset(int legNo, int jointNo, double offset){
     ++legNo;
     ++jointNo;
