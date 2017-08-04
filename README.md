@@ -1,5 +1,5 @@
 ## Overview
-This is a software for controlling a walking, four-legged Galgo robot.
+This is a software for controlling a walking, four-legged Galgo robot ([video](https://www.youtube.com/watch?v=pD7Y1Y1Fs7I)).
 
 ## Description
 The whole project consists of:
