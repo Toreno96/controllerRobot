@@ -1,8 +1,14 @@
+#ifndef _WRAPPERS_D2XX_SPI_H_
+#define _WRAPPERS_D2XX_SPI_H_
+
 #include <cstdint>
 #include <map>
 #include <vector>
 #include "3rdParty/d2xx/include/ftd2xx.h"
 
+namespace controller {
+
+namespace d2xxwrapper {
 
 class Spi {
   public:
@@ -29,3 +35,9 @@ class Spi {
     const Config config_;
     FT_HANDLE ftHandler_;
 };
+
+} // namespace controller
+
+} // namespace d2xxwrapper
+
+#endif // #ifndef _WRAPPERS_D2XX_SPI_H_
