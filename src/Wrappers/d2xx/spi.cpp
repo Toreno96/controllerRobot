@@ -1,5 +1,7 @@
-#include "Wrappers/d2xx/spi.h"
 #include <cmath>
+#include <stdexcept>
+#include <string>
+#include "Wrappers/d2xx/spi.h"
 
 namespace controller {
 
