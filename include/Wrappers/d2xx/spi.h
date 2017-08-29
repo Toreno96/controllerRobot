@@ -19,7 +19,7 @@ class Spi {
       const DWORD writeTimeout;
     };
     using Bytes = std::vector<uint8_t>;
-    Spi(const Config& spiConfig);
+    Spi(const Config& config);
     ~Spi();
     Bytes read(DWORD bytesCount);
     void write(const Bytes& bytes);
@@ -33,7 +33,7 @@ class Spi {
     void initializePins();
     void setChipSelect(bool state);
     const Config config_;
-    FT_HANDLE ftHandler_;
+    FT_HANDLE ftHandle_;
 };
 
 } // namespace controller
