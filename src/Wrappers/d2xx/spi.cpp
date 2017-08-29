@@ -8,7 +8,13 @@ namespace controller {
 namespace d2xxwrapper {
 
 
-Spi::Spi(const Config& config) : config_(config) {}
+Spi::Spi(const Config& config) : config_(config), ftHandle_(nullptr) {
+  FT_STATUS ftStatus = FT_Open(config_.port, &ftHandle_);
+  if (ftStatus != FT_OK) {
+    throw std::runtime_error("FT_Open(" + std::to_string(config_.port) +
+        ") failed with FT_STATUS == " + std::to_string(ftStatus));
+  }
+}
 
 Spi::~Spi() {
 
