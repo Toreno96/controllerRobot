@@ -58,7 +58,9 @@ void Spi::write(const Spi::Bytes& bytes) {
 Spi::Bytes Spi::transfer(const Spi::Bytes& bytes) {
   Bytes transferBytes{0x31, static_cast<uint8_t>(bytes.size() - 1), 0x00};
   transferBytes.insert(transferBytes.end(), bytes.begin(), bytes.end());
+  setChipSelect(false);
   ftdiWrite(transferBytes);
+  setChipSelect(true);
   return read(bytes.size());
 }
 
