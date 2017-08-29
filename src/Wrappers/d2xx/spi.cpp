@@ -14,6 +14,9 @@ Spi::Spi(const Config& config) : config_(config), ftHandle_(nullptr) {
     throw std::runtime_error("FT_Open(" + std::to_string(config_.port) +
         ") failed with FT_STATUS == " + std::to_string(ftStatus));
   }
+  initializeMpsse();
+  disconnectLoopbackMode();
+  initializePins();
 }
 
 Spi::~Spi() {
