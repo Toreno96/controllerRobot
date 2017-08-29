@@ -20,11 +20,54 @@ Spi::~Spi() {
   FT_Close(ftHandle_);
 }
 
-Spi::Bytes Spi::read(DWORD bytesCount) {}
+Spi::Bytes Spi::read(DWORD bytesCount) {
+  FT_STATUS ftStatus;
 
-void Spi::ftdiWrite(const Spi::Bytes& bytes) {}
+  DWORD bytesInQueue = 0;
+  int attempts = 0;
+  do {
+    if (attempts++ < 10)
+      ftStatus = FT_GetQueueStatus(ftHandle_, &bytesInQueue);
+    else
+      throw std::runtime_error(
+          "Spi::read failed! Too much attempts of FT_GetQueueStatus. The most recent FT_STATUS == " +
+          std::to_string(ftStatus));
+  }
+  while (bytesInQueue < bytesCount);
 
-Spi::Bytes Spi::transfer(const Spi::Bytes& bytes) {}
+  Bytes receivedBytes(bytesCount);
+  DWORD receivedBytesCount = 0;
+  ftStatus = FT_Read(ftHandle_, receivedBytes.data(), bytesCount,
+      &receivedBytesCount);
+  if (ftStatus != FT_OK) {
+    throw std::runtime_error("FT_Read failed with FT_STATUS == " +
+        std::to_string(ftStatus));
+  }
+  // Sprawdzanie czy receivedBytesCount == bytesCount?
+  else
+    return receivedBytes;
+}
+
+void Spi::write(const Spi::Bytes& bytes) {
+  throw std::runtime_error("Not implemented yet");
+}
+
+Spi::Bytes Spi::transfer(const Spi::Bytes& bytes) {
+  Bytes transferBytes{0x31, static_cast<uint8_t>(bytes.size() - 1), 0x00};
+  transferBytes.insert(transferBytes.end(), bytes.begin(), bytes.end());
+  ftdiWrite(transferBytes);
+  return read(bytes.size());
+}
+
+void Spi::ftdiWrite(const Spi::Bytes& bytes) {
+  Bytes buffer = bytes;
+  DWORD bytesWritten = 0;
+  FT_STATUS ftStatus = FT_Write(ftHandle_, buffer.data(), buffer.size(), &bytesWritten);
+  if (ftStatus != FT_OK) {
+    throw std::runtime_error("FT_Write failed with FT_STATUS == " +
+        std::to_string(ftStatus));
+  }
+}
 
 void Spi::initializeMpsse() {
 	FT_ResetDevice(ftHandle_);
