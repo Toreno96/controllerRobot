@@ -2,7 +2,6 @@
 #define _WRAPPERS_D2XX_SPI_H_
 
 #include <cstdint>
-#include <map>
 #include <vector>
 #include "3rdParty/d2xx/include/ftd2xx.h"
 
@@ -13,7 +12,7 @@ namespace d2xxwrapper {
 class Spi {
   public:
     struct Config {
-      const std::map<int, int> portsByLeg;
+      const int port;
       const int frequency;
       const DWORD readTimeout;
       const DWORD writeTimeout;
