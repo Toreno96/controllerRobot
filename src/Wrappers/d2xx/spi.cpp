@@ -17,7 +17,7 @@ Spi::Spi(const Config& config) : config_(config), ftHandle_(nullptr) {
 }
 
 Spi::~Spi() {
-
+  FT_Close(ftHandle_);
 }
 
 Spi::Bytes Spi::read(DWORD bytesCount) {}
