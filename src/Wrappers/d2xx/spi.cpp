@@ -8,11 +8,13 @@ namespace d2xxwrapper {
 
 Spi::Spi(const Config& config) : config_(config) {}
 
-Spi::~Spi() {}
+Spi::~Spi() {
+
+}
 
 Spi::Bytes Spi::read(DWORD bytesCount) {}
 
-void Spi::write(const Spi::Bytes& bytes) {}
+void Spi::ftdiWrite(const Spi::Bytes& bytes) {}
 
 Spi::Bytes Spi::transfer(const Spi::Bytes& bytes) {}
 
@@ -28,13 +30,13 @@ void Spi::initializeMpsse() {
 }
 
 void Spi::disableBy5ClockDivider() {
-	write({0x8A});
+	ftdiWrite({0x8A});
 }
 
 void Spi::setClockDivisor() {
     int divisor = int(ceil((30000000.0 - double(config_.frequency)) /
     	double(config_.frequency))) & 0xFFFF;
-	write({0x86, uint8_t(divisor & 0xFF), uint8_t((divisor >> 8) & 0xFF)});
+	ftdiWrite({0x86, uint8_t(divisor & 0xFF), uint8_t((divisor >> 8) & 0xFF)});
 }
 
 void Spi::checkMpsseOperability() {
@@ -42,7 +44,7 @@ void Spi::checkMpsseOperability() {
 	Bytes answer;
 	
 	for (int i = 0; i < 2; ++i) {
-		write({commands[i]});
+		ftdiWrite({commands[i]});
 		answer = read(2);
 		
         if (answer[0] != 0xFA || answer[1] != commands[i]) {
@@ -53,15 +55,15 @@ void Spi::checkMpsseOperability() {
 }
 
 void Spi::disconnectLoopbackMode() {
-	write({0x85});
+	ftdiWrite({0x85});
 }
 
 void Spi::initializePins() {
-	write({0x80, 0x22, 0x23});
+	ftdiWrite({0x80, 0x22, 0x23});
 }
 
 void Spi::setChipSelect(bool state) {
-	write({0x80, static_cast<uint8_t>(0x02 | ((state & 1) << 5)), 0x23});
+	ftdiWrite({0x80, static_cast<uint8_t>(0x02 | ((state & 1) << 5)), 0x23});
 }
 
 } // namespace controller

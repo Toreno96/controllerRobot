@@ -25,6 +25,7 @@ class Spi {
     void write(const Bytes& bytes);
     Bytes transfer(const Bytes& bytes);
   private:
+  	void ftdiWrite(const Bytes& bytes);
     void initializeMpsse();
     void disableBy5ClockDivider();
     void setClockDivisor();
