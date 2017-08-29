@@ -1,27 +1,28 @@
-struct SpiConfig:
-  // all members const?
-  portsByLeg
-  frequency
-  readTimeout // ??
-  writeTimeout // ??
-
 class Galgo:
-  + ctor(..., SpiConfig)
-  - class Spi:
-    + using Bytes = Container<uint8_t>
-    + ctor(SpiConfig)
-    + dtor()
-    + Bytes read(bytesCount)
-    + write(Bytes)
-    + Bytes transfer(Container bytes)
-    - initializeMpsse()
-    - disableBy5ClockDivider()
-    - setClockDivisor()
-    - checkMpsseOperability()
-    - disconnectLoopbackMode()
-    - initializePins()
-    - setChipSelect(bool)
-    - SpiConfig spiConfig_;
-    - FT_HANDLE ftHandler;
+  + ctor(..., Container spiConfigs)
   - AngleSpi readSpiPosition(legNo) // x tries of Spi::transfer. Any success => immediate return; x failures => throw exception
   - map<leg, Spi> spiByLeg_
+
+class Spi:
+  + struct Config:
+      // all members const ??
+      port
+      frequency
+      readTimeout // ??
+      writeTimeout // ??
+  + using Bytes = Container<uint8_t>
+  + ctor(config)
+  + dtor()
+  + Bytes read(bytesCount)
+  + write(Bytes)
+  + Bytes transfer(Container bytes)
+  - initializeMpsse()
+  - disableBy5ClockDivider()
+  - setClockDivisor()
+  - checkMpsseOperability()
+  - disconnectLoopbackMode()
+  - initializePins()
+  - setChipSelect(bool)
+  - ftdiWrite(Bytes)
+  - Config config_;
+  - FT_HANDLE ftHandle;
