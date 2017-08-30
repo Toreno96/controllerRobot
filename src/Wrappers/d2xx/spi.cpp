@@ -32,9 +32,9 @@ Spi::Bytes Spi::read(DWORD bytesCount) {
         if (attempts++ < 10000)
             ftStatus = FT_GetQueueStatus(ftHandle_, &bytesInQueue);
         else
-            throw std::runtime_error(
-                    "Spi::read failed! Too much attempts of FT_GetQueueStatus. The most recent FT_STATUS == " +
-                    std::to_string(ftStatus));
+            throw std::runtime_error("Spi::read failed! " +
+                    "Too much attempts of FT_GetQueueStatus." +
+                    "The most recent FT_STATUS == " + std::to_string(ftStatus));
     }
     while (bytesInQueue < bytesCount);
 
@@ -67,7 +67,8 @@ Spi::Bytes Spi::transfer(const Spi::Bytes& bytes) {
 void Spi::ftdiWrite(const Spi::Bytes& bytes) {
     Bytes buffer = bytes;
     DWORD bytesWritten = 0;
-    FT_STATUS ftStatus = FT_Write(ftHandle_, buffer.data(), buffer.size(), &bytesWritten);
+    FT_STATUS ftStatus = FT_Write(ftHandle_, buffer.data(), buffer.size(),
+            &bytesWritten);
     if (ftStatus != FT_OK) {
         throw std::runtime_error("FT_Write failed with FT_STATUS == " +
                 std::to_string(ftStatus));
