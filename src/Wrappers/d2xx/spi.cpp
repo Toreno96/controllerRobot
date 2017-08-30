@@ -82,7 +82,6 @@ void Spi::initializeMpsse() {
     FT_SetBitMode(ftHandle_, 0xBB, 2);
     FT_SetLatencyTimer(ftHandle_, 16);
     FT_SetTimeouts(ftHandle_, config_.readTimeout, config_.writeTimeout);
-
     disableBy5ClockDivider();
     setClockDivisor();
     checkMpsseOperability();
