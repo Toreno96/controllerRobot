@@ -27,7 +27,7 @@ Spi::Bytes Spi::read(DWORD bytesCount) {
   FT_STATUS ftStatus;
 
   DWORD bytesInQueue = 0;
-  int attempts = 0;
+  unsigned attempts = 0;
   do {
     if (attempts++ < 100000)
       ftStatus = FT_GetQueueStatus(ftHandle_, &bytesInQueue);
