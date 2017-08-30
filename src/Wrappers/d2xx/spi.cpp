@@ -99,15 +99,10 @@ void Spi::setClockDivisor() {
 }
 
 void Spi::checkMpsseOperability() {
-    uint8_t commands[2] = {0xAA, 0xAB};
-    Bytes answer;
-
-    for (int i = 0; i < 2; ++i) {
-        ftdiWrite({commands[i]});
-        answer = read(2);
-
-        if (answer[0] != 0xFA || answer[1] != commands[i]) {
-            FT_Close(ftHandle_);
+    for (auto command : {uint8_t(0xAA), uint8_t(0xAB)}) {
+        ftdiWrite({command});
+        Bytes answer = read(2);
+        if (answer[0] != 0xFA || answer[1] != command) {
             throw std::runtime_error("MPSSE did not respond correctly");
         }
     }
