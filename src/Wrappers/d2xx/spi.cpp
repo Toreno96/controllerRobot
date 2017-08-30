@@ -55,6 +55,7 @@ Spi::Bytes Spi::read(DWORD bytesCount) {
 
 void Spi::write(const Spi::Bytes& bytes) {
     throw std::runtime_error("Not implemented yet");
+    bytes.size();
 }
 
 Spi::Bytes Spi::transfer(const Spi::Bytes& bytes) {
