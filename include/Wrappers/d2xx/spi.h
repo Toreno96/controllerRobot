@@ -3,7 +3,7 @@
 
 #include <cstdint>
 #include <vector>
-#include "3rdParty/d2xx/include/ftd2xx.h"
+#include "../../../3rdParty/d2xx/include/ftd2xx.h"
 
 namespace controller {
 
