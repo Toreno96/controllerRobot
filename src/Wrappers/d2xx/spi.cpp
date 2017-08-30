@@ -31,10 +31,12 @@ Spi::Bytes Spi::read(DWORD bytesCount) {
     do {
         if (attempts++ < 10000)
             ftStatus = FT_GetQueueStatus(ftHandle_, &bytesInQueue);
-        else
-            throw std::runtime_error("Spi::read failed! " +
-                    "Too much attempts of FT_GetQueueStatus." +
-                    "The most recent FT_STATUS == " + std::to_string(ftStatus));
+        else {
+            using namespace std::string_literals;
+            throw std::runtime_error("Spi::read failed! "s +
+                    "Too much attempts of FT_GetQueueStatus."s +
+                    "The most recent FT_STATUS == "s + std::to_string(ftStatus));
+        }
     }
     while (bytesInQueue < bytesCount);
 
