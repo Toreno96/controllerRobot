@@ -17,7 +17,8 @@ class Spi {
             const DWORD readTimeout;
             const DWORD writeTimeout;
         };
-        using Bytes = std::vector<uint8_t>;
+        using Byte = uint8_t;
+        using Bytes = std::vector<Byte>;
         Spi(const Config& config);
         ~Spi();
         Bytes read(DWORD bytesCount);

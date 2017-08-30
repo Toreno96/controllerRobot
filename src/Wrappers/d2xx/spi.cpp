@@ -58,7 +58,7 @@ void Spi::write(const Spi::Bytes& bytes) {
 }
 
 Spi::Bytes Spi::transfer(const Spi::Bytes& bytes) {
-    Bytes transferBytes{0x31, static_cast<uint8_t>(bytes.size() - 1), 0x00};
+    Bytes transferBytes{0x31, static_cast<Byte>(bytes.size() - 1), 0x00};
     transferBytes.insert(transferBytes.end(), bytes.begin(), bytes.end());
     setChipSelect(false);
     ftdiWrite(transferBytes);
@@ -94,11 +94,11 @@ void Spi::disableBy5ClockDivider() {
 void Spi::setClockDivisor() {
     int divisor = int(ceil((30000000.0 - double(config_.frequency)) /
             double(config_.frequency))) & 0xFFFF;
-    ftdiWrite({0x86, uint8_t(divisor & 0xFF), uint8_t((divisor >> 8) & 0xFF)});
+    ftdiWrite({0x86, Byte(divisor & 0xFF), Byte((divisor >> 8) & 0xFF)});
 }
 
 void Spi::checkMpsseOperability() {
-    for (auto command : {uint8_t(0xAA), uint8_t(0xAB)}) {
+    for (auto command : {Byte(0xAA), Byte(0xAB)}) {
         ftdiWrite({command});
         Bytes answer = read(2);
         if (answer[0] != 0xFA || answer[1] != command) {
@@ -116,7 +116,7 @@ void Spi::initializePins() {
 }
 
 void Spi::setChipSelect(bool state) {
-    ftdiWrite({0x80, static_cast<uint8_t>(0x02 | ((state & 1) << 5)), 0x23});
+    ftdiWrite({0x80, static_cast<Byte>(0x02 | ((state & 1) << 5)), 0x23});
 }
 
 } // namespace controller
