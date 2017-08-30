@@ -1,5 +1,6 @@
 CMakeLists.txt.user
 build/
+notes/unversioned/
 spikes/unversioned/
 .vscode/
 *.out
