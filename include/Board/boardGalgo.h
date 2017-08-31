@@ -31,8 +31,7 @@ class BoardGalgo : public Board {
     public:
         struct Config {
 
-                Config(){
-                }
+                Config() = delete;
 
                 Config(std::string configFilename);
 
@@ -54,7 +53,7 @@ class BoardGalgo : public Board {
                     const std::string &leftLegsDevPath,
                     int baudRate, uint8_t torqueEnable = 1 );
 
-        BoardGalgo(std::string configFilename);
+        BoardGalgo(const Config& config);
 
         ~BoardGalgo();
 
@@ -345,7 +344,6 @@ class BoardGalgo : public Board {
         void setTorque( int legNo, const std::vector< uint8_t >& boolean );
         void setTorque( const std::vector< uint8_t >& boolean );
 
-        Config config;
         tPortHandler rightLegs_;
         tPortHandler leftLegs_;
         std::map< int, tPortHandler > portHandlersByLegNumber_;

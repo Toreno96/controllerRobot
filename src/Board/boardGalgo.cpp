@@ -38,20 +38,8 @@ BoardGalgo::BoardGalgo( const std::string &rightLegsDevPath,
     setTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, torqueEnable ) );
 }
 
-BoardGalgo::BoardGalgo(std::string configFilename) :
-        Board( "Board Galgo", TYPE_GALGO ),
-        config(configFilename),
-        rightLegs_( dynamixel::PortHandler::getPortHandler(
-                           config.rightLegsDevPath.c_str() ) ),
-        leftLegs_( dynamixel::PortHandler::getPortHandler(
-                           config.leftLegsDevPath.c_str() ) ),
-        packetHandler_( dynamixel::PacketHandler::getPacketHandler(
-                                PROTOCOL_VERSION ) ) {
-    preparePortHandler( rightLegs_, config.baudRate );
-    preparePortHandler( leftLegs_, config.baudRate );
-    preparePortHandlersByLegNumberMap();
-    setTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, 1 ) );
-}
+BoardGalgo::BoardGalgo(const BoardGalgo::Config& config) : BoardGalgo(
+        config.rightLegsDevPath, config.leftLegsDevPath, config.baudRate) {}
 
 //------------------------------------------------------------------------------
 BoardGalgo::Config::Config(std::string configFilename) {
@@ -513,7 +501,7 @@ Board* createBoardGalgo( const std::string &rightLegsDevPath,
 }
 
 Board* createBoardGalgo(std::string configFilename) {
-    boardGalgo.reset( new BoardGalgo(configFilename) );
+    boardGalgo.reset( new BoardGalgo(BoardGalgo::Config(configFilename)) );
     return boardGalgo.get();
 }
 
