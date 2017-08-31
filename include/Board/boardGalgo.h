@@ -34,9 +34,7 @@ class BoardGalgo : public Board {
                 Config(){
                 }
 
-                Config(std::string configFilename) {
-                    load(configFilename);
-                }
+                Config(std::string configFilename);
 
                 void load(std::string configFilename);
 

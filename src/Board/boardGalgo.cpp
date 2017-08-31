@@ -54,6 +54,10 @@ BoardGalgo::BoardGalgo(std::string configFilename) :
 }
 
 //------------------------------------------------------------------------------
+BoardGalgo::Config::Config(std::string configFilename) {
+    load(configFilename);
+}
+
 void BoardGalgo::Config::load(std::string configFilename){
     tinyxml2::XMLDocument configSrv;
     configSrv.LoadFile(std::string("../../resources/" + configFilename).c_str());
