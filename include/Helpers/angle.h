@@ -14,13 +14,14 @@
 
 namespace controller {
 
-template< typename T, int Dynamixel, int Radians >
+template< typename T, int Dynamixel, int Radians, int Spi >
 struct AngleUnit {
     using value_type = T;
 };
 
-using tAngleUnitDynamixel = AngleUnit< uint32_t, 1, 0 >;
-using tAngleUnitRadians = AngleUnit< double, 0, 1 >;
+using tAngleUnitDynamixel = AngleUnit< uint32_t, 1, 0, 0 >;
+using tAngleUnitRadians = AngleUnit< double, 0, 1, 0 >;
+using tAngleUnitSpi = AngleUnit< uint16_t, 0, 0, 1 >;
 
 template< typename U >
 class Angle {
@@ -40,6 +41,10 @@ class Angle {
         operator Angle< typename std::enable_if_t<
                 !std::is_same< T, tAngleUnitRadians >::value,
                 tAngleUnitRadians > >();
+        template< typename T = U >
+        operator Angle< typename std::enable_if_t<
+                !std::is_same< T, tAngleUnitSpi >::value,
+                tAngleUnitSpi > >();
 
         static constexpr typename U::value_type full();
 };
