@@ -29,18 +29,6 @@ Board* createBoardGalgo(std::string configFilename);
 
 class BoardGalgo : public Board {
     public:
-        using Ptr = std::unique_ptr< BoardGalgo >;
-        static const uint8_t OPERATINGMODE_POSITION;
-        static const uint8_t OPERATINGMODE_CURRENT_BASED_POSITION;
-
-        BoardGalgo( const std::string &rightLegsDevPath,
-                    const std::string &leftLegsDevPath,
-                    int baudRate, uint8_t torqueEnable = 1 );
-
-        BoardGalgo(std::string configFilename);
-
-        ~BoardGalgo();
-
         class Config {
             public:
 
@@ -60,6 +48,18 @@ class BoardGalgo : public Board {
                 /// baudrate
                 int baudRate;
         };
+
+        using Ptr = std::unique_ptr< BoardGalgo >;
+        static const uint8_t OPERATINGMODE_POSITION;
+        static const uint8_t OPERATINGMODE_CURRENT_BASED_POSITION;
+
+        BoardGalgo( const std::string &rightLegsDevPath,
+                    const std::string &leftLegsDevPath,
+                    int baudRate, uint8_t torqueEnable = 1 );
+
+        BoardGalgo(std::string configFilename);
+
+        ~BoardGalgo();
 
         void setLED(int legNo, int jointNo, uint8_t boolean);
         void setLED(int legNo, const std::vector<uint8_t>& boolean);
@@ -308,7 +308,6 @@ class BoardGalgo : public Board {
         void setDefault(void);
 
     private:
-        Config config;
         using tPortHandler = std::shared_ptr< dynamixel::PortHandler >;
         using tPacketHandler = std::shared_ptr< dynamixel::PacketHandler >;
         using tId = dynamixel3wrapper::tId;
@@ -349,6 +348,7 @@ class BoardGalgo : public Board {
         void setTorque( int legNo, const std::vector< uint8_t >& boolean );
         void setTorque( const std::vector< uint8_t >& boolean );
 
+        Config config;
         tPortHandler rightLegs_;
         tPortHandler leftLegs_;
         std::map< int, tPortHandler > portHandlersByLegNumber_;
