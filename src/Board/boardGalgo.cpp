@@ -42,11 +42,11 @@ BoardGalgo::BoardGalgo(const BoardGalgo::Config& config) : BoardGalgo(
         config.rightLegsDevPath, config.leftLegsDevPath, config.baudRate) {}
 
 //------------------------------------------------------------------------------
-BoardGalgo::Config::Config(std::string configFilename) {
+BoardGalgo::Config::Config(const std::string& configFilename) {
     load(configFilename);
 }
 
-void BoardGalgo::Config::load(std::string configFilename){
+void BoardGalgo::Config::load(const std::string& configFilename){
     tinyxml2::XMLDocument configSrv;
     configSrv.LoadFile(std::string("../../resources/" + configFilename).c_str());
     if (configSrv.ErrorID())
@@ -500,7 +500,7 @@ Board* createBoardGalgo( const std::string &rightLegsDevPath,
     return boardGalgo.get();
 }
 
-Board* createBoardGalgo(std::string configFilename) {
+Board* createBoardGalgo(const std::string& configFilename) {
     boardGalgo.reset( new BoardGalgo(BoardGalgo::Config(configFilename)) );
     return boardGalgo.get();
 }

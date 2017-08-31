@@ -25,7 +25,7 @@ Board* createBoardGalgo( const std::string &rightLegsDevPath,
                          const std::string &leftLegsDevPath,
                          int baudRate );
 
-Board* createBoardGalgo(std::string configFilename);
+Board* createBoardGalgo(const std::string& configFilename);
 
 class BoardGalgo : public Board {
     public:
@@ -33,9 +33,9 @@ class BoardGalgo : public Board {
 
                 Config() = delete;
 
-                Config(std::string configFilename);
+                Config(const std::string& configFilename);
 
-                void load(std::string configFilename);
+                void load(const std::string& configFilename);
 
                 /// rightLegsDevPath
                 std::string rightLegsDevPath;
