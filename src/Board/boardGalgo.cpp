@@ -50,7 +50,7 @@ void BoardGalgo::Config::load(const std::string& configFilename){
     tinyxml2::XMLDocument configSrv;
     configSrv.LoadFile(std::string("../../resources/" + configFilename).c_str());
     if (configSrv.ErrorID())
-        std::cout << "unable to load board Galgo config file.\n";
+        throw std::runtime_error("Unable to load board Galgo config file");
     rightLegsDevPath = configSrv.FirstChildElement("boardGalgo")->FirstChildElement("parameters")->Attribute("rightLegsDevPath");
     leftLegsDevPath = configSrv.FirstChildElement("boardGalgo")->FirstChildElement("parameters")->Attribute("leftLegsDevPath");
     configSrv.FirstChildElement("boardGalgo")->FirstChildElement("parameters")->QueryIntAttribute("baudRate",&baudRate);
