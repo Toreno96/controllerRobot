@@ -17,13 +17,16 @@
 #include "Helpers/current.h"
 #include "Helpers/speed.h"
 #include "Wrappers/dynamixel3/globals.h"
+#include "Wrappers/d2xx/spi.h"
 
 namespace controller {
 
 /// create a single board controller (with usb2dynamixel)
 Board* createBoardGalgo( const std::string &rightLegsDevPath,
                          const std::string &leftLegsDevPath,
-                         int baudRate );
+                         int baudRate,
+                         const std::map<int, d2xxwrapper::Spi::Config>&
+                                spiConfigsByLegNumber);
 
 Board* createBoardGalgo(const std::string& configFilename);
 
@@ -43,6 +46,7 @@ class BoardGalgo : public Board {
                 std::string leftLegsDevPath;
                 /// baudrate
                 int baudRate;
+                // TO-DO Add support for SPI config (1)
         };
 
         using Ptr = std::unique_ptr< BoardGalgo >;
@@ -51,7 +55,10 @@ class BoardGalgo : public Board {
 
         BoardGalgo( const std::string &rightLegsDevPath,
                     const std::string &leftLegsDevPath,
-                    int baudRate, uint8_t torqueEnable = 1 );
+                    int baudRate,
+                    const std::map<int, d2xxwrapper::Spi::Config>&
+                            spiConfigsByLegNumber,
+                    uint8_t torqueEnable = 1);
 
         BoardGalgo(const Config& config);
 
@@ -66,7 +73,7 @@ class BoardGalgo : public Board {
         void setOperatingMode(const std::vector<uint8_t>& operatingMode);
 
         void reboot( int legNo, int jointNo );
-        
+
        /**
         * \brief Set reference position value for servomotor.
         * \param legNo Leg number.
@@ -310,6 +317,7 @@ class BoardGalgo : public Board {
         using tAddress = dynamixel3wrapper::tAddress;
         using tAngleDynamixel = Angle< tAngleUnitDynamixel >;
         using tAngleRadians = Angle< tAngleUnitRadians >;
+        using tAngleSpi = Angle< tAngleUnitSpi >;
         using tCurrentDynamixel = Current< tCurrentUnitDynamixel >;
         using tCurrentInterval = Current< tCurrentUnitInterval >;
         using tCurrentAmpers = Current< tCurrentUnitAmpers >;
@@ -333,6 +341,9 @@ class BoardGalgo : public Board {
 
         void preparePortHandler( const tPortHandler& portHandler, int baudRate );
         void preparePortHandlersByLegNumberMap();
+        void prepareSpiByLegNumberMap(
+                const std::map<int, d2xxwrapper::Spi::Config>&
+                        spiConfigsByLegNumber);
 
         tId convert( int legNo, int jointNo );
         std::vector< tId > getSingleLegIds( int legNo );
@@ -344,9 +355,12 @@ class BoardGalgo : public Board {
         void setTorque( int legNo, const std::vector< uint8_t >& boolean );
         void setTorque( const std::vector< uint8_t >& boolean );
 
+        tAngleSpi readSpiPosition(int legNo);
+
         tPortHandler rightLegs_;
         tPortHandler leftLegs_;
         std::map< int, tPortHandler > portHandlersByLegNumber_;
+        std::map<int, d2xxwrapper::Spi> spiByLegNumber_;
         tPacketHandler packetHandler_;
 };
 

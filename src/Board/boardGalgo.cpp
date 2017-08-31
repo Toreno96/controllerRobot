@@ -24,22 +24,29 @@ const uint8_t BoardGalgo::OPERATINGMODE_CURRENT_BASED_POSITION = 5;
 
 BoardGalgo::BoardGalgo( const std::string &rightLegsDevPath,
                         const std::string &leftLegsDevPath,
-                        int baudRate, uint8_t torqueEnable ) :
+                        int baudRate,
+                        const std::map<int, d2xxwrapper::Spi::Config>&
+                                spiConfigsByLegNumber,
+                        uint8_t torqueEnable ) :
         Board( "Board Galgo", TYPE_GALGO ),
-        rightLegs_( dynamixel::PortHandler::getPortHandler(
-                           rightLegsDevPath.c_str() ) ),
-        leftLegs_( dynamixel::PortHandler::getPortHandler(
-                           leftLegsDevPath.c_str() ) ),
+        // rightLegs_( dynamixel::PortHandler::getPortHandler(
+        //                    rightLegsDevPath.c_str() ) ),
+        // leftLegs_( dynamixel::PortHandler::getPortHandler(
+        //                    leftLegsDevPath.c_str() ) ),
         packetHandler_( dynamixel::PacketHandler::getPacketHandler(
                                 PROTOCOL_VERSION ) ) {
-    preparePortHandler( rightLegs_, baudRate );
-    preparePortHandler( leftLegs_, baudRate );
-    preparePortHandlersByLegNumberMap();
+    // preparePortHandler( rightLegs_, baudRate );
+    // preparePortHandler( leftLegs_, baudRate );
+    // preparePortHandlersByLegNumberMap();
+    prepareSpiByLegNumberMap(spiConfigsByLegNumber);
     setTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, torqueEnable ) );
 }
 
 BoardGalgo::BoardGalgo(const BoardGalgo::Config& config) : BoardGalgo(
-        config.rightLegsDevPath, config.leftLegsDevPath, config.baudRate) {}
+        config.rightLegsDevPath, config.leftLegsDevPath, config.baudRate,
+        // TEMPORARY; See (1) in 'boardGalgo.h'
+        {{0, {0, 0, 0, 0}}, {1, {1, 0, 0, 0}}, {2, {2, 0, 0, 0}},
+                {3, {3, 0, 0, 0}}}) {}
 
 //------------------------------------------------------------------------------
 BoardGalgo::Config::Config(const std::string& configFilename) {
@@ -68,6 +75,24 @@ void BoardGalgo::preparePortHandlersByLegNumberMap() {
     portHandlersByLegNumber_.insert( std::make_pair( 2, rightLegs_ ) );
     portHandlersByLegNumber_.insert( std::make_pair( 3, leftLegs_ ) );
     portHandlersByLegNumber_.insert( std::make_pair( 4, leftLegs_ ) );
+}
+void BoardGalgo::prepareSpiByLegNumberMap(
+        const std::map<int, d2xxwrapper::Spi::Config>& spiConfigsByLegNumber) {
+    spiByLegNumber_ = {{1, d2xxwrapper::Spi({0, 15'000, 0, 0})}};
+            // {2, d2xxwrapper::Spi({1, 15'000, 0, 0})}};
+    // int i = 0;
+    // for (auto element : spiConfigsByLegNumber) {
+    //     if (i++ < 2) {
+    //         spiByLegNumber_.insert(std::make_pair(element.first + 1,
+    //                 d2xxwrapper::Spi(element.second)));
+    //     }
+    //     else
+    //         break;
+    // }
+    for (int j = 0; j < 1000; ++j) {
+        std::cout << readSpiPosition(1).val() << '\n';
+                // << readSpiPosition(2).val() << '\n';
+    }
 }
 BoardGalgo::~BoardGalgo() {
   rightLegs_->closePort();
@@ -493,10 +518,32 @@ void BoardGalgo::setDefault(void){
     throw NotSupportedException();
 }
 
+BoardGalgo::tAngleSpi BoardGalgo::readSpiPosition(int legNo) {
+    d2xxwrapper::Spi::Bytes writtenBytes{0xAA};
+    writtenBytes.insert(writtenBytes.end(), 9, 0xFF);
+    for (unsigned attempts = 0; attempts < 10; ++attempts) {
+        const auto receivedBytes =
+                spiByLegNumber_.at(legNo).transfer(writtenBytes);
+        auto converter =
+            [&receivedBytes](auto firstBytePosition, auto secondBytePosition) {
+                return (receivedBytes[firstBytePosition] & 0x7F) << 8 |
+                    (receivedBytes[secondBytePosition] & 0xFF);
+            };
+        auto data = converter(2, 3);
+        auto negatedData = converter(4, 5);
+        if (data == (~negatedData & 0x7FFF))
+            return tAngleSpi(static_cast<uint16_t>(data));
+    }
+    throw std::runtime_error("Data read from SPI is invalid");
+}
+
 Board* createBoardGalgo( const std::string &rightLegsDevPath,
                          const std::string &leftLegsDevPath,
-                         int baudRate ) {
-    boardGalgo.reset( new BoardGalgo( rightLegsDevPath, leftLegsDevPath, baudRate ) );
+                         int baudRate,
+                         const std::map<int, d2xxwrapper::Spi::Config>&
+                                spiConfigsByLegNumber) {
+    boardGalgo.reset( new BoardGalgo( rightLegsDevPath, leftLegsDevPath,
+            baudRate, spiConfigsByLegNumber ) );
     return boardGalgo.get();
 }
 
