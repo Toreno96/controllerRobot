@@ -29,8 +29,7 @@ Board* createBoardGalgo(std::string configFilename);
 
 class BoardGalgo : public Board {
     public:
-        class Config {
-            public:
+        struct Config {
 
                 Config(){
                 }
