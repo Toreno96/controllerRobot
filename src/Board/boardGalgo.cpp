@@ -512,8 +512,9 @@ BoardGalgo::tAngleSpi BoardGalgo::readSpiPosition(int legNo) {
     for (unsigned attempts = 0; attempts < 10; ++attempts) {
         const auto receivedBytes =
                 spiByLegNumber_.at(legNo).transfer(writtenBytes);
+        using SizeType = decltype(receivedBytes)::size_type;
         auto converter =
-            [&receivedBytes](auto firstBytePosition, auto secondBytePosition) {
+            [&receivedBytes](SizeType firstBytePosition, SizeType secondBytePosition) {
                 return (receivedBytes[firstBytePosition] & 0x7F) << 8 |
                     (receivedBytes[secondBytePosition] & 0xFF);
             };
