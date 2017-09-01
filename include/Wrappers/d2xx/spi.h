@@ -19,8 +19,13 @@ class Spi {
         };
         using Byte = uint8_t;
         using Bytes = std::vector<Byte>;
+        Spi() = delete;
         Spi(const Config& config);
         ~Spi();
+        Spi(const Spi&) = delete;
+        Spi(Spi&& other);
+        Spi& operator=(const Spi&) = delete;
+        Spi& operator=(Spi&& other);
         Bytes read(DWORD bytesCount);
         void write(const Bytes& bytes);
         Bytes transfer(const Bytes& bytes);

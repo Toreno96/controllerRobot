@@ -78,20 +78,9 @@ void BoardGalgo::preparePortHandlersByLegNumberMap() {
 }
 void BoardGalgo::prepareSpiByLegNumberMap(
         const std::map<int, d2xxwrapper::Spi::Config>& spiConfigsByLegNumber) {
-    spiByLegNumber_ = {{1, d2xxwrapper::Spi({0, 15'000, 0, 0})}};
-            // {2, d2xxwrapper::Spi({1, 15'000, 0, 0})}};
-    // int i = 0;
-    // for (auto element : spiConfigsByLegNumber) {
-    //     if (i++ < 2) {
-    //         spiByLegNumber_.insert(std::make_pair(element.first + 1,
-    //                 d2xxwrapper::Spi(element.second)));
-    //     }
-    //     else
-    //         break;
-    // }
-    for (int j = 0; j < 1000; ++j) {
-        std::cout << readSpiPosition(1).val() << '\n';
-                // << readSpiPosition(2).val() << '\n';
+    for (auto element : spiConfigsByLegNumber) {
+        spiByLegNumber_.emplace(element.first + 1,
+                d2xxwrapper::Spi(element.second));
     }
 }
 BoardGalgo::~BoardGalgo() {

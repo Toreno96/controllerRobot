@@ -1,6 +1,7 @@
 #include <cmath>
 #include <stdexcept>
 #include <string>
+#include <utility>
 #include "Wrappers/d2xx/spi.h"
 
 namespace controller {
@@ -22,6 +23,15 @@ Spi::Spi(const Config& config) : ftHandle_(nullptr) {
 Spi::~Spi() {
     if (ftHandle_ != nullptr)
         FT_Close(ftHandle_);
+}
+
+Spi::Spi(Spi&& other) : ftHandle_(other.ftHandle_) {
+    other.ftHandle_ = nullptr;
+}
+
+Spi& Spi::operator=(Spi&& other) {
+    std::swap(ftHandle_, other.ftHandle_);
+    return *this;
 }
 
 Spi::Bytes Spi::read(DWORD bytesCount) {
