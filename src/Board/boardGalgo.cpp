@@ -45,8 +45,7 @@ BoardGalgo::BoardGalgo( const std::string &rightLegsDevPath,
 BoardGalgo::BoardGalgo(const BoardGalgo::Config& config) : BoardGalgo(
         config.rightLegsDevPath, config.leftLegsDevPath, config.baudRate,
         // TEMPORARY; See (1) in 'boardGalgo.h'
-        {{0, {0, 0, 0, 0}}, {1, {1, 0, 0, 0}}, {2, {2, 0, 0, 0}},
-                {3, {3, 0, 0, 0}}}) {}
+        {}) {}
 
 //------------------------------------------------------------------------------
 BoardGalgo::Config::Config(const std::string& configFilename) {
