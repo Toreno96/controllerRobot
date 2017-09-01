@@ -29,15 +29,15 @@ BoardGalgo::BoardGalgo( const std::string &rightLegsDevPath,
                                 spiConfigsByLegNumber,
                         uint8_t torqueEnable ) :
         Board( "Board Galgo", TYPE_GALGO ),
-        // rightLegs_( dynamixel::PortHandler::getPortHandler(
-        //                    rightLegsDevPath.c_str() ) ),
-        // leftLegs_( dynamixel::PortHandler::getPortHandler(
-        //                    leftLegsDevPath.c_str() ) ),
+        rightLegs_( dynamixel::PortHandler::getPortHandler(
+                           rightLegsDevPath.c_str() ) ),
+        leftLegs_( dynamixel::PortHandler::getPortHandler(
+                           leftLegsDevPath.c_str() ) ),
         packetHandler_( dynamixel::PacketHandler::getPacketHandler(
                                 PROTOCOL_VERSION ) ) {
-    // preparePortHandler( rightLegs_, baudRate );
-    // preparePortHandler( leftLegs_, baudRate );
-    // preparePortHandlersByLegNumberMap();
+    preparePortHandler( rightLegs_, baudRate );
+    preparePortHandler( leftLegs_, baudRate );
+    preparePortHandlersByLegNumberMap();
     prepareSpiByLegNumberMap(spiConfigsByLegNumber);
     setTorque( std::vector< uint8_t >( 4 * JOINTS_COUNT_IN_SINGLE_LEG, torqueEnable ) );
 }
