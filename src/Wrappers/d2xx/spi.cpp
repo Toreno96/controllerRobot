@@ -8,13 +8,13 @@ namespace controller {
 namespace d2xxwrapper {
 
 
-Spi::Spi(const Config& config) : config_(config), ftHandle_(nullptr) {
-    FT_STATUS ftStatus = FT_Open(config_.port, &ftHandle_);
+Spi::Spi(const Config& config) : ftHandle_(nullptr) {
+    FT_STATUS ftStatus = FT_Open(config.port, &ftHandle_);
     if (ftStatus != FT_OK) {
-        throw std::runtime_error("FT_Open(" + std::to_string(config_.port) +
+        throw std::runtime_error("FT_Open(" + std::to_string(config.port) +
                 ") failed with FT_STATUS == " + std::to_string(ftStatus));
     }
-    initializeMpsse();
+    initializeMpsse(config);
     disconnectLoopbackMode();
     initializePins();
 }
@@ -78,13 +78,13 @@ void Spi::ftdiWrite(const Spi::Bytes& bytes) {
     }
 }
 
-void Spi::initializeMpsse() {
+void Spi::initializeMpsse(const Config& config) {
     FT_ResetDevice(ftHandle_);
     FT_SetBitMode(ftHandle_, 0xBB, 2);
     FT_SetLatencyTimer(ftHandle_, 16);
-    FT_SetTimeouts(ftHandle_, config_.readTimeout, config_.writeTimeout);
+    FT_SetTimeouts(ftHandle_, config.readTimeout, config.writeTimeout);
     disableBy5ClockDivider();
-    setClockDivisor();
+    setClockDivisor(config);
     checkMpsseOperability();
 }
 
@@ -92,9 +92,9 @@ void Spi::disableBy5ClockDivider() {
     ftdiWrite({0x8A});
 }
 
-void Spi::setClockDivisor() {
-    int divisor = int(ceil((30000000.0 - double(config_.frequency)) /
-            double(config_.frequency))) & 0xFFFF;
+void Spi::setClockDivisor(const Config& config) {
+    int divisor = int(ceil((30000000.0 - double(config.frequency)) /
+            double(config.frequency))) & 0xFFFF;
     ftdiWrite({0x86, Byte(divisor & 0xFF), Byte((divisor >> 8) & 0xFF)});
 }
 

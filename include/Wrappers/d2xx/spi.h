@@ -26,14 +26,13 @@ class Spi {
         Bytes transfer(const Bytes& bytes);
     private:
         void ftdiWrite(const Bytes& bytes);
-        void initializeMpsse();
+        void initializeMpsse(const Config& config);
         void disableBy5ClockDivider();
-        void setClockDivisor();
+        void setClockDivisor(const Config& config);
         void checkMpsseOperability();
         void disconnectLoopbackMode();
         void initializePins();
         void setChipSelect(bool state);
-        const Config config_;
         FT_HANDLE ftHandle_;
 };
 
