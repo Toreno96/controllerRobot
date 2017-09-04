@@ -369,6 +369,10 @@ unsigned int BoardGalgo::setTorqueLimit(const std::vector<double>& torqueLimit){
 unsigned int BoardGalgo::readPosition(int legNo, int jointNo, double& angle){
     ++legNo;
     ++jointNo;
+    if (jointNo == 4) {
+        angle = readSpiPosition(legNo).val();
+        return 0;
+    }
     uint32_t presentPosition;
     uint8_t error;
     int result = packetHandler_->read4ByteTxRx(portHandlersByLegNumber_.at( legNo ).get(), convert( legNo, jointNo ), PRESENT_POSITION, &presentPosition, &error);
@@ -385,6 +389,8 @@ unsigned int BoardGalgo::readPosition(int legNo, std::vector<double>& angle){
     angle = reader.read< double >( receivers, []( uint32_t value ){
         return tAngleRadians( tAngleDynamixel( value ) ).val() - M_PI;
     } );
+    // Insert position of the foot
+    angle.push_back(readSpiPosition(legNo).val());
     return 0;
 }
 
@@ -398,6 +404,15 @@ unsigned int BoardGalgo::readPosition(std::vector<double>& angle){
     };
     angle = unsortedMerge( rightReader.read< double >( rightReceivers, converter ),
             leftReader.read< double >( leftReceivers, converter ) );
+    // Insert position of the feet
+    int legNo = 1;
+    for (auto it = std::next(angle.begin(), JOINTS_COUNT_IN_SINGLE_LEG);
+            it != angle.end(); ++legNo) {
+        it = std::next(
+                angle.insert(it, readSpiPosition(legNo).val()),
+                JOINTS_COUNT_IN_SINGLE_LEG + 1);
+    }
+    angle.insert(angle.end(), readSpiPosition(legNo).val());
     return 0;
 }
 
