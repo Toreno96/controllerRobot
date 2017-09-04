@@ -34,11 +34,12 @@ BoardGalgo::BoardGalgo(const BoardGalgo::Config& config):
     preparePortHandler(leftLegs_,  config.baudRate);
     preparePortHandlersByLegNumberMap();
     prepareSpiByLegNumberMap(config.spiDevices);
-    setTorque(std::vector<uint8_t>(4 * JOINTS_COUNT_IN_SINGLE_LEG, 0));
+    setTorque(std::vector<uint8_t>(4 * JOINTS_COUNT_IN_SINGLE_LEG, config.torqueEnable));
+    spiReadAttempts_ = config.spiReadAttempts;
 }
 
 BoardGalgo::Config BoardGalgo::Config::load(const std::string& configFilename){
-    Config conf;
+    Config conf{"", "", 0, 0, 0, {}};
     tinyxml2::XMLDocument configSrv;
 
     configSrv.LoadFile(std::string("../../resources/" + configFilename).c_str());
@@ -46,15 +47,19 @@ BoardGalgo::Config BoardGalgo::Config::load(const std::string& configFilename){
         throw std::runtime_error("Unable to load board Galgo config file");
 
     conf.rightLegsDevPath = configSrv.FirstChildElement("boardGalgo")->FirstChildElement("parameters")->Attribute("rightLegsDevPath");
-    conf.leftLegsDevPath = configSrv.FirstChildElement("boardGalgo")->FirstChildElement("parameters")->Attribute("leftLegsDevPath");
-    configSrv.FirstChildElement("boardGalgo")->FirstChildElement("parameters")->QueryIntAttribute("baudRate",&conf.baudRate);
+    conf.leftLegsDevPath  = configSrv.FirstChildElement("boardGalgo")->FirstChildElement("parameters")->Attribute("leftLegsDevPath");
+    conf.baudRate         = configSrv.FirstChildElement("boardGalgo")->FirstChildElement("parameters")->IntAttribute("baudRate");
+    conf.torqueEnable     = static_cast<uint8_t>(configSrv.FirstChildElement("boardGalgo")->FirstChildElement("parameters")->IntAttribute("torqueEnable"));
+    conf.spiReadAttempts  = configSrv.FirstChildElement("boardGalgo")->FirstChildElement("parameters")->UnsignedAttribute("spiReadAttempts");
+
     tinyxml2::XMLElement* node = configSrv.FirstChildElement("boardGalgo")->FirstChildElement("spiDevices")->FirstChildElement();
 
     int legNumber;
 
     while(node){
+
         if(string(node->Value()) == "spiDevice"){
-            legNumber=node->IntAttribute("legNumber");
+            legNumber = node->IntAttribute("legNumber");
 
             d2xxwrapper::Spi::Config spiconf{
                 node->IntAttribute("port"),
@@ -65,6 +70,7 @@ BoardGalgo::Config BoardGalgo::Config::load(const std::string& configFilename){
 
             conf.spiDevices.emplace(legNumber, spiconf);
         }
+
         node = node->NextSiblingElement();
     }
 
@@ -518,7 +524,7 @@ void BoardGalgo::setDefault(void){
 BoardGalgo::tAngleSpi BoardGalgo::readSpiPosition(int legNo) {
     d2xxwrapper::Spi::Bytes writtenBytes{0xAA};
     writtenBytes.insert(writtenBytes.end(), 9, 0xFF);
-    for (unsigned attempts = 0; attempts < 10; ++attempts) {
+    for (unsigned attempts = 0; attempts < spiReadAttempts_; ++attempts) {
         const auto receivedBytes =
                 spiByLegNumber_.at(legNo).transfer(writtenBytes);
         using SizeType = decltype(receivedBytes)::size_type;

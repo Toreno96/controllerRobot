@@ -27,6 +27,8 @@ Board* createBoardGalgo(const std::string& configFilename);
 class BoardGalgo : public Board {
     public:
         struct Config {
+            Config() = delete;
+
             static Config load(const std::string& configFilename);
 
             /// rightLegsDevPath
@@ -35,6 +37,8 @@ class BoardGalgo : public Board {
             std::string leftLegsDevPath;
             /// baudrate
             int baudRate;
+            uint8_t torqueEnable;
+            unsigned spiReadAttempts;
             /// SPI
             std::map<int, d2xxwrapper::Spi::Config> spiDevices;
         };
@@ -345,6 +349,7 @@ class BoardGalgo : public Board {
         std::map< int, tPortHandler > portHandlersByLegNumber_;
         std::map<int, d2xxwrapper::Spi> spiByLegNumber_;
         tPacketHandler packetHandler_;
+        unsigned spiReadAttempts_;
 };
 
 } // namespace controller
