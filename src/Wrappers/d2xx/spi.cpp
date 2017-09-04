@@ -74,8 +74,11 @@ Spi::Bytes Spi::read(DWORD bytesCount) {
 }
 
 void Spi::write(const Spi::Bytes& bytes) {
-    throw std::runtime_error("Not implemented yet");
-    bytes.size();
+    Bytes writeBytes{0x11, static_cast<Byte>(bytes.size() - 1), 0x00};
+    writeBytes.insert(writeBytes.end(), bytes.begin(), bytes.end());
+    setChipSelect(false);
+    ftdiWrite(writeBytes);
+    setChipSelect(true);
 }
 
 Spi::Bytes Spi::transfer(const Spi::Bytes& bytes) {
