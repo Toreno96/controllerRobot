@@ -22,43 +22,26 @@
 namespace controller {
 
 /// create a single board controller (with usb2dynamixel)
-Board* createBoardGalgo( const std::string &rightLegsDevPath,
-                         const std::string &leftLegsDevPath,
-                         int baudRate,
-                         const std::map<int, d2xxwrapper::Spi::Config>&
-                                spiConfigsByLegNumber);
-
 Board* createBoardGalgo(const std::string& configFilename);
 
 class BoardGalgo : public Board {
     public:
         struct Config {
+            static Config load(const std::string& configFilename);
 
-                Config() = delete;
-
-                Config(const std::string& configFilename);
-
-                void load(const std::string& configFilename);
-
-                /// rightLegsDevPath
-                std::string rightLegsDevPath;
-                /// rightLegsDevPath
-                std::string leftLegsDevPath;
-                /// baudrate
-                int baudRate;
-                // TO-DO Add support for SPI config (1)
+            /// rightLegsDevPath
+            std::string rightLegsDevPath;
+            /// rightLegsDevPath
+            std::string leftLegsDevPath;
+            /// baudrate
+            int baudRate;
+            /// SPI
+            std::map<int, d2xxwrapper::Spi::Config> spiDevices;
         };
 
         using Ptr = std::unique_ptr< BoardGalgo >;
         static const uint8_t OPERATINGMODE_POSITION;
         static const uint8_t OPERATINGMODE_CURRENT_BASED_POSITION;
-
-        BoardGalgo( const std::string &rightLegsDevPath,
-                    const std::string &leftLegsDevPath,
-                    int baudRate,
-                    const std::map<int, d2xxwrapper::Spi::Config>&
-                            spiConfigsByLegNumber,
-                    uint8_t torqueEnable = 1);
 
         BoardGalgo(const Config& config);
 
