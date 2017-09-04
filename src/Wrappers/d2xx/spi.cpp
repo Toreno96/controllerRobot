@@ -8,28 +8,37 @@ namespace controller {
 
 namespace d2xxwrapper {
 
+std::unordered_set<int> Spi::usedPorts_;
 
-Spi::Spi(const Config& config) : ftHandle_(nullptr) {
-    FT_STATUS ftStatus = FT_Open(config.port, &ftHandle_);
+Spi::Spi(const Config& config) : port_(config.port), ftHandle_(nullptr) {
+    if (usedPorts_.find(port_) != usedPorts_.end()) {
+        throw std::runtime_error("This port(" + std::to_string(port_) +
+                ") is already in use");
+    }
+    FT_STATUS ftStatus = FT_Open(port_, &ftHandle_);
     if (ftStatus != FT_OK) {
-        throw std::runtime_error("FT_Open(" + std::to_string(config.port) +
+        throw std::runtime_error("FT_Open(" + std::to_string(port_) +
                 ") failed with FT_STATUS == " + std::to_string(ftStatus));
     }
     initializeMpsse(config);
     disconnectLoopbackMode();
     initializePins();
+    usedPorts_.insert(port_);
 }
 
 Spi::~Spi() {
-    if (ftHandle_ != nullptr)
+    if (ftHandle_ != nullptr) {
         FT_Close(ftHandle_);
+        usedPorts_.erase(port_);
+    }
 }
 
-Spi::Spi(Spi&& other) : ftHandle_(other.ftHandle_) {
+Spi::Spi(Spi&& other) : port_(other.port_), ftHandle_(other.ftHandle_) {
     other.ftHandle_ = nullptr;
 }
 
 Spi& Spi::operator=(Spi&& other) {
+    std::swap(port_, other.port_);
     std::swap(ftHandle_, other.ftHandle_);
     return *this;
 }
@@ -65,8 +74,11 @@ Spi::Bytes Spi::read(DWORD bytesCount) {
 }
 
 void Spi::write(const Spi::Bytes& bytes) {
-    throw std::runtime_error("Not implemented yet");
-    bytes.size();
+    Bytes writeBytes{0x11, static_cast<Byte>(bytes.size() - 1), 0x00};
+    writeBytes.insert(writeBytes.end(), bytes.begin(), bytes.end());
+    setChipSelect(false);
+    ftdiWrite(writeBytes);
+    setChipSelect(true);
 }
 
 Spi::Bytes Spi::transfer(const Spi::Bytes& bytes) {
