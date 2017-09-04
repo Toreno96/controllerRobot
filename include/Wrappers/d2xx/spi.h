@@ -2,6 +2,7 @@
 #define _WRAPPERS_D2XX_SPI_H_
 
 #include <cstdint>
+#include <unordered_set>
 #include <vector>
 #include "../../../3rdParty/d2xx/include/ftd2xx.h"
 
@@ -38,7 +39,9 @@ class Spi {
         void disconnectLoopbackMode();
         void initializePins();
         void setChipSelect(bool state);
+        int port_;
         FT_HANDLE ftHandle_;
+        static std::unordered_set<int> usedPorts_;
 };
 
 } // namespace controller
