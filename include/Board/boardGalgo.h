@@ -342,7 +342,7 @@ class BoardGalgo : public Board {
         void setTorque( int legNo, const std::vector< uint8_t >& boolean );
         void setTorque( const std::vector< uint8_t >& boolean );
 
-        tAngleSpi readSpiPosition(int legNo);
+        tAngleRadians readSpiPosition(int legNo);
 
         tPortHandler rightLegs_;
         tPortHandler leftLegs_;

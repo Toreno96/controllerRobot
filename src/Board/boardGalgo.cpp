@@ -563,7 +563,7 @@ void BoardGalgo::setDefault(void){
     throw NotSupportedException();
 }
 
-BoardGalgo::tAngleSpi BoardGalgo::readSpiPosition(int legNo) {
+BoardGalgo::tAngleRadians BoardGalgo::readSpiPosition(int legNo) {
     d2xxwrapper::Spi::Bytes writtenBytes{0xAA};
     writtenBytes.insert(writtenBytes.end(), 9, 0xFF);
     for (unsigned attempts = 0; attempts < spiReadAttempts_; ++attempts) {
@@ -578,7 +578,7 @@ BoardGalgo::tAngleSpi BoardGalgo::readSpiPosition(int legNo) {
         auto data = converter(2, 3);
         auto negatedData = converter(4, 5);
         if (data == (~negatedData & 0x7FFF))
-            return tAngleSpi(static_cast<uint16_t>(data));
+            return tAngleRadians(tAngleSpi(static_cast<uint16_t>(data)));
     }
     throw std::runtime_error("Data read from SPI is invalid");
 }
