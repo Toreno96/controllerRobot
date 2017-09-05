@@ -12,6 +12,7 @@
 #include "Board/boardGalgo.h"
 #include "Board/exceptions.h"
 #include "Helpers/algorithm.h"
+#include "Helpers/utilities.h"
 #include "Wrappers/dynamixel3/communicationResult.h"
 #include "Wrappers/dynamixel3/syncReader.h"
 #include "Wrappers/dynamixel3/syncWriter.h"
@@ -311,22 +312,34 @@ unsigned int BoardGalgo::setSpeed(const std::vector<double>& speed){
 
 unsigned int BoardGalgo::setComplianceMargin(int legNo, int jointNo, double margin){
     throw NotSupportedException();
+    INTENTIONALLY_UNUSED(legNo);
+    INTENTIONALLY_UNUSED(jointNo);
+    INTENTIONALLY_UNUSED(margin);
 }
 unsigned int BoardGalgo::setComplianceMargin(int legNo, const std::vector<double> margin){
     throw NotSupportedException();
+    INTENTIONALLY_UNUSED(legNo);
+    INTENTIONALLY_UNUSED(margin);
 }
 unsigned int BoardGalgo::setComplianceMargin(const std::vector<double> margin){
     throw NotSupportedException();
+    INTENTIONALLY_UNUSED(margin);
 }
 
 unsigned int BoardGalgo::setComplianceSlope(int legNo, int jointNo, double slope){
     throw NotSupportedException();
+    INTENTIONALLY_UNUSED(legNo);
+    INTENTIONALLY_UNUSED(jointNo);
+    INTENTIONALLY_UNUSED(slope);
 }
 unsigned int BoardGalgo::setComplianceSlope(int legNo, const std::vector<double>& slope){
     throw NotSupportedException();
+    INTENTIONALLY_UNUSED(legNo);
+    INTENTIONALLY_UNUSED(slope);
 }
 unsigned int BoardGalgo::setComplianceSlope(const std::vector<double>& slope){
     throw NotSupportedException();
+    INTENTIONALLY_UNUSED(slope);
 }
 
 unsigned int BoardGalgo::setTorqueLimit(int legNo, int jointNo, double torqueLimit){
@@ -418,23 +431,31 @@ unsigned int BoardGalgo::readPosition(std::vector<double>& angle){
 
 unsigned int BoardGalgo::readForce(int legNo, double& contactForce){
     throw NotSupportedException();
+    INTENTIONALLY_UNUSED(legNo);
+    INTENTIONALLY_UNUSED(contactForce);
 }
 unsigned int BoardGalgo::readForce(const std::vector<double>& contactForce){
     throw NotSupportedException();
+    INTENTIONALLY_UNUSED(contactForce);
 }
 
 unsigned int BoardGalgo::readTorqueForce(int legNo, walkers::TorqueForce& valueTF){
     throw NotSupportedException();
+    INTENTIONALLY_UNUSED(legNo);
+    INTENTIONALLY_UNUSED(valueTF);
 }
 unsigned int BoardGalgo::readTorqueForce(const std::vector<double>& valueTF){
     throw NotSupportedException();
+    INTENTIONALLY_UNUSED(valueTF);
 }
 
 bool BoardGalgo::readContact(int legNo){
     throw NotSupportedException();
+    INTENTIONALLY_UNUSED(legNo);
 }
 void BoardGalgo::readContacts(std::vector<bool>& contact){
     throw NotSupportedException();
+    INTENTIONALLY_UNUSED(contact);
 }
 
 unsigned int BoardGalgo::readCurrent(int legNo, int jointNo, double& servoCurrent){
@@ -474,12 +495,18 @@ unsigned int BoardGalgo::readCurrent(std::vector<double>& servoCurrent){
 
 unsigned int BoardGalgo::readTorque(int legNo, int jointNo, double& servoTorque){
     throw NotSupportedException();
+    INTENTIONALLY_UNUSED(legNo);
+    INTENTIONALLY_UNUSED(jointNo);
+    INTENTIONALLY_UNUSED(servoTorque);
 }
 unsigned int BoardGalgo::readTorque(int legNo,std::vector<double>& servoTorque){
     throw NotSupportedException();
+    INTENTIONALLY_UNUSED(legNo);
+    INTENTIONALLY_UNUSED(servoTorque);
 }
 unsigned int BoardGalgo::readTorque(std::vector<double>& servoTorque){
     throw NotSupportedException();
+    INTENTIONALLY_UNUSED(servoTorque);
 }
 
 void BoardGalgo::setOffset(int legNo, int jointNo, double offset){
