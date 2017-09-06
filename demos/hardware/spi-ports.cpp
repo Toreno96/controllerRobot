@@ -1,4 +1,4 @@
-// Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./tests/spi-ports.cpp ./src/Board/spi.cpp -o ./tests/spi-ports.out -I ./include/ -lftd2xx
+// Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./demos/hardware/spi-ports.cpp ./src/Board/spi.cpp -o ./demos/hardware/spi-ports.out -I ./include/ -lftd2xx
 
 #include <iostream>
 #include "Board/spi.h"

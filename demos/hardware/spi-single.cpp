@@ -1,4 +1,4 @@
-// Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./tests/spi-single.cpp ./src/Board/spi.cpp -o ./tests/spi-single.out -I ./include/ -lftd2xx
+// Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./demos/hardware/spi-single.cpp ./src/Board/spi.cpp -o ./demos/hardware/spi-single.out -I ./include/ -lftd2xx
 
 #include <iostream>
 #include <string>
