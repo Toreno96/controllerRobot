@@ -130,8 +130,7 @@ void SetOffsets(controller::BoardGalgo& bg){
 
 int main(){
     try {
-        controller::BoardGalgo bg("/dev/ttyUSB0", "/dev/ttyUSB1", 3000000,
-                {{0, {0, 15'000, 0, 0}}, {1, {1, 15'000, 0, 0}}}, 1);
+        controller::BoardGalgo bg(controller::BoardGalgo::Config::load("boardGalgo.xml"));
         SetOffsets(bg);
 
         int selectedOption;
