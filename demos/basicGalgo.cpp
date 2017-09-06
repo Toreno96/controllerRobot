@@ -10,7 +10,7 @@
 #include <limits>
 #include <string>
 #include <thread>
-#include "Board/boardGalgo.h"
+#include "Board/Galgo/boardGalgo.h"
 
 void RiseOfRobot(controller::BoardGalgo& bg){
     bg.setOperatingMode(std::vector<uint8_t>(12, controller::BoardGalgo::OPERATINGMODE_POSITION));

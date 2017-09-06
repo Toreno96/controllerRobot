@@ -4,10 +4,10 @@
 /// \author Daniel Staśczak
 ///
 
-#include "Board/addParamException.h"
-#include "Board/communicationResult.h"
-#include "Board/groupCommunicationHelper.h"
-#include "Board/syncReader.h"
+#include "Board/Galgo/addParamException.h"
+#include "Board/Galgo/communicationResult.h"
+#include "Board/Galgo/groupCommunicationHelper.h"
+#include "Board/Galgo/syncReader.h"
 
 namespace controller {
 

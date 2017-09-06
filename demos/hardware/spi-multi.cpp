@@ -1,10 +1,10 @@
-// Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./demos/hardware/spi-multi.cpp ./src/Board/spi.cpp -o ./demos/hardware/spi-multi.out -I ./include/ -lftd2xx
+// Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./demos/hardware/spi-multi.cpp ./src/Board/Galgo/spi.cpp -o ./demos/hardware/spi-multi.out -I . -I ./include/ -I -lftd2xx
 
 #include <array>
 #include <iomanip>
 #include <iostream>
 #include <string>
-#include "Board/spi.h"
+#include "Board/Galgo/spi.h"
 
 namespace test {
 

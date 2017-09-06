@@ -6,7 +6,7 @@
 
 #include <cassert>
 #include <iostream>
-#include "Board/angle.h"
+#include "Board/Galgo/angle.h"
 
 
 int main() {

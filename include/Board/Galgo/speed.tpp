@@ -5,7 +5,7 @@
 /// \author Przemysław Walkowiak
 ///
 
-#include "Board/speed.h"
+#include "Board/Galgo/speed.h"
 
 namespace controller {
 

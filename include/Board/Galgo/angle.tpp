@@ -5,7 +5,7 @@
 /// \author Przemysław Walkowiak
 ///
 
-#include "Board/angle.h"
+#include "Board/Galgo/angle.h"
 
 namespace controller {
 

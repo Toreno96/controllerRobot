@@ -1,8 +1,8 @@
-// Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./demos/hardware/spi-single.cpp ./src/Board/spi.cpp -o ./demos/hardware/spi-single.out -I ./include/ -lftd2xx
+// Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./demos/hardware/spi-single.cpp ./src/Board/Galgo/spi.cpp -o ./demos/hardware/spi-single.out -I . -I ./include/ -lftd2xx
 
 #include <iostream>
 #include <string>
-#include "Board/spi.h"
+#include "Board/Galgo/spi.h"
 
 int main() {
     using namespace controller::d2xxwrapper;

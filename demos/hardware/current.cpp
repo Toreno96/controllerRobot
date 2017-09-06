@@ -7,7 +7,7 @@
 
 #include <cassert>
 #include <iostream>
-#include "Board/current.h"
+#include "Board/Galgo/current.h"
 
 
 int main() {

@@ -5,7 +5,7 @@
 /// \author Marcin Orczyk
 ///
 
-#include "Board/exceptions.h"
+#include "Board/Galgo/exceptions.h"
 
 controller::FailedOpeningPortException::FailedOpeningPortException():
     runtime_error("Failed to open the USB port.\n"){}

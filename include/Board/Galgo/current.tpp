@@ -5,7 +5,7 @@
 /// \author Przemysław Walkowiak
 ///
 
-#include "Board/current.h"
+#include "Board/Galgo/current.h"
 
 namespace controller {
 

@@ -50,6 +50,6 @@ class Current {
 
 } // namespace controller
 
-#include "Board/current.tpp"
+#include "Board/Galgo/current.tpp"
 
 #endif // #ifndef _HELPERS_CURRENT_H_

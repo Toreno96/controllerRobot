@@ -5,7 +5,7 @@
 ///
 
 #include <type_traits>
-#include "Board/groupCommunicationHelper.h"
+#include "Board/Galgo/groupCommunicationHelper.h"
 
 namespace controller {
 

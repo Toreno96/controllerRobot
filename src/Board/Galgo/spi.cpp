@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <string>
 #include <utility>
-#include "Board/spi.h"
+#include "Board/Galgo/spi.h"
 
 namespace controller {
 

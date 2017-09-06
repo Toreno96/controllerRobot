@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <vector>
-#include "Board/algorithm.h"
+#include "Board/Galgo/algorithm.h"
 
 int main() {
     std::vector< int > in1{ 5, 1, 6, 2 };

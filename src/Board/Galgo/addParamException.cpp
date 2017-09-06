@@ -4,7 +4,7 @@
 /// \author Daniel Staśczak
 ///
 
-#include "Board/addParamException.h"
+#include "Board/Galgo/addParamException.h"
 
 namespace controller {
 

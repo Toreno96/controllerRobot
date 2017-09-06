@@ -7,7 +7,7 @@
 
 #include <cassert>
 #include <iostream>
-#include "Board/speed.h"
+#include "Board/Galgo/speed.h"
 
 
 int main() {

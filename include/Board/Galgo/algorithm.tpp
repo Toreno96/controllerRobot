@@ -4,7 +4,7 @@
 /// \author Daniel Staśczak
 ///
 
-#include "Board/algorithm.h"
+#include "Board/Galgo/algorithm.h"
 
 namespace controller {
 

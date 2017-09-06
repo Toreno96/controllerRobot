@@ -51,6 +51,6 @@ class Angle {
 
 } // namespace controller
 
-#include "Board/angle.tpp"
+#include "Board/Galgo/angle.tpp"
 
 #endif // #ifndef _HELPERS_ANGLE_H_

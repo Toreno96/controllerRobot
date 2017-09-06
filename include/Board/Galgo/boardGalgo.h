@@ -11,13 +11,13 @@
 #include <array>
 #include <map>
 #include <memory>
-#include "../../3rdParty/dynamixel3/include/dynamixel_sdk.h"
-#include "board.h"
-#include "Board/angle.h"
-#include "Board/current.h"
-#include "Board/speed.h"
-#include "Board/globals.h"
-#include "Board/spi.h"
+#include "3rdParty/dynamixel3/include/dynamixel_sdk.h"
+#include "Board/board.h"
+#include "Board/Galgo/angle.h"
+#include "Board/Galgo/current.h"
+#include "Board/Galgo/speed.h"
+#include "Board/Galgo/globals.h"
+#include "Board/Galgo/spi.h"
 
 namespace controller {
 

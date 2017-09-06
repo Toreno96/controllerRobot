@@ -5,7 +5,7 @@
 ///
 
 #include <iostream>
-#include "Board/communicationResult.h"
+#include "Board/Galgo/communicationResult.h"
 
 namespace controller {
 

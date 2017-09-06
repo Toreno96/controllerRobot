@@ -8,14 +8,14 @@
 #include <algorithm>
 #include <cmath>
 #include <utility>
-#include "../3rdParty/tinyXML/tinyxml2.h"
-#include "Board/boardGalgo.h"
-#include "Board/exceptions.h"
-#include "Board/algorithm.h"
-#include "Board/utilities.h"
-#include "Board/communicationResult.h"
-#include "Board/syncReader.h"
-#include "Board/syncWriter.h"
+#include "3rdParty/tinyXML/tinyxml2.h"
+#include "Board/Galgo/boardGalgo.h"
+#include "Board/Galgo/exceptions.h"
+#include "Board/Galgo/algorithm.h"
+#include "Board/Galgo/utilities.h"
+#include "Board/Galgo/communicationResult.h"
+#include "Board/Galgo/syncReader.h"
+#include "Board/Galgo/syncWriter.h"
 
 namespace controller {
 

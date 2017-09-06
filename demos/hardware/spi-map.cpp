@@ -1,10 +1,10 @@
-// Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./demos/hardware/spi-map.cpp ./src/Board/spi.cpp -o ./demos/hardware/spi-map.out -I ./include/ -lftd2xx
+// Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./demos/hardware/spi-map.cpp ./src/Board/Galgo/spi.cpp -o ./demos/hardware/spi-map.out -I . -I ./include/ -lftd2xx
 
 #include <iomanip>
 #include <iostream>
 #include <map>
 #include <string>
-#include "Board/spi.h"
+#include "Board/Galgo/spi.h"
 
 using controller::d2xxwrapper::Spi;
 

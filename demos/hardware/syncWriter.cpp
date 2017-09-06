@@ -4,13 +4,13 @@
 /// \author Daniel Staśczak
 ///
 
-// Compile with: clang++ -std=c++14  ./demos/hardware/syncWriter.cpp ./src/Board/communicationResult.cpp ./3rdParty/dynamixel3/src/dynamixel_sdk/*.cpp ./3rdParty/dynamixel3/src/dynamixel_sdk_linux/port_handler_linux.cpp -I./include/ -I./3rdParty/dynamixel3/include/ -o ./demos/hardware/syncWriter.out
+// Compile with: clang++ -std=c++14  ./demos/hardware/syncWriter.cpp ./src/Board/Galgo/communicationResult.cpp ./src/Board/Galgo/addParamException.cpp ./3rdParty/dynamixel3/src/dynamixel_sdk/*.cpp ./3rdParty/dynamixel3/src/dynamixel_sdk_linux/port_handler_linux.cpp -I./include/ -I./3rdParty/dynamixel3/include/ -I . -o ./demos/hardware/syncWriter.out
 
 #include <chrono>
 #include <memory>
 #include <thread>
 #include <vector>
-#include "Board/syncWriter.h"
+#include "Board/Galgo/syncWriter.h"
 
 int main() {
     using namespace controller::dynamixel3wrapper;
