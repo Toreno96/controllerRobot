@@ -169,7 +169,7 @@ endif(BUILD_CONTROLLER)
 
 if(BUILD_CONTROLLER_DEMO)
         SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath ./")
-        SET(DEMO_SOURCES ./main.cpp)
+        SET(DEMO_SOURCES ./demos/basicGalgo.cpp)
         ADD_EXECUTABLE(controller ${DEMO_SOURCES})
         TARGET_LINK_LIBRARIES(controller Board dynamixel tinyxml2)
         INSTALL(TARGETS controller RUNTIME DESTINATION bin)
