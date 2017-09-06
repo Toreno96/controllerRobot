@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <string>
 #include <utility>
-#include "Wrappers/d2xx/spi.h"
+#include "Board/spi.h"
 
 namespace controller {
 

@@ -1,10 +1,10 @@
-// Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./tests/spi-multi.cpp ./src/Wrappers/d2xx/spi.cpp -o ./tests/spi-multi.out -I ./include/ -lftd2xx
+// Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./tests/spi-multi.cpp ./src/Board/spi.cpp -o ./tests/spi-multi.out -I ./include/ -lftd2xx
 
 #include <array>
 #include <iomanip>
 #include <iostream>
 #include <string>
-#include "Wrappers/d2xx/spi.h"
+#include "Board/spi.h"
 
 namespace test {
 

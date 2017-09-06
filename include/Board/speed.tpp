@@ -5,7 +5,7 @@
 /// \author Przemysław Walkowiak
 ///
 
-#include "Helpers/speed.h"
+#include "Board/speed.h"
 
 namespace controller {
 

@@ -45,6 +45,6 @@ class Speed {
 
 } // namespace controller
 
-#include "Helpers/speed.tpp"
+#include "Board/speed.tpp"
 
 #endif // #ifndef _HELPERS_SPEED_H_

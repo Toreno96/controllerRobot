@@ -1,10 +1,10 @@
-// Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./tests/spi-map.cpp ./src/Wrappers/d2xx/spi.cpp -o ./tests/spi-map.out -I ./include/ -lftd2xx
+// Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./tests/spi-map.cpp ./src/Board/spi.cpp -o ./tests/spi-map.out -I ./include/ -lftd2xx
 
 #include <iomanip>
 #include <iostream>
 #include <map>
 #include <string>
-#include "Wrappers/d2xx/spi.h"
+#include "Board/spi.h"
 
 using controller::d2xxwrapper::Spi;
 

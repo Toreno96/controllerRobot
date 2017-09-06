@@ -34,6 +34,6 @@ class GroupCommunicationHelper {
 
 } // namespace controller
 
-#include "Wrappers/dynamixel3/groupCommunicationHelper.tpp"
+#include "Board/groupCommunicationHelper.tpp"
 
 #endif // #ifndef _WRAPPERS_DYNAMIXEL3_GROUP_COMMUNICATION_HELPER_H_

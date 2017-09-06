@@ -115,22 +115,7 @@ if(BUILD_CONTROLLER)
         file(GLOB BOARD_HEADERS
             "${CMAKE_SOURCE_DIR}/include/Board/*.h"
         )
-        file( GLOB BOARD_HELPERS_HEADERS
-            "${CMAKE_SOURCE_DIR}/include/Helpers/*.h"
-        )
-        file( GLOB BOARD_WRAPPERS_DYNAMIXEL3_SOURCES
-            "${CMAKE_SOURCE_DIR}/src/Wrappers/dynamixel3/*.cpp"
-        )
-        file( GLOB BOARD_WRAPPERS_DYNAMIXEL3_HEADERS
-            "${CMAKE_SOURCE_DIR}/include/Wrappers/dynamixel3/*.h"
-        )
-        file( GLOB BOARD_WRAPPERS_D2XX_SOURCES
-            "${CMAKE_SOURCE_DIR}/src/Wrappers/d2xx/*.cpp"
-        )
-        file( GLOB BOARD_WRAPPERS_D2XX_HEADERS
-            "${CMAKE_SOURCE_DIR}/include/Wrappers/d2xx/*.h"
-        )
-        add_library(Board STATIC ${BOARD_SOURCES} ${BOARD_HEADERS} ${BOARD_HELPERS_HEADERS} ${BOARD_WRAPPERS_DYNAMIXEL3_SOURCES} ${BOARD_WRAPPERS_DYNAMIXEL3_HEADERS} ${BOARD_WRAPPERS_D2XX_SOURCES} ${BOARD_WRAPPERS_D2XX_HEADERS})
+        add_library(Board STATIC ${BOARD_SOURCES} ${BOARD_HEADERS})
         find_library(ftd2xx "libftd2xx.a")
         TARGET_LINK_LIBRARIES(Board dynamixel dynamixel3 tinyxml2 ftd2xx)
         INSTALL(TARGETS Board RUNTIME DESTINATION bin LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)

@@ -5,7 +5,7 @@
 ///
 
 #include <iostream>
-#include "Wrappers/dynamixel3/communicationResult.h"
+#include "Board/communicationResult.h"
 
 namespace controller {
 

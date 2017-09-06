@@ -51,6 +51,6 @@ class Angle {
 
 } // namespace controller
 
-#include "Helpers/angle.tpp"
+#include "Board/angle.tpp"
 
 #endif // #ifndef _HELPERS_ANGLE_H_

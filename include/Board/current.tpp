@@ -5,7 +5,7 @@
 /// \author Przemysław Walkowiak
 ///
 
-#include "Helpers/current.h"
+#include "Board/current.h"
 
 namespace controller {
 

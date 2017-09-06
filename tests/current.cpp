@@ -7,7 +7,7 @@
 
 #include <cassert>
 #include <iostream>
-#include "Helpers/current.h"
+#include "Board/current.h"
 
 
 int main() {

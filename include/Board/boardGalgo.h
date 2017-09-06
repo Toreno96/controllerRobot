@@ -13,11 +13,11 @@
 #include <memory>
 #include "../../3rdParty/dynamixel3/include/dynamixel_sdk.h"
 #include "board.h"
-#include "Helpers/angle.h"
-#include "Helpers/current.h"
-#include "Helpers/speed.h"
-#include "Wrappers/dynamixel3/globals.h"
-#include "Wrappers/d2xx/spi.h"
+#include "Board/angle.h"
+#include "Board/current.h"
+#include "Board/speed.h"
+#include "Board/globals.h"
+#include "Board/spi.h"
 
 namespace controller {
 

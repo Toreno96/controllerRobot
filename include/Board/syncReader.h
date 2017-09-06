@@ -8,8 +8,8 @@
 #define _WRAPPERS_DYNAMIXEL3_SYNC_READER_H_
 
 #include <vector>
-#include "../../../3rdParty/dynamixel3/include/dynamixel_sdk.h"
-#include "Wrappers/dynamixel3/globals.h"
+#include "../../3rdParty/dynamixel3/include/dynamixel_sdk.h"
+#include "Board/globals.h"
 
 namespace controller {
 
@@ -34,6 +34,6 @@ class SyncReader {
 
 } // namespace controller
 
-#include "Wrappers/dynamixel3/syncReader.tpp"
+#include "Board/syncReader.tpp"
 
 #endif // #ifndef _WRAPPERS_DYNAMIXEL3_SYNC_READER_H_

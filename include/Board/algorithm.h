@@ -23,6 +23,6 @@ std::vector< T > unsortedMerge( const std::vector< T >& in1,
 
 } // namespace controller
 
-#include "Helpers/algorithm.tpp"
+#include "Board/algorithm.tpp"
 
 #endif // #ifndef _HELPERS_ALGORITHM_H_

@@ -4,10 +4,10 @@
 /// \author Daniel Staśczak
 ///
 
-#include "Wrappers/dynamixel3/addParamException.h"
-#include "Wrappers/dynamixel3/communicationResult.h"
-#include "Wrappers/dynamixel3/groupCommunicationHelper.h"
-#include "Wrappers/dynamixel3/syncReader.h"
+#include "Board/addParamException.h"
+#include "Board/communicationResult.h"
+#include "Board/groupCommunicationHelper.h"
+#include "Board/syncReader.h"
 
 namespace controller {
 

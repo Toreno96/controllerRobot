@@ -11,11 +11,11 @@
 #include "../3rdParty/tinyXML/tinyxml2.h"
 #include "Board/boardGalgo.h"
 #include "Board/exceptions.h"
-#include "Helpers/algorithm.h"
-#include "Helpers/utilities.h"
-#include "Wrappers/dynamixel3/communicationResult.h"
-#include "Wrappers/dynamixel3/syncReader.h"
-#include "Wrappers/dynamixel3/syncWriter.h"
+#include "Board/algorithm.h"
+#include "Board/utilities.h"
+#include "Board/communicationResult.h"
+#include "Board/syncReader.h"
+#include "Board/syncWriter.h"
 
 namespace controller {
 

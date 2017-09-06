@@ -8,8 +8,8 @@
 #define _WRAPPERS_DYNAMIXEL3_SYNC_WRITER_H_
 
 #include <vector>
-#include "../../../3rdParty/dynamixel3/include/dynamixel_sdk.h"
-#include "Wrappers/dynamixel3/globals.h"
+#include "../../3rdParty/dynamixel3/include/dynamixel_sdk.h"
+#include "Board/globals.h"
 
 namespace controller {
 
@@ -43,6 +43,6 @@ class SyncWriter {
 
 } // namespace controller
 
-#include "Wrappers/dynamixel3/syncWriter.tpp"
+#include "Board/syncWriter.tpp"
 
 #endif // #ifndef _WRAPPERS_DYNAMIXEL3_SYNC_WRITER_H_

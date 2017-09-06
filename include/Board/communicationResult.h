@@ -10,7 +10,7 @@
 #include <cstdint>
 #include <stdexcept>
 #include <string>
-#include "../../../3rdParty/dynamixel3/include/dynamixel_sdk.h"
+#include "../../3rdParty/dynamixel3/include/dynamixel_sdk.h"
 
 namespace controller {
 

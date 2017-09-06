@@ -50,6 +50,6 @@ class Current {
 
 } // namespace controller
 
-#include "Helpers/current.tpp"
+#include "Board/current.tpp"
 
 #endif // #ifndef _HELPERS_CURRENT_H_

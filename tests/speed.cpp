@@ -7,7 +7,7 @@
 
 #include <cassert>
 #include <iostream>
-#include "Helpers/speed.h"
+#include "Board/speed.h"
 
 
 int main() {

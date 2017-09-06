@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <vector>
-#include "Helpers/algorithm.h"
+#include "Board/algorithm.h"
 
 int main() {
     std::vector< int > in1{ 5, 1, 6, 2 };

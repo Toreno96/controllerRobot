@@ -1,8 +1,8 @@
-// Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./tests/spi-single.cpp ./src/Wrappers/d2xx/spi.cpp -o ./tests/spi-single.out -I ./include/ -lftd2xx
+// Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./tests/spi-single.cpp ./src/Board/spi.cpp -o ./tests/spi-single.out -I ./include/ -lftd2xx
 
 #include <iostream>
 #include <string>
-#include "Wrappers/d2xx/spi.h"
+#include "Board/spi.h"
 
 int main() {
     using namespace controller::d2xxwrapper;

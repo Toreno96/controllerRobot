@@ -4,7 +4,7 @@
 /// \author Daniel Staśczak
 ///
 
-#include "Helpers/algorithm.h"
+#include "Board/algorithm.h"
 
 namespace controller {
 

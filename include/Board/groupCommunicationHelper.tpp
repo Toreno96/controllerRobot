@@ -5,7 +5,7 @@
 ///
 
 #include <type_traits>
-#include "Wrappers/dynamixel3/groupCommunicationHelper.h"
+#include "Board/groupCommunicationHelper.h"
 
 namespace controller {
 

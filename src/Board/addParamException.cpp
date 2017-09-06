@@ -4,7 +4,7 @@
 /// \author Daniel Staśczak
 ///
 
-#include "Wrappers/dynamixel3/addParamException.h"
+#include "Board/addParamException.h"
 
 namespace controller {
 
