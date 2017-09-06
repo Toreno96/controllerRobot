@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <unordered_set>
 #include <vector>
+#include <stdexcept>
+#include <string>
 #include "../../../3rdParty/d2xx/include/ftd2xx.h"
 
 namespace controller {
@@ -42,6 +44,33 @@ class Spi {
         int port_;
         FT_HANDLE ftHandle_;
         static std::unordered_set<int> usedPorts_;
+};
+
+
+class SpiOpenPortException: public std::runtime_error{
+public:
+    SpiOpenPortException();
+    SpiOpenPortException(int port);
+    SpiOpenPortException(int port, FT_STATUS status);
+};
+
+class SpiReadException: public std::runtime_error{
+public:
+    SpiReadException();
+    SpiReadException(FT_STATUS status);
+    SpiReadException(int attempts, FT_STATUS status);
+};
+
+class SpiWriteException: public std::runtime_error{
+public:
+    SpiWriteException();
+    SpiWriteException(FT_STATUS status);
+};
+
+class MpsseFailedException: public std::runtime_error{
+public:
+    MpsseFailedException();
+    MpsseFailedException(const std::string& description);
 };
 
 } // namespace controller
