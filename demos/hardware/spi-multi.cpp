@@ -1,3 +1,10 @@
+///
+/// \file
+/// \brief Wrapper for SPI communication using D2XX library (test for two connected devices at once).
+/// \author Daniel Staśczak
+/// \author Marcin Orczyk
+///
+
 // Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./demos/hardware/spi-multi.cpp ./src/Board/Galgo/spi.cpp -o ./demos/hardware/spi-multi.out -I . -I ./include/ -I -lftd2xx
 
 #include <array>

@@ -1,3 +1,10 @@
+///
+/// \file
+/// \brief Wrapper for SPI communication using D2XX library.
+/// \author Daniel Staśczak
+/// \author Marcin Orczyk
+///
+
 #ifndef _WRAPPERS_D2XX_SPI_H_
 #define _WRAPPERS_D2XX_SPI_H_
 

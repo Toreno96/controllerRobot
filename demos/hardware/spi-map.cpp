@@ -1,3 +1,10 @@
+///
+/// \file
+/// \brief Wrapper for SPI communication using D2XX library (test for Spi instances as elements in map).
+/// \author Daniel Staśczak
+/// \author Marcin Orczyk
+///
+
 // Compile with: clang++ -g -O0 -DDEBUG -std=c++14 -Wall -Wextra -Wshadow -Wconversion ./demos/hardware/spi-map.cpp ./src/Board/Galgo/spi.cpp -o ./demos/hardware/spi-map.out -I . -I ./include/ -lftd2xx
 
 #include <iomanip>
