@@ -75,8 +75,8 @@ class Spi {
         static std::unordered_set<int> usedPorts_;
 };
 
-} // namespace controller
-
 } // namespace d2xxwrapper
+
+} // namespace controller
 
 #endif // #ifndef _WRAPPERS_D2XX_SPI_H_

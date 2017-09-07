@@ -186,6 +186,6 @@ Spi::MpsseFailedException::MpsseFailedException(const std::string& description) 
         runtime_error("MPSSE failed: " + description + ".\n") {}
 
 
-} // namespace controller
-
 } // namespace d2xxwrapper
+
+} // namespace controller
