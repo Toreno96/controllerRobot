@@ -40,7 +40,7 @@ BoardGalgo::BoardGalgo(const BoardGalgo::Config& config):
 }
 
 BoardGalgo::Config BoardGalgo::Config::load(const std::string& configFilename){
-    Config conf{"", "", 0, 0, 0, {}};
+    Config conf{};
     tinyxml2::XMLDocument configSrv;
 
     configSrv.LoadFile(std::string("../../resources/" + configFilename).c_str());
