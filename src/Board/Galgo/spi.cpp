@@ -19,11 +19,11 @@ std::unordered_set<int> Spi::usedPorts_;
 
 Spi::Spi(const Config& config) : port_(config.port), ftHandle_(nullptr) {
     if (usedPorts_.find(port_) != usedPorts_.end()) {
-        throw SpiOpenPortException(port_);
+        throw Spi::OpenPortException(port_);
     }
     FT_STATUS ftStatus = FT_Open(port_, &ftHandle_);
     if (ftStatus != FT_OK) {
-        throw SpiOpenPortException(port_, ftStatus);
+        throw Spi::OpenPortException(port_, ftStatus);
     }
     initializeMpsse(config);
     disconnectLoopbackMode();
@@ -57,7 +57,7 @@ Spi::Bytes Spi::read(DWORD bytesCount) {
         if (attempts++ < 10000)
             ftStatus = FT_GetQueueStatus(ftHandle_, &bytesInQueue);
         else {
-            throw SpiReadException(attempts, ftStatus);
+            throw Spi::ReadException(attempts, ftStatus);
         }
     }
     while (bytesInQueue < bytesCount);
@@ -67,7 +67,7 @@ Spi::Bytes Spi::read(DWORD bytesCount) {
     ftStatus = FT_Read(ftHandle_, receivedBytes.data(), bytesCount,
             &receivedBytesCount);
     if (ftStatus != FT_OK) {
-        throw SpiReadException(ftStatus);
+        throw Spi::ReadException(ftStatus);
     }
     // Sprawdzanie czy receivedBytesCount == bytesCount?
     else
@@ -97,7 +97,7 @@ void Spi::ftdiWrite(const Spi::Bytes& bytes) {
     FT_STATUS ftStatus = FT_Write(ftHandle_, buffer.data(), buffer.size(),
             &bytesWritten);
     if (ftStatus != FT_OK) {
-        throw SpiWriteException(ftStatus);
+        throw Spi::WriteException(ftStatus);
     }
 }
 
@@ -144,41 +144,41 @@ void Spi::setChipSelect(bool state) {
 }
 
 
-SpiOpenPortException::SpiOpenPortException():
+Spi::OpenPortException::OpenPortException():
     runtime_error("Failed to open the SPI port.\n"){}
 
-SpiOpenPortException::SpiOpenPortException(int port):
+Spi::OpenPortException::OpenPortException(int port):
     runtime_error("Port " + std::to_string(port) + " is already in use.\n"){}
 
-SpiOpenPortException::SpiOpenPortException(int port, FT_STATUS status):
+Spi::OpenPortException::OpenPortException(int port, FT_STATUS status):
     runtime_error("FT_Open (port " + std::to_string(port) +
                   ") failed with FT_STATUS = " + std::to_string(status) + ".\n"){}
 
 
-SpiReadException::SpiReadException():
+Spi::ReadException::ReadException():
     runtime_error("Failed to read data from SPI.\n"){}
 
-SpiReadException::SpiReadException(FT_STATUS status):
+Spi::ReadException::ReadException(FT_STATUS status):
     runtime_error("FT_Read failed with FT_STATUS = " +
                   std::to_string(status) + ".\n"){}
 
-SpiReadException::SpiReadException(int attempts, FT_STATUS status):
+Spi::ReadException::ReadException(int attempts, FT_STATUS status):
     runtime_error("Too much attempts of FT_GetQueueStatus (" + std::to_string(attempts) + "). "
                   "The most recent FT_STATUS = " + std::to_string(status) + ".\n"){}
 
 
-SpiWriteException::SpiWriteException():
+Spi::WriteException::WriteException():
     runtime_error("Failed to write data to SPI.\n"){}
 
-SpiWriteException::SpiWriteException(FT_STATUS status):
+Spi::WriteException::WriteException(FT_STATUS status):
     runtime_error("FT_Write failed with FT_STATUS = " +
                   std::to_string(status) + ".\n"){}
 
 
-MpsseFailedException::MpsseFailedException():
+Spi::MpsseFailedException::MpsseFailedException():
     runtime_error("MPSSE did not respond correctly.\n"){}
 
-MpsseFailedException::MpsseFailedException(const std::string& description):
+Spi::MpsseFailedException::MpsseFailedException(const std::string& description):
     runtime_error("MPSSE failed: " + description + ".\n"){}
 
 

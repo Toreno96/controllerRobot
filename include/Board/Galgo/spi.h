@@ -21,6 +21,32 @@ namespace d2xxwrapper {
 
 class Spi {
     public:
+        class OpenPortException: public std::runtime_error{
+        public:
+            OpenPortException();
+            OpenPortException(int port);
+            OpenPortException(int port, FT_STATUS status);
+        };
+
+        class ReadException: public std::runtime_error{
+        public:
+            ReadException();
+            ReadException(FT_STATUS status);
+            ReadException(int attempts, FT_STATUS status);
+        };
+
+        class WriteException: public std::runtime_error{
+        public:
+            WriteException();
+            WriteException(FT_STATUS status);
+        };
+
+        class MpsseFailedException: public std::runtime_error{
+        public:
+            MpsseFailedException();
+            MpsseFailedException(const std::string& description);
+        };
+
         struct Config {
             const int port;
             const int frequency;
@@ -51,33 +77,6 @@ class Spi {
         int port_;
         FT_HANDLE ftHandle_;
         static std::unordered_set<int> usedPorts_;
-};
-
-
-class SpiOpenPortException: public std::runtime_error{
-public:
-    SpiOpenPortException();
-    SpiOpenPortException(int port);
-    SpiOpenPortException(int port, FT_STATUS status);
-};
-
-class SpiReadException: public std::runtime_error{
-public:
-    SpiReadException();
-    SpiReadException(FT_STATUS status);
-    SpiReadException(int attempts, FT_STATUS status);
-};
-
-class SpiWriteException: public std::runtime_error{
-public:
-    SpiWriteException();
-    SpiWriteException(FT_STATUS status);
-};
-
-class MpsseFailedException: public std::runtime_error{
-public:
-    MpsseFailedException();
-    MpsseFailedException(const std::string& description);
 };
 
 } // namespace controller
