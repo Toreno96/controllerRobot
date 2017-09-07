@@ -383,7 +383,7 @@ unsigned int BoardGalgo::readPosition(int legNo, int jointNo, double& angle){
     ++legNo;
     ++jointNo;
     if (jointNo == 4) {
-        angle = readSpiPosition(legNo).val();
+        angle = readSpiPosition(legNo).val() - M_PI;
         return 0;
     }
     uint32_t presentPosition;
@@ -403,7 +403,7 @@ unsigned int BoardGalgo::readPosition(int legNo, std::vector<double>& angle){
         return tAngleRadians( tAngleDynamixel( value ) ).val() - M_PI;
     } );
     // Insert position of the foot
-    angle.push_back(readSpiPosition(legNo).val());
+    angle.push_back(readSpiPosition(legNo).val() - M_PI);
     return 0;
 }
 
@@ -422,7 +422,7 @@ unsigned int BoardGalgo::readPosition(std::vector<double>& angle){
     for (auto it = std::next(angle.begin(), JOINTS_COUNT_IN_SINGLE_LEG);
             it != angle.end(); ++legNo) {
         it = std::next(
-                angle.insert(it, readSpiPosition(legNo).val()),
+                angle.insert(it, readSpiPosition(legNo).val() - M_PI),
                 JOINTS_COUNT_IN_SINGLE_LEG + 1);
     }
     angle.insert(angle.end(), readSpiPosition(legNo).val());
