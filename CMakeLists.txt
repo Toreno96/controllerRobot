@@ -10,7 +10,13 @@ endif(NOT CMAKE_BUILD_TYPE)
 # Example Project configuration
 PROJECT(CONTROLLER)
 
-SET(CMAKE_CXX_FLAGS "-std=c++14 -Wall -Wextra -Wshadow -Wconversion -pthread")
+option(BUILD_WALKERS_BOARD_GALGO "Build WALKERS Board (hardware) library for Galgo robot" OFF)
+if(BUILD_WALKERS_BOARD_GALGO)
+    SET(CXX_STANDARD "-std=c++14")
+else()
+    SET(CXX_STANDARD "-std=c++0x")
+endif(BUILD_WALKERS_BOARD_GALGO)
+SET(CMAKE_CXX_FLAGS "${CXX_STANDARD} -Wall -Wextra -Wshadow -Wconversion -pthread")
 SET(CMAKE_CXX_FLAGS_DEBUG "-O0 -DDEBUG -g")
 SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 
@@ -115,24 +121,21 @@ if(BUILD_CONTROLLER)
         file(GLOB BOARD_HEADERS
             "${CMAKE_SOURCE_DIR}/include/Board/*.h"
         )
-        file( GLOB BOARD_HELPERS_HEADERS
-            "${CMAKE_SOURCE_DIR}/include/Helpers/*.h"
-        )
-        file( GLOB BOARD_WRAPPERS_DYNAMIXEL3_SOURCES
-            "${CMAKE_SOURCE_DIR}/src/Wrappers/dynamixel3/*.cpp"
-        )
-        file( GLOB BOARD_WRAPPERS_DYNAMIXEL3_HEADERS
-            "${CMAKE_SOURCE_DIR}/include/Wrappers/dynamixel3/*.h"
-        )
-        file( GLOB BOARD_WRAPPERS_D2XX_SOURCES
-            "${CMAKE_SOURCE_DIR}/src/Wrappers/d2xx/*.cpp"
-        )
-        file( GLOB BOARD_WRAPPERS_D2XX_HEADERS
-            "${CMAKE_SOURCE_DIR}/include/Wrappers/d2xx/*.h"
-        )
-        add_library(Board STATIC ${BOARD_SOURCES} ${BOARD_HEADERS} ${BOARD_HELPERS_HEADERS} ${BOARD_WRAPPERS_DYNAMIXEL3_SOURCES} ${BOARD_WRAPPERS_DYNAMIXEL3_HEADERS} ${BOARD_WRAPPERS_D2XX_SOURCES} ${BOARD_WRAPPERS_D2XX_HEADERS})
-        find_library(ftd2xx "libftd2xx.a")
-        TARGET_LINK_LIBRARIES(Board dynamixel dynamixel3 tinyxml2 ftd2xx)
+        if(NOT BUILD_WALKERS_BOARD_GALGO)
+            add_library(Board STATIC ${BOARD_SOURCES} ${BOARD_HEADERS})
+            TARGET_LINK_LIBRARIES(Board dynamixel tinyxml2)
+        else()
+            file(GLOB GALGO_SOURCES
+                "${CMAKE_SOURCE_DIR}/src/Board/Galgo/*.cpp"
+            )
+            file(GLOB GALGO_HEADERS
+                "${CMAKE_SOURCE_DIR}/include/Board/Galgo/*.h"
+                "${CMAKE_SOURCE_DIR}/include/Board/Galgo/*.tpp"
+            )
+            find_library(ftd2xx "libftd2xx.a")
+            add_library(Board STATIC ${BOARD_SOURCES} ${BOARD_HEADERS} ${GALGO_SOURCES} ${GALGO_HEADERS})
+            TARGET_LINK_LIBRARIES(Board dynamixel dynamixel3 tinyxml2 ftd2xx)
+        endif(NOT BUILD_WALKERS_BOARD_GALGO)
         INSTALL(TARGETS Board RUNTIME DESTINATION bin LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
         INSTALL(FILES ${BOARD_HEADERS} DESTINATION include/walkers/Board/)
 endif(BUILD_CONTROLLER)
@@ -145,9 +148,9 @@ endif(BUILD_CONTROLLER)
 
 if(BUILD_CONTROLLER_DEMO)
         SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath ./")
-        SET(DEMO_SOURCES ./main.cpp)
-        ADD_EXECUTABLE(controller ${DEMO_SOURCES})
-        TARGET_LINK_LIBRARIES(controller Board dynamixel tinyxml2)
-        INSTALL(TARGETS controller RUNTIME DESTINATION bin)
+        SET(DEMO_SOURCES ./demos/basicGalgo.cpp)
+        ADD_EXECUTABLE(basicGalgo ${DEMO_SOURCES})
+        TARGET_LINK_LIBRARIES(basicGalgo Board dynamixel tinyxml2)
+        INSTALL(TARGETS basicGalgo RUNTIME DESTINATION bin)
 
 endif(BUILD_CONTROLLER_DEMO)
