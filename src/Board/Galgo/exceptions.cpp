@@ -29,4 +29,14 @@ NotSupportedException::NotSupportedException():
 NotSupportedException::NotSupportedException(const string& description):
     runtime_error("This function is not supported: " + description + "\n"){}
 
+
+FailedLoadingGalgoConfigException::FailedLoadingGalgoConfigException(
+                const std::string& filename) :
+        std::runtime_error("Unable to load board Galgo config file '" +
+                filename + "'") {}
+
+InvalidDataFromSpiException::InvalidDataFromSpiException() :
+        std::runtime_error("Data read from SPI is invalid") {}
+
+
 } // namespace controller

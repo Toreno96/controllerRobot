@@ -45,7 +45,7 @@ BoardGalgo::Config BoardGalgo::Config::load(const std::string& configFilename){
 
     configSrv.LoadFile(std::string("../../resources/" + configFilename).c_str());
     if (configSrv.ErrorID())
-        throw std::runtime_error("Unable to load board Galgo config file");
+        throw FailedLoadingGalgoConfigException(configFilename);
 
     conf.rightLegsDevPath = configSrv.FirstChildElement("boardGalgo")->FirstChildElement("parameters")->Attribute("rightLegsDevPath");
     conf.leftLegsDevPath  = configSrv.FirstChildElement("boardGalgo")->FirstChildElement("parameters")->Attribute("leftLegsDevPath");
@@ -580,7 +580,7 @@ BoardGalgo::tAngleRadians BoardGalgo::readSpiPosition(int legNo) {
         if (data == (~negatedData & 0x7FFF))
             return tAngleRadians(tAngleSpi(static_cast<uint16_t>(data)));
     }
-    throw std::runtime_error("Data read from SPI is invalid");
+    throw InvalidDataFromSpiException();
 }
 
 Board* createBoardGalgo(const std::string& configFilename) {

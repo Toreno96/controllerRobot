@@ -37,6 +37,16 @@ public:
     NotSupportedException(const string& description);
 };
 
+class FailedLoadingGalgoConfigException : public std::runtime_error {
+    public:
+        FailedLoadingGalgoConfigException(const std::string& filename);
+};
+
+class InvalidDataFromSpiException : public std::runtime_error {
+    public:
+        InvalidDataFromSpiException();
+};
+
 }
 
 #endif
