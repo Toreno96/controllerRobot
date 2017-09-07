@@ -21,32 +21,28 @@ namespace d2xxwrapper {
 
 class Spi {
     public:
-        class OpenPortException: public std::runtime_error{
-        public:
-            OpenPortException();
-            OpenPortException(int port);
-            OpenPortException(int port, FT_STATUS status);
+        class OpenPortException : public std::runtime_error {
+            public:
+                OpenPortException();
+                OpenPortException(int port);
+                OpenPortException(int port, FT_STATUS status);
         };
-
-        class ReadException: public std::runtime_error{
-        public:
-            ReadException();
-            ReadException(FT_STATUS status);
-            ReadException(int attempts, FT_STATUS status);
+        class ReadException : public std::runtime_error {
+            public:
+                ReadException();
+                ReadException(FT_STATUS status);
+                ReadException(int attempts, FT_STATUS status);
         };
-
-        class WriteException: public std::runtime_error{
-        public:
-            WriteException();
-            WriteException(FT_STATUS status);
+        class WriteException : public std::runtime_error {
+            public:
+                WriteException();
+                WriteException(FT_STATUS status);
         };
-
-        class MpsseFailedException: public std::runtime_error{
-        public:
-            MpsseFailedException();
-            MpsseFailedException(const std::string& description);
+        class MpsseFailedException : public std::runtime_error {
+            public:
+                MpsseFailedException();
+                MpsseFailedException(const std::string& description);
         };
-
         struct Config {
             const int port;
             const int frequency;

@@ -144,42 +144,46 @@ void Spi::setChipSelect(bool state) {
 }
 
 
-Spi::OpenPortException::OpenPortException():
-    runtime_error("Failed to open the SPI port.\n"){}
+Spi::OpenPortException::OpenPortException() :
+        runtime_error("Failed to open the SPI port.\n") {}
 
-Spi::OpenPortException::OpenPortException(int port):
-    runtime_error("Port " + std::to_string(port) + " is already in use.\n"){}
+Spi::OpenPortException::OpenPortException(int port) :
+        runtime_error("Port " + std::to_string(port) +
+                " is already in use.\n") {}
 
-Spi::OpenPortException::OpenPortException(int port, FT_STATUS status):
-    runtime_error("FT_Open (port " + std::to_string(port) +
-                  ") failed with FT_STATUS = " + std::to_string(status) + ".\n"){}
-
-
-Spi::ReadException::ReadException():
-    runtime_error("Failed to read data from SPI.\n"){}
-
-Spi::ReadException::ReadException(FT_STATUS status):
-    runtime_error("FT_Read failed with FT_STATUS = " +
-                  std::to_string(status) + ".\n"){}
-
-Spi::ReadException::ReadException(int attempts, FT_STATUS status):
-    runtime_error("Too much attempts of FT_GetQueueStatus (" + std::to_string(attempts) + "). "
-                  "The most recent FT_STATUS = " + std::to_string(status) + ".\n"){}
+Spi::OpenPortException::OpenPortException(int port, FT_STATUS status) :
+        runtime_error("FT_Open (port " + std::to_string(port) +
+                ") failed with FT_STATUS = " + std::to_string(status) +
+                ".\n") {}
 
 
-Spi::WriteException::WriteException():
-    runtime_error("Failed to write data to SPI.\n"){}
+Spi::ReadException::ReadException() :
+        runtime_error("Failed to read data from SPI.\n") {}
 
-Spi::WriteException::WriteException(FT_STATUS status):
-    runtime_error("FT_Write failed with FT_STATUS = " +
-                  std::to_string(status) + ".\n"){}
+Spi::ReadException::ReadException(FT_STATUS status) :
+        runtime_error("FT_Read failed with FT_STATUS = " +
+                std::to_string(status) + ".\n") {}
+
+Spi::ReadException::ReadException(int attempts, FT_STATUS status) :
+        runtime_error("Too much attempts of FT_GetQueueStatus (" +
+                std::to_string(attempts) + "). " +
+                "The most recent FT_STATUS = " + std::to_string(status) +
+                ".\n") {}
 
 
-Spi::MpsseFailedException::MpsseFailedException():
-    runtime_error("MPSSE did not respond correctly.\n"){}
+Spi::WriteException::WriteException() :
+        runtime_error("Failed to write data to SPI.\n") {}
 
-Spi::MpsseFailedException::MpsseFailedException(const std::string& description):
-    runtime_error("MPSSE failed: " + description + ".\n"){}
+Spi::WriteException::WriteException(FT_STATUS status) :
+        runtime_error("FT_Write failed with FT_STATUS = " +
+                std::to_string(status) + ".\n") {}
+
+
+Spi::MpsseFailedException::MpsseFailedException() :
+        runtime_error("MPSSE did not respond correctly.\n") {}
+
+Spi::MpsseFailedException::MpsseFailedException(const std::string& description) :
+        runtime_error("MPSSE failed: " + description + ".\n") {}
 
 
 } // namespace controller
