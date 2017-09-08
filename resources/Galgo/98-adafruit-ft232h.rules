@@ -1,0 +1,2 @@
+# unbind Adafruit FT232H when connected
+SUBSYSTEM=="usb", ENV{ID_SERIAL}=="0403_6014", MODE="0666", RUN+="/bin/sh -c 'echo -n $kernel:1.0 >/sys/bus/usb/drivers/ftdi_sio/unbind'"
