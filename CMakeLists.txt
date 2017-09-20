@@ -104,7 +104,7 @@ file(GLOB DYNAMIXEL3_SOURCES
   ${DYNAMIXEL3_SOURCE_DIR}/dynamixel_sdk/*.cpp
   ${DYNAMIXEL3_SOURCE_DIR}/dynamixel_sdk_linux/port_handler_linux.cpp
 )
-  
+
 add_library(dynamixel3 STATIC ${DYNAMIXEL3_HEADERS} ${DYNAMIXEL3_SOURCES})
 SET_TARGET_PROPERTIES(dynamixel3 PROPERTIES COMPILE_FLAGS "-w") #disable tons of warnings in the dynamixel library
 
