@@ -146,11 +146,11 @@ endif(BUILD_CONTROLLER)
 #
 ###############################################################################
 
-if(BUILD_CONTROLLER_DEMO)
+if(BUILD_CONTROLLER_DEMO AND BUILD_WALKERS_BOARD_GALGO)
         SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath ./")
         SET(DEMO_SOURCES ./demos/basicGalgo.cpp)
         ADD_EXECUTABLE(basicGalgo ${DEMO_SOURCES})
         TARGET_LINK_LIBRARIES(basicGalgo Board dynamixel tinyxml2)
         INSTALL(TARGETS basicGalgo RUNTIME DESTINATION bin)
 
-endif(BUILD_CONTROLLER_DEMO)
+endif(BUILD_CONTROLLER_DEMO AND BUILD_WALKERS_BOARD_GALGO)
