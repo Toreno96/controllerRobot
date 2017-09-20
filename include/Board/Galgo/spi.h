@@ -31,7 +31,7 @@ class Spi {
             public:
                 ReadException();
                 ReadException(FT_STATUS status);
-                ReadException(int attempts, FT_STATUS status);
+                ReadException(unsigned attempts, FT_STATUS status);
         };
         class WriteException : public std::runtime_error {
             public:

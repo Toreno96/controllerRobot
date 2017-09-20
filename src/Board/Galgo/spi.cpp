@@ -88,14 +88,14 @@ Spi::Bytes Spi::transfer(const Spi::Bytes& bytes) {
     setChipSelect(false);
     ftdiWrite(transferBytes);
     setChipSelect(true);
-    return read(bytes.size());
+    return read(static_cast<DWORD>(bytes.size()));
 }
 
 void Spi::ftdiWrite(const Spi::Bytes& bytes) {
     Bytes buffer = bytes;
     DWORD bytesWritten = 0;
-    FT_STATUS ftStatus = FT_Write(ftHandle_, buffer.data(), buffer.size(),
-            &bytesWritten);
+    FT_STATUS ftStatus = FT_Write(ftHandle_, buffer.data(),
+            static_cast<DWORD>(buffer.size()), &bytesWritten);
     if (ftStatus != FT_OK) {
         throw Spi::WriteException(ftStatus);
     }
@@ -164,7 +164,7 @@ Spi::ReadException::ReadException(FT_STATUS status) :
         runtime_error("FT_Read failed with FT_STATUS = " +
                 std::to_string(status) + ".\n") {}
 
-Spi::ReadException::ReadException(int attempts, FT_STATUS status) :
+Spi::ReadException::ReadException(unsigned attempts, FT_STATUS status) :
         runtime_error("Too much attempts of FT_GetQueueStatus (" +
                 std::to_string(attempts) + "). " +
                 "The most recent FT_STATUS = " + std::to_string(status) +
